@@ -1,0 +1,789 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Git笔记</title>
+    <url>/blog/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/Git%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<p><em>本文是基于<a href="https://www.liaoxuefeng.com/wiki/896043488029600">廖雪峰大佬的Git教程</a>进行的记忆笔记，主要目的是用于快速回忆和精炼Git的一些常用命令，同时补充结合一些网络上的其它关于git的知识，本笔记不适合直接用来零基础学习，如果需要可以通过前面的链接跳转至廖雪峰的教程。本笔记可能存在疏漏，如有问题欢迎指正。</em></p>
+<span id="more"></span>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>Linux直接用apt安装，Windows官网下载安装，Mac用Xcode安装，安装完毕后在命令行使用如下内容进行设置：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git config --global user.name &quot;Your Name&quot;</span><br><span class="line">git config --global user.email &quot;email@example.com&quot;</span><br></pre></td></tr></table></figure>
+<p>若要使用Github或Gitee等远程仓库，其初始化过程请在往上自行搜索。</p>
+<h2 id="仓库管理（repository）"><a href="#仓库管理（repository）" class="headerlink" title="仓库管理（repository）"></a>仓库管理（repository）</h2><h3 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h3><p><code>git init</code>：将一个文件夹初始化为git仓库，可以在命令行中进入该文件夹并使用此命令。</p>
+<h3 id="克隆仓库"><a href="#克隆仓库" class="headerlink" title="克隆仓库"></a>克隆仓库</h3><p><code>git clone &lt;URL&gt; &lt;name&gt;</code>：将远程仓库拷贝到自己电脑上，其中<code>&lt;URL&gt;</code>为远程仓库地址，<code>&lt;name&gt;</code>为赋值后对该项目进行重命名（文件夹的名字）。</p>
+<h2 id="版本控制"><a href="#版本控制" class="headerlink" title="版本控制"></a>版本控制</h2><h3 id="缓存修改"><a href="#缓存修改" class="headerlink" title="缓存修改"></a>缓存修改</h3><p><code>git add &lt;file&gt;</code>：将工作区修改过的文件存入缓存区，其中<code>&lt;file&gt;</code>为需要缓存的文件，可同时添加多个文件，也可以添加文件夹，若输入<code>git add .</code>则将该路径下所有的内容全部添加。</p>
+<h3 id="提交修改"><a href="#提交修改" class="headerlink" title="提交修改"></a>提交修改</h3><p><code>git commit &lt;file&gt; -m &lt;message&gt;</code>：将缓存区的内容提交至本地仓库，其中<code>&lt;file&gt;</code>为需要提交的文件，可多个或文件夹，若不填写则全部提交。<code>-m &lt;message&gt;</code>为添加注释内容，如果在其中添加<code>-a</code>指令，如<code>git commit -am &lt;message&gt;</code>，则可以跳过<code>add</code>步骤，直接工作区内容提交到本地仓库中。同时每次commit也相当于提交了一个新的版本。</p>
+<h3 id="查看状态"><a href="#查看状态" class="headerlink" title="查看状态"></a>查看状态</h3><p><code>git status</code>：查看当前仓库的状态，例如有无未缓存或未提交之类的信息。</p>
+<h3 id="内容比较"><a href="#内容比较" class="headerlink" title="内容比较"></a>内容比较</h3><p><code>git diff</code>：比较工作区和暂存区的差异，可找到例如未缓存但已修改的内容。添加<code>--cached</code>参数则比较暂存区与上一次提交之间的差异，其它参数可在网上查询。</p>
+<h3 id="版本日志"><a href="#版本日志" class="headerlink" title="版本日志"></a>版本日志</h3><p><code>git log</code>：查询过去的版本，包括日期、作者、版本号等信息，添加<code>--pretty=oneline</code>可以精简上述信息至只有版本号和你commit时添加的注释。</p>
+<p><code>git reflog</code>：查询未来的版本，即你曾经回退过版本，现在想取消回退，可以通过这个命令进行查询。</p>
+<h3 id="撤销修改"><a href="#撤销修改" class="headerlink" title="撤销修改"></a>撤销修改</h3><p><code>git checkout -- &lt;file&gt;</code>：将工作区的文件恢复为之前暂存区存储的内容。</p>
+<p><code>git reset HEAD &lt;file&gt;</code>：将暂存区某文件的内容恢复为之前仓库存储的内容。</p>
+<h3 id="删除文件"><a href="#删除文件" class="headerlink" title="删除文件"></a>删除文件</h3><p><code>git rm &lt;file&gt;</code>：将文件从暂存区和工作区删除，若未使用该语句而直接将文件删除，则暂存区仍然会保留该文件，且在查询状态时告知你删除了文件，此时可以使用撤销修改进行恢复。若删除之前进行过修改，缓存至了暂存区且尚未提交，则此命令需要使用<code>-f</code>参数才可进行强制删除。若仅想删除暂存区内的修改但保留工作区的文件，则需要添加<code>--cached</code>参数。</p>
+<h3 id="版本回退"><a href="#版本回退" class="headerlink" title="版本回退"></a>版本回退</h3><p><code>git reset &lt;--soft|--mix|--hard&gt; &lt;commit_id&gt;</code>：将仓库重置至另外某个版本的状态。</p>
+<p>其中<code>&lt;--soft|--mix|--hard&gt;</code>为三选一参数：</p>
+<p><code>--soft</code>为变更<code>HEAD</code>所指向的版本（<code>HEAD</code>版本即为分支顶端的别名）。</p>
+<p><code>--hard</code>为除了变更<code>HEAD</code>所指向的版本外，还会把工程的一切都变成该历史版本的样子，该操作有丢失掉当前所有修改的风险。</p>
+<p><code>--mix</code>为除了变更<code>HEAD</code>所指向的版本外，还会将暂存区重置以匹配<code>HEAD</code>，但工作区不会改变。</p>
+<p>其中<code>&lt;commit_id&gt;</code>为版本号，通过版本日志可以查询，若设置为<code>HEAD</code>则为当前版本，若使用<code>HEAD^</code>可退回上一个版本，使用<code>HEAD^^</code>或<code>HEAD^2</code>可退回上上个版本，通过增加<code>^</code>的数量或增加数字，可退回的层数以此类推增长。</p>
+<h2 id="远程操作"><a href="#远程操作" class="headerlink" title="远程操作"></a>远程操作</h2><h3 id="添加关联"><a href="#添加关联" class="headerlink" title="添加关联"></a>添加关联</h3><p><code>git remote add &lt;name&gt; &lt;URL&gt;</code>：将本地已有仓库与一个远程仓库进行关联，其中<code>&lt;name&gt;</code>为对该远程仓库取得别名，常用origin作为该别名，<code>&lt;URL&gt;</code>为远程仓库的地址。</p>
+<h3 id="查看关联"><a href="#查看关联" class="headerlink" title="查看关联"></a>查看关联</h3><p><code>git remote -v</code>：查看当前全部已关联库。</p>
+<h3 id="取消关联"><a href="#取消关联" class="headerlink" title="取消关联"></a>取消关联</h3><p><code>git remote rm &lt;name&gt;</code>：删除某个关联的<code>&lt;name&gt;</code>分支。</p>
+<h3 id="上传代码"><a href="#上传代码" class="headerlink" title="上传代码"></a>上传代码</h3><p><code>git push &lt;name&gt; &lt;branch&gt;</code>：将本地仓库名为<code>&lt;branch&gt;</code>的分支上传至远程<code>&lt;name&gt;</code>仓库并合并，若两边分支名不同则应使用<code>&lt;brach_local&gt;:&lt;branch_origin&gt;</code>分别填写上两边的分支名然后上传，若两边版本差异则需要添加<code>--force</code>参数强制推送，若想未来简化<code>git push</code>操作，可在<code>&lt;name&gt;</code>前添加<code>-u</code>参数，未来<code>git push</code>即可直接代替<code>git push &lt;name&gt; &lt;branch&gt;</code>指令。</p>
+<h3 id="下载代码"><a href="#下载代码" class="headerlink" title="下载代码"></a>下载代码</h3><p><code>git pull &lt;name&gt; &lt;branch&gt;</code>：将远程<code>&lt;name&gt;</code>主机<code>&lt;branch&gt;</code>分支的代码合并到本地，也可使用<code>&lt;branch_origin&gt;:&lt;branch_local&gt;</code>来确定分支，当团队之间合作代码push推送失败时，可以使用<code>git pull</code>来获取最新的提交，然后本地修改合并后再推送。注意，pull操作会直接合并，如果在合并前需要对照之类的操作应该使用fetch。</p>
+<h2 id="分支管理"><a href="#分支管理" class="headerlink" title="分支管理"></a>分支管理</h2><h3 id="连接分支"><a href="#连接分支" class="headerlink" title="连接分支"></a>连接分支</h3><p><code>git branch --set-upstream-to &lt;branch&gt; &lt;name&gt;/&lt;branch&gt;</code>：如果pull失败并提示<code>no tracking information</code>，则说明本地分支和远程分支没有连接，使用上述方法方法即可完成连接。</p>
+<h3 id="创建分支"><a href="#创建分支" class="headerlink" title="创建分支"></a>创建分支</h3><p><code>git branch &lt;name&gt;</code>：创建一个名为<code>&lt;name&gt;</code>的分支，创建分支并不会对之前分支的工作区产生改变。</p>
+<p><code>git switch -c &lt;branch&gt; &lt;name&gt;/&lt;branch&gt;</code>：跟踪一个远端<code>&lt;name&gt;</code>主机的<code>&lt;branch&gt;</code>分支到本地。</p>
+<h3 id="切换分支"><a href="#切换分支" class="headerlink" title="切换分支"></a>切换分支</h3><p><code>git checkout &lt;name&gt;</code>：切换到<code>&lt;name&gt;</code>分支，若中间加上<code>-b</code>参数，则可以创建并切换。</p>
+<p><code>git switch &lt;name&gt;</code>：新版git提供的新指令，用于替代checkout，切换到<code>&lt;name&gt;</code>分支，若中间加上<code>-c</code>参数，则可以创建并切换。</p>
+<h3 id="合并分支"><a href="#合并分支" class="headerlink" title="合并分支"></a>合并分支</h3><p><code>git merge &lt;name&gt;</code>：将<code>&lt;name&gt;</code>分支合并到当前分支，如果合并产生了冲突，则需要手动合并冲突（即手动将文件编辑为我们想要的内容，git将在文件合并冲突位置处添加符号标注）。合并时如果加上<code>--no-ff</code>参数即可使用普通模式合并，这样合并后的历史有分支，可以看出曾经做过合并，而如果不加则看不出来曾经做个合并。</p>
+<h3 id="删除分支"><a href="#删除分支" class="headerlink" title="删除分支"></a>删除分支</h3><p><code>git push &lt;name&gt; --delete &lt;branch&gt;</code>：删除远端<code>&lt;name&gt;</code>仓库的<code>&lt;branch&gt;</code>分支。</p>
+<p><code>git branch -d &lt;branch&gt;</code>：删除本地<code>&lt;branch&gt;</code>分支，在删除前需要先切换到其它分支，若d改为大写D，则为强制删除。</p>
+<h3 id="查看分支"><a href="#查看分支" class="headerlink" title="查看分支"></a>查看分支</h3><p><code>git branch</code>：查看本地分支。</p>
+<p><code>git branch -r</code>：查看远端分支。</p>
+<h3 id="保存现场"><a href="#保存现场" class="headerlink" title="保存现场"></a>保存现场</h3><p><code>git stash</code>：当急需继续对某另一分支进行操作而当前任务尚未结束无法提交，可以先保存现场，去处理完其它任务后再回来重新工作，保存现场后当前工作区将会恢复为上一次commit时的状态，直到恢复现场。</p>
+<h3 id="查看现场"><a href="#查看现场" class="headerlink" title="查看现场"></a>查看现场</h3><p><code>git stash list</code>：查看现在已保存的现场，每个保存的现场均会拥有一个id进行标识。</p>
+<h3 id="恢复现场"><a href="#恢复现场" class="headerlink" title="恢复现场"></a>恢复现场</h3><p><code>git stash pop</code>：恢复现场并删除保存记录，如果产生冲突，文件会出现和合并时类似的改变。</p>
+<p><code>git stash apply &lt;id&gt;</code>：恢复id为<code>&lt;id&gt;</code>的现场但不会删除记录，需要手动删除</p>
+<h3 id="删除现场"><a href="#删除现场" class="headerlink" title="删除现场"></a>删除现场</h3><p><code>git stash drop &lt;id&gt;</code>：删除id为<code>&lt;id&gt;</code>的现场。</p>
+<h3 id="获取修改"><a href="#获取修改" class="headerlink" title="获取修改"></a>获取修改</h3><p><code>git cherry-pick &lt;commit_id&gt;</code>：从其它地方获取更改，但不同于merge，其获取的更改是以commit为单位而非分支，所以<code>&lt;commit_id&gt;</code>即为所交commit的id，可以在对应分支通过log查询。</p>
+<h2 id="标签管理"><a href="#标签管理" class="headerlink" title="标签管理"></a>标签管理</h2><h3 id="添加标签"><a href="#添加标签" class="headerlink" title="添加标签"></a>添加标签</h3><p><code>git tag &lt;TAG&gt;</code>：为一个commit打上标签，<code>&lt;TAG&gt;</code>为标签内容。通过<code>git tag -a &lt;TAG&gt; -m &lt;message&gt; &lt;commit_id&gt;</code>可以为id为<code>&lt;commit_id&gt;</code>的提交打上标签<code>&lt;TAG&gt;</code>并添加说明文字<code>&lt;message&gt;</code>。</p>
+<h3 id="查看标签"><a href="#查看标签" class="headerlink" title="查看标签"></a>查看标签</h3><p><code>git tag</code>：可以查看历史打过的标签。</p>
+<h3 id="删除标签"><a href="#删除标签" class="headerlink" title="删除标签"></a>删除标签</h3><p><code>git tag -d &lt;TAG&gt;</code>：删除名为<code>&lt;TAG&gt;</code>的标签。</p>
+<h3 id="推送标签"><a href="#推送标签" class="headerlink" title="推送标签"></a>推送标签</h3><p><code>git push &lt;name&gt; &lt;TAG&gt;</code>：标签本身不会自动上传到远端服务器，通过此指令可以将<code>&lt;TAG&gt;</code>推送到远端<code>&lt;name&gt;</code>主机上。</p>
+<p><code>git push &lt;name&gt; :refs/tags/&lt;TAG&gt;</code>：通过本指令可以将已上传至远端的标签删除。</p>
+]]></content>
+      <tags>
+        <tag>git</tag>
+        <tag>github</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>STM32CubeMX GCC工程Makefile内容详解</title>
+    <url>/blog/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/STM32CubeMX%20GCC%E5%B7%A5%E7%A8%8BMakefile%E5%86%85%E5%AE%B9%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<h2 id="基础介绍"><a href="#基础介绍" class="headerlink" title="基础介绍"></a>基础介绍</h2><p>因为项目原因，需要对编译系统进行一些比较复杂的使用，但是我对于编译系统这一块并不是非常精通了解，所以需要进行一下学习。正巧，众所周知STM32推出过非常实用的工具——STM32CubeMX，这个工具可以对STM32进行一些基础配置并设置一些配置代码，基本可以靠图形界面完成对STM32的所有初始化配置，然后它就会生成一个基础工程，编程者在这个基础上进行设置即可。</p>
+<span id="more"></span>
+<p>当然，本文主要关注点是在编译系统，所以该工具的配置什么的就不详细说了，基本上就是简单随便配置一下时钟就可以了（事实上应该时钟都不需要配置），重点在于我们生成工程的时候需要选择生成Makefile工程，这样才可以使用我们的开源工具链进行配置。</p>
+<p>之后我们可以得到如下的工程目录（当然，众所周知CubeMX的一些设置会影响到工程根目录的具体结构，不过这都不是重点）：</p>
+<p><img src="https://s2.loli.net/2022/03/04/olTYWtfcu9gSspM.png" alt></p>
+<p>其中build目录是编译后生成的，先不管，另外Core文件夹下的Test文件夹及其中内容是我进行测试的时候添加的，暂时也先不管。</p>
+<p>我们先来看看其它的东西，首先是Core中的内容，这部分的内容基本上就完全是STM32CubeMX生成的，Inc中放h文件而Src中放c文件，里面的文件都是在CubeMX中配置过的东西，这些东西是每次CubeMX在修改后都会重新生成的东西（也有可能是你修改了哪一部分，就会重新生成哪一部分的文件，这个是CubeMX自己的机制，不重要）。</p>
+<p>其次是Drivers中的内容，这些内容实际上都是从 CubeMX的安装目录里的sdk中复制过来的，如果我们在配置的时候没有选择要将这些东西复制过来，那么CubeMX也不会生成这个目录下的内容（或者不能说生成，而就是直接复制过来），但是取而代之的就是你使用的所有sdk的库函数，都是直接调用的安装目录里的东西，那么为了安全性着想，就不要在编程的时候修改他们了，否则你的库函数就被你的代码污染了，当然这样做的好处就是你的代码复用性会提高而且工程体积会稍微小点。</p>
+<p>然后是下面的<code>.mxproject</code>文件，CubeMX的工程文件，不管。</p>
+<p>接着就是我们等会最重要的Makefile，这个是Make工具的脚本文件，如果你不知道Make工具是啥，建议先了解一下再看本文会好一点。</p>
+<p>之后是<code>MakeTest.ioc</code>文件，CubeMX的配置文件，不管。</p>
+<p>然后是后缀为s的start文件，这个文件是芯片的项目启动文件，一般不需要管，里面放了中断向量表之类的东西。</p>
+<p>最后是后缀为ld的链接脚本文件，这个是用于链接的，等会会说。</p>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>本文的解析结构并没有按照makefile的解析顺序来，而是采用从上到下的顺序来解说的（当然会根据实际情况进行跳跃），主要原因在于我学习这个东西的目的主要是直接把这个Makefile当成一个模板，然后未来直接在这个模板上进行修改就可以了，而到目前为止我暂时还不打算自己从头来写个Makefile（毕竟能用就行，平时哪需要那么麻烦）。</p>
+<p>考虑到篇幅，就不单独把全部makefile列出来了，需要时你直接用CubeMX生成一个工程然后看它Makefile即可，只要STM32公司那边没有对这个规则进行大改，那么下面这些内容应该都大差不差。</p>
+<p>此外，本文中很多东西其实可以在<a href="https://gcc.gnu.org/onlinedocs/">gcc的手册</a>中找到答案，如果感兴趣可以去看看。</p>
+<h2 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h2><h3 id="TARGET"><a href="#TARGET" class="headerlink" title="TARGET"></a>TARGET</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">TARGET = MakeTest</span><br></pre></td></tr></table></figure>
+<p>设置目标文件名，实际上就是做了个变量，并且把Makefile这个作为参数传入。平时当成工程名即可，如果要换工程，就自己随便重新取个名字。</p>
+<h3 id="DEBUG"><a href="#DEBUG" class="headerlink" title="DEBUG"></a>DEBUG</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">DEBUG = 1</span><br></pre></td></tr></table></figure>
+<p>是否进行调试编译，这里表示是，release版关闭调试时将1改成其它数即可，具体原因后面会讲到。</p>
+<h3 id="OPT"><a href="#OPT" class="headerlink" title="OPT"></a>OPT</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">OPT = -Og</span><br></pre></td></tr></table></figure>
+<p>优化等级，这里使用Og的目的是因为开启了调试，所以优化时需要产生合理的优化而不和调试选项冲突。如果是release版本，可以使用<code>-Os</code>（提高速度并优化体积）或<code>-O3</code>（大幅提高速度但会增大体积）等命令，关于这部分的介绍可以参考<a href="https://www.zhihu.com/question/27090458/answer/137944410">知乎回答</a>。</p>
+<h3 id="BUILD-DIR"><a href="#BUILD-DIR" class="headerlink" title="BUILD_DIR"></a>BUILD_DIR</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">BUILD_DIR = build</span><br></pre></td></tr></table></figure>
+<p>编译目标地址，这也是前面提到为什么我会生成一个build文件夹，实际上就是这个变量进行的命名，如果你需要，可以把它修改成任何名字，然后编译出来的所有文件就都会放在这个你新命名的文件夹里面了。不过一般不建议修改，因为大家通用的都是build，不建议太特立独行。</p>
+<h3 id="C-SOURCES"><a href="#C-SOURCES" class="headerlink" title="C_SOURCES"></a>C_SOURCES</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">C_SOURCES =  \</span><br><span class="line">Core/Src/main.c \</span><br><span class="line">Core/Src/gpio.c \</span><br><span class="line">Core/Src/usart.c \</span><br><span class="line">Core/Src/stm32f4xx_it.c \</span><br><span class="line">Core/Src/stm32f4xx_hal_msp.c \</span><br><span class="line">Core/Test/test.c\</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c \</span><br><span class="line">Core/Src/system_stm32f4xx.c  </span><br></pre></td></tr></table></figure>
+<p>其实从名字我们不难理解，这里放的就是所有用到的c文件。如果我们需要自己写个什么库自己写了什么新的c文件，而且最后会被编译到程序里面的话，就都需要自己在这里添加一行c文件地址。这些地址可以是相对路径，相对的就是makefile文件的地址，而如果不好相对路径，那么也可以设置为绝对路径，例如这里面所有Drivers的文件，如果我们没有配置为复制到工程里面，那么这些文件就会被写为绝对路径并导航到你的CubeMX的sdk存储地址里面。</p>
+<p>此外，注意我添加了一行test.c的路径，这一行就是我自己写的文件，里面定义了一个全局变量，并被对应的test.h使用extern引用，然后在Src文件夹下面被main.c引用test.h后使用。这里我想说明的是，哪怕你用h文件做了个跳板（而不是直接extern过来）然后调用了test.c的东西，而且test.c中连个函数都没有，但是只要你使用了里面的东西，就必须要把文件地址填在上面的文件列表中。</p>
+<p>不过说实话我个人感觉这样做非常麻烦，这里我有点想知道为什么不能直接添加一个文件夹然后遍历下面的所有c文件并添加呢？为此我还稍微查询了一下，找到了这个博客《<a href="https://blog.csdn.net/qq849635649/article/details/52935079">一点一点学写Makefile(6)-遍历当前目录源文件及其子目录下源文件</a>》，感兴趣可以看看。</p>
+<h3 id="ASM-SOURCES"><a href="#ASM-SOURCES" class="headerlink" title="ASM_SOURCES"></a>ASM_SOURCES</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">ASM_SOURCES =  \</span><br><span class="line">startup_stm32f411xe.s</span><br></pre></td></tr></table></figure>
+<p>所有汇编文件的地址，添加方法可以继续参考前面C文件的添加方法，也是绝对地址和相对地址添加即可。而这里的start文件，一般不需要用户自己写，这些厂商在开发好芯片后都至少会提供一个startup的c或s文件的，我们需要做的就只是把他添加进来即可（有的可能不是汇编s文件，如果是c文件，正常添加到前面C文件的路径下面即可，这种情况下汇编这里就不需要添加startup了，不过此外你自己写的其他汇编文件倒是仍然可以正常这样写进去）。</p>
+<h3 id="PREFIX"><a href="#PREFIX" class="headerlink" title="PREFIX"></a>PREFIX</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">PREFIX = arm-none-eabi-</span><br></pre></td></tr></table></figure>
+<p>工具链起始名，说白了就是你使用的开源工具链（当然你有钱也可以买闭源的，不过没啥必要而且使用起来需要再自行研究一下），这里变量的内容是arm-none-eabi-，其实这个是一个gcc工具链的名字，这个工具链全程一般叫<code>arm-none-eabi-gcc</code>，arm表示架构平台，none表示无系统，eabi表示嵌入式应用二进制接口，gcc表示其遵守的GNU GCC的设计规范。这东西我记得之前在哪个很古老的博客上面看到的，但是当时忘了收藏，所以现在找不到了。总之，开发者将这个工具链除gcc部分命名后，里面的所有工具就全部使用这个前缀了，这个东西我们在后面会说。</p>
+<p>如果你需要对linux的arm设备进行开发，那么你可能需要安装arm-linux-eabi-gcc（当然也可能是其他名字或顺序，这个是开发者自己决定的，因为里面还可以添加开发者名称，所以好像没有非常严格的规范），如果你需要对riscv架构的设备进行开发，那么可能需要使用riscv-none-gcc，总之，需要什么自己去芯片官网上先看看有没有推荐，然后下载并改这里的参数即可。</p>
+<h3 id="CC-AS-CP-SZ"><a href="#CC-AS-CP-SZ" class="headerlink" title="CC,AS,CP,SZ"></a>CC,AS,CP,SZ</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ifdef</span> GCC_PATH</span><br><span class="line">CC = <span class="variable">$(GCC_PATH)</span>/<span class="variable">$(PREFIX)</span>gcc</span><br><span class="line">AS = <span class="variable">$(GCC_PATH)</span>/<span class="variable">$(PREFIX)</span>gcc -x assembler-with-cpp</span><br><span class="line">CP = <span class="variable">$(GCC_PATH)</span>/<span class="variable">$(PREFIX)</span>objcopy</span><br><span class="line">SZ = <span class="variable">$(GCC_PATH)</span>/<span class="variable">$(PREFIX)</span>size</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">CC = <span class="variable">$(PREFIX)</span>gcc</span><br><span class="line">AS = <span class="variable">$(PREFIX)</span>gcc -x assembler-with-cpp</span><br><span class="line">CP = <span class="variable">$(PREFIX)</span>objcopy</span><br><span class="line">SZ = <span class="variable">$(PREFIX)</span>size</span><br><span class="line"><span class="keyword">endif</span></span><br></pre></td></tr></table></figure>
+<p>这里我们需要分别看两个东西，其中是ifdef部分，这东西是一个判断你有没有定义某个变量，看名字大概也可以猜到，这个就是我们gcc工具链的地址。这就涉及到一个问题，也就是环境变量，如果你将你的工具链的工具目录地址添加到环境变量中，那么我们就可以在命令行中直接通过工具的名称调用这个工具，否则我们就需要输入绝对路径来调用工具。</p>
+<p>比如你的arm-none-eabi-gcc存储在D盘根目录下，那么你很可能需要在环境变量中添加<code>D:\arm-none-eabi-gcc\bin\</code>文件夹地址，此时我们就可以在命令行中直接使用<code>arm-none-eabi-gcc</code>来运行<code>D:\arm-none-eabi-gcc\bin\arm-none-eabi-gcc.exe</code>程序，否则，我们就需要输入完整的绝对路径来调用该程序。</p>
+<p>而GCC_PATH就是用来帮助你添加这个绝对路径的，如果你没有添加环境变量，那么就可以在makefile前面定义GCC_PATH并添加上地址，如<code>D:\arm-none-eabi-gcc\bin</code>，那么之后我们会运行ifdef中的程序（如果没定义就直接使用后面else的程序），makefile所有变量的本质其实就是字符替换，此时例如CC，就会被编译为<code>D:\arm-none-eabi-gcc\bin\arm-none-eabi-gcc.exe</code>，其余同理。当然，如果你不想在makefile中添加这个变量，也可以选择在输入<code>make</code>指令的时候添加<code>GCC_PATH=D:\arm-none-eabi-gcc\bin</code>。</p>
+<p><code>PREFIX</code>前面也已经说过了，不赘述。</p>
+<p>然后我们关注到这四个工具，其中gcc出现了两次，分别在CC和AS中，CC中直接使用gcc，其实代表了其默认参数编译C语言，而AS从名字在可以猜是代表了汇编器，其使用了-x参数表示更换编译语言，只不过代表所更换的参数assembler-with-cpp，似乎不只是可以汇编，还可以处理C++？不过我把test.c改名成test.cpp后分别添加到汇编和C的Sources列表中似乎都不行，会编译错误，有点不是很懂，不过总之其可以编译汇编语言成为机器语言是肯定的。</p>
+<p>之后是CP的objcopy，这是个复制文件内容的工具，具体介绍可以参考《<a href="https://my.oschina.net/dake/blog/196707">objcopy命令介绍 - Dake的信息摘录博客</a>》。</p>
+<p>SZ是一个记录生成程序内部各分段的大小的工具，这个在编译后查看编译出的文件大小进行项目优化的时候会比较有用，makefile中也用了这个工具，在编译到最后会输出这样的内容：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">arm-none-eabi-size build/MakeTest.elf</span><br><span class="line">   text    data     bss     dec     hex filename</span><br><span class="line">   6524      24    1640    8188    1ffc build/MakeTest.elf</span><br></pre></td></tr></table></figure>
+<p>值得注意的是这个size工具只能对elf文件进行解析，而hex和bin文件中是不包含代码段数据段这些东西的。这里的大概意思是我的代码段有6524字节，数据段有24字节，bss段有1640字节，总共加起来有8188字节。关于这些段的介绍，参考可以参考这个博客《<a href="https://blog.csdn.net/zhy557/article/details/80832268">堆栈、BSS段、代码段、数据段、RO、RW、ZI等概念区分</a>》。</p>
+<h3 id="HEX-BIN"><a href="#HEX-BIN" class="headerlink" title="HEX,BIN"></a>HEX,BIN</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">HEX = <span class="variable">$(CP)</span> -O ihex</span><br><span class="line">BIN = <span class="variable">$(CP)</span> -O binary -S</span><br></pre></td></tr></table></figure>
+<p>从名字我们就不难看出，这里其实指的就是生成十六进制文件和二进制文件，他们都是可以被烧录到stm32中的代码文件格式，而其中的参数也很好懂，分别就是生成十六进制和二进制所需的参数，没啥好解释的，直接用就行。</p>
+<h3 id="CPU"><a href="#CPU" class="headerlink" title="CPU"></a>CPU</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">CPU = -mcpu=cortex-m4</span><br></pre></td></tr></table></figure>
+<p>选择cpu的架构，因为我使用的是stm32f4的芯片，故这里的架构是cortex-m4，如果是其它架构需要进行修改。</p>
+<h3 id="FPU"><a href="#FPU" class="headerlink" title="FPU"></a>FPU</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">FPU = -mfpu=fpv4-sp-d16</span><br></pre></td></tr></table></figure>
+<p>选择fpu的架构，这里是因为F4系列有fpu，所以可以添加，如果没有就需要关闭，关闭后无法使用fpu对浮点数计算进行加速，相关概念可以参考《<a href="https://blog.csdn.net/weixin_42415539/article/details/110139722">【arm-gcc开发STM32】开启stm32f4的FPU</a>》。</p>
+<h3 id="FLOAT-ABI"><a href="#FLOAT-ABI" class="headerlink" title="FLOAT-ABI"></a>FLOAT-ABI</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">FLOAT-ABI = -mfloat-abi=hard</span><br></pre></td></tr></table></figure>
+<p>硬浮点或软浮点，如果有FPU就可以开启硬浮点，这里开启了，相关概念可以参考《<a href="http://blog.chinaunix.net/uid-27875-id-5785166.html">浮点 <em> 运算处理方式(软硬-mfloat-abi=) </em> 浮点协处理器类型 -mfpu=</a>》。</p>
+<h3 id="MCU"><a href="#MCU" class="headerlink" title="MCU"></a>MCU</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">MCU = <span class="variable">$(CPU)</span> -mthumb <span class="variable">$(FPU)</span> $(FLOAT-ABI)</span><br></pre></td></tr></table></figure>
+<p>此处代表了所有针对MCU硬件的配置，其它的我们已经说过，而这个<code>-mthumb</code>代表的是T32指令集，如果使用了另外一种指令集的架构就需要换这里的参数，具体参考《<a href="http://blog.sina.com.cn/s/blog_675a80790102ylnk.html">【解读经典】ARM体系结构与编程（3）</a>》。</p>
+<h3 id="AD-DEFS-C-DEFS"><a href="#AD-DEFS-C-DEFS" class="headerlink" title="AD_DEFS,C_DEFS"></a>AD_DEFS,C_DEFS</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">AS_DEFS = </span><br><span class="line"></span><br><span class="line">C_DEFS =  \</span><br><span class="line">-DUSE_HAL_DRIVER \</span><br><span class="line">-DSTM32F411xE</span><br></pre></td></tr></table></figure>
+<p>分别是汇编和C的宏定义，这个项目中的汇编里面因为不需要，所以啥也没写，如果你不需要在汇编程序中增加什么外部的宏定义，就不需要这个。</p>
+<p>而C文件宏定义，真正的宏需要去掉每个宏定义开头的-D，例如此处的-DUSE_HAL_DRIVER，实际上是宏定义了USE_HAL_DRIVER，这些宏定义会影响到c文件里面相关宏的内容，例如这个HAL，其实就代表了HAL库，那么C文件里面引用的东西就会选择HAL库而非LL库的内容。如果你想的话，也可以自己添加一些宏定义在c文件中作为开关，然后在这里添加东西表示打开。</p>
+<h3 id="AS-INCLUDES-C-INCLUDES"><a href="#AS-INCLUDES-C-INCLUDES" class="headerlink" title="AS_INCLUDES,C_INCLUDES"></a>AS_INCLUDES,C_INCLUDES</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">AS_INCLUDES = </span><br><span class="line"></span><br><span class="line">C_INCLUDES =  \</span><br><span class="line">-ICore/Inc \</span><br><span class="line">-IDrivers/STM32F4xx_HAL_Driver/Inc \</span><br><span class="line">-IDrivers/STM32F4xx_HAL_Driver/Inc/Legacy \</span><br><span class="line">-IDrivers/CMSIS/Device/ST/STM32F4xx/Include \</span><br><span class="line">-IDrivers/CMSIS/Include</span><br></pre></td></tr></table></figure>
+<p>汇编和C的引用文件所在文件夹，其中因为汇编没有引用外部文件，所以什么也没有，如果有需要自己添加。</p>
+<p>注意这里添加的是文件夹地址而不是具体的文件地址。</p>
+<p>对于C来说，如果在自己的代码#include中使用了相对地址或绝对地址，则可以不添加，如果是只写了引用文件名或非本文件的文件名，则需要添加，以辅助编译器找到对应文件，编译器会主动从上述路径作为相对路径寻找include的文件。这里-I也全部是前缀。</p>
+<p>例如我们需要在<code>Core\Src\main.c</code>中引用<code>Core\Test\test.h</code>，那么我们需要在main.c中写<code>#include &quot;test.h&quot;</code>并在<code>C_INCLUDES</code>中添加<code>-ICore/Test</code>，而如果我们不在<code>C_INCLUDES</code>中进行添加，那么main.c中就必须写相对或绝对地址，例如<code>#include &quot;../Test/test.h&quot;</code>，这样才能保证我们的编译器能够找准位置。</p>
+<h3 id="ASFLAGS-CFLAGS"><a href="#ASFLAGS-CFLAGS" class="headerlink" title="ASFLAGS,CFLAGS"></a>ASFLAGS,CFLAGS</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">ASFLAGS = <span class="variable">$(MCU)</span> <span class="variable">$(AS_DEFS)</span> <span class="variable">$(AS_INCLUDES)</span> <span class="variable">$(OPT)</span> -Wall -fdata-sections -ffunction-sections</span><br><span class="line">CFLAGS = <span class="variable">$(MCU)</span> <span class="variable">$(C_DEFS)</span> <span class="variable">$(C_INCLUDES)</span> <span class="variable">$(OPT)</span> -Wall -fdata-sections -ffunction-sections</span><br></pre></td></tr></table></figure>
+<p>编译参数，分别针对汇编和C语言，他们各自前面四个变量参数已经讲过，不再赘述。</p>
+<p><code>-Wall</code>的功能主要是开启一些警告检测，如果我们的代码出现了不规范的地方，那么通过这个参数，编译器就会检查到这些地方并告知我们。关于这个参数的具体介绍可以参考《<a href="http://blog.sina.com.cn/s/blog_553230d70101efqv.html">gcc -Wall详解</a>》。</p>
+<p><code>-fdata-sections</code>表示对程序中每个数据创建一个section，而<code>-ffunction-sections</code>则是针对函数创建section，GCC的链接操作是以section作为最小的处理单元，只要一个section中的某个符号被引用，该section就会被加到可执行程序中。关于这个部分具体可以参考《<a href="https://blog.csdn.net/pengfei240/article/details/55228228">gcc -ffunction-sections -fdata-sections -Wl,–gc-sections 参数详解</a>》</p>
+<h3 id="ifeq-DEBUG-1"><a href="#ifeq-DEBUG-1" class="headerlink" title="ifeq ($(DEBUG), 1)"></a>ifeq ($(DEBUG), 1)</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ifeq</span> (<span class="variable">$(DEBUG)</span>, 1)</span><br><span class="line">CFLAGS += -g -gdwarf-2</span><br><span class="line"><span class="keyword">endif</span></span><br></pre></td></tr></table></figure>
+<p>语句很好理解，如果DEBUG=1，就执行，如果不是1，就不执行。很显然，这段话就是检测目前是否是调试模式，而注意这里CFLAGS前面其实已经出现过，而这里再次出现时使用的就不再是等号=了，而是+=符号，这个符号在makefile中表示在已有变量后面补上新的符号。</p>
+<p>而补上的其实就是两个新的参数，我们应该不难猜测这两个参数就是针对的调试生成的。</p>
+<p><code>-g</code>表示的意思是生成调试信息，如果不生成的话我们在使用gdb调试的时候就很难做到代码定位，当然如果你不使用gdb，还可以使用<code>-gformat</code>然后加上你想要的格式。而<code>-gdwarf-2</code>的意思是生成DWARF version2 的格式的调试信息，常用于IRIXX6上的DBX调试器。GCC会使用DWARF version3的一些特性。关于这两个参数的使用，可以参考《<a href="https://blog.csdn.net/luguifang2011/article/details/80642692">GCC 编译及编译选项</a>》。</p>
+<h3 id="CFLAGS"><a href="#CFLAGS" class="headerlink" title="CFLAGS"></a>CFLAGS</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">CFLAGS += -MMD -MP -MF<span class="string">&quot;$(@:%.o=%.d)&quot;</span></span><br></pre></td></tr></table></figure>
+<p>关于这个部分的内容又是针对CFLAGS，这里出现了三个新的参数，同时后面有一串makefile语法的宏。</p>
+<p>这一串东西的主要功能是生成关联信息，关联信息会对链接产生影响，其中<code>-MMD</code>表示会把关联信息输出到.d文件中，<code>-MF</code>是指定用于存放关联信息的文件，<code>-MP</code>生成的依赖文件里面，依赖规则中的所有 .h 依赖项都会在该文件中生成一个伪目标，其不依赖任何其他依赖项。该伪规则将避免删除了对应的头文件而没有更新 “Makefile” 去匹配新的依赖关系而导致 make 出错的情况出现。</p>
+<p>关于这三个参数以及相关信息的介绍可以参考《<a href="https://blog.csdn.net/linuxandroidwince/article/details/75221300">GCC -M,-MM,-MMD,-MF,-MT</a>》和《<a href="https://blog.csdn.net/QQ1452008/article/details/50855810">Linux Makefile 生成 *.d 依赖文件以及 gcc -M -MF -MP 等相关选项说明</a>》。</p>
+<p>而后面那一堆宏，说实话我也不太看得懂，毕竟我对Makefile的语法研究不深，不过看样子意思大概是针对MF的，而且大概含义是把所有o文件的名字复制生成对应的d文件，然后配合前面的参数，把关联信息生成到这些d文件中，而且通过build中的确d文件和o文件基本可以对应上，也侧面应证了这个猜想。</p>
+<h3 id="LDSCRIPTS"><a href="#LDSCRIPTS" class="headerlink" title="LDSCRIPTS"></a>LDSCRIPTS</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">LDSCRIPT = STM32F411CEUx_FLASH.ld</span><br></pre></td></tr></table></figure>
+<p>链接脚本，里面包括了链接时各程序的组织架构，以及包括堆栈地址大小等信息，这个东西是CubeMX生成的，所以里面其实很多东西你在CubeMX中都可以修改。这里的内容不只是修改芯片，只要修改了了中断向量、堆栈大小等信息，均需要修改此部分，它其实就代表了你的程序在芯片的ROM中是怎么存储的，感兴趣可以自行查看一下这个文件，我把我的这个文件复制上来给各位看一下（删除了一些无用的注释）：</p>
+<figure class="highlight sqf"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* Entry Point */</span></span><br><span class="line">ENTRY(Reset_Handler)</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Highest address of the user mode stack */</span></span><br><span class="line"><span class="variable">_estack</span> = <span class="number">0</span>x20020000;    <span class="comment">/* end of RAM */</span></span><br><span class="line"><span class="comment">/* Generate a link error if heap and stack don&#x27;t fit into RAM */</span></span><br><span class="line"><span class="variable">_Min_Heap_Size</span> = <span class="number">0</span>x200;      <span class="comment">/* required amount of heap  */</span></span><br><span class="line"><span class="variable">_Min_Stack_Size</span> = <span class="number">0</span>x400; <span class="comment">/* required amount of stack */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Specify the memory areas */</span></span><br><span class="line">MEMORY</span><br><span class="line">&#123;</span><br><span class="line">RAM (xrw)      : ORIGIN = <span class="number">0</span>x20000000, LENGTH = <span class="number">128</span>K</span><br><span class="line">FLASH (rx)      : ORIGIN = <span class="number">0</span>x8000000, LENGTH = <span class="number">512</span>K</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Define output sections */</span></span><br><span class="line">SECTIONS</span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">/* The startup code goes first into FLASH */</span></span><br><span class="line">  .isr_vector :</span><br><span class="line">  &#123;</span><br><span class="line">    . = ALIGN(<span class="number">4</span>);</span><br><span class="line">    KEEP(*(.isr_vector)) <span class="comment">/* Startup code */</span></span><br><span class="line">    . = ALIGN(<span class="number">4</span>);</span><br><span class="line">  &#125; &gt;FLASH</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* The program code and other data goes into FLASH */</span></span><br><span class="line">  .<span class="built_in">text</span> :</span><br><span class="line">  &#123;</span><br><span class="line">    . = ALIGN(<span class="number">4</span>);</span><br><span class="line">    *(.<span class="built_in">text</span>)           <span class="comment">/* .text sections (code) */</span></span><br><span class="line">    *(.<span class="built_in">text</span>*)          <span class="comment">/* .text* sections (code) */</span></span><br><span class="line">    *(.glue_7)         <span class="comment">/* glue arm to thumb code */</span></span><br><span class="line">    *(.glue_7t)        <span class="comment">/* glue thumb to arm code */</span></span><br><span class="line">    *(.eh_frame)</span><br><span class="line"></span><br><span class="line">    KEEP (*(.init))</span><br><span class="line">    KEEP (*(.fini))</span><br><span class="line"></span><br><span class="line">    . = ALIGN(<span class="number">4</span>);</span><br><span class="line">    <span class="variable">_etext</span> = .;        <span class="comment">/* define a global symbols at end of code */</span></span><br><span class="line">  &#125; &gt;FLASH</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Constant data goes into FLASH */</span></span><br><span class="line">  .rodata :</span><br><span class="line">  &#123;</span><br><span class="line">    . = ALIGN(<span class="number">4</span>);</span><br><span class="line">    *(.rodata)         <span class="comment">/* .rodata sections (constants, strings, etc.) */</span></span><br><span class="line">    *(.rodata*)        <span class="comment">/* .rodata* sections (constants, strings, etc.) */</span></span><br><span class="line">    . = ALIGN(<span class="number">4</span>);</span><br><span class="line">  &#125; &gt;FLASH</span><br><span class="line"></span><br><span class="line">  .ARM.extab   : &#123; *(.ARM.extab* .gnu.linkonce.armextab.*) &#125; &gt;FLASH</span><br><span class="line">  .ARM : &#123;</span><br><span class="line">    <span class="variable">__exidx_start</span> = .;</span><br><span class="line">    *(.ARM.exidx*)</span><br><span class="line">    <span class="variable">__exidx_end</span> = .;</span><br><span class="line">  &#125; &gt;FLASH</span><br><span class="line"></span><br><span class="line">  .preinit_array     :</span><br><span class="line">  &#123;</span><br><span class="line">    PROVIDE_HIDDEN (<span class="variable">__preinit_array_start</span> = .);</span><br><span class="line">    KEEP (*(.preinit_array*))</span><br><span class="line">    PROVIDE_HIDDEN (<span class="variable">__preinit_array_end</span> = .);</span><br><span class="line">  &#125; &gt;FLASH</span><br><span class="line">  .init_array :</span><br><span class="line">  &#123;</span><br><span class="line">    PROVIDE_HIDDEN (<span class="variable">__init_array_start</span> = .);</span><br><span class="line">    KEEP (*(<span class="built_in">SORT</span>(.init_array.*)))</span><br><span class="line">    KEEP (*(.init_array*))</span><br><span class="line">    PROVIDE_HIDDEN (<span class="variable">__init_array_end</span> = .);</span><br><span class="line">  &#125; &gt;FLASH</span><br><span class="line">  .fini_array :</span><br><span class="line">  &#123;</span><br><span class="line">    PROVIDE_HIDDEN (<span class="variable">__fini_array_start</span> = .);</span><br><span class="line">    KEEP (*(<span class="built_in">SORT</span>(.fini_array.*)))</span><br><span class="line">    KEEP (*(.fini_array*))</span><br><span class="line">    PROVIDE_HIDDEN (<span class="variable">__fini_array_end</span> = .);</span><br><span class="line">  &#125; &gt;FLASH</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* used by the startup to initialize data */</span></span><br><span class="line">  <span class="variable">_sidata</span> = LOADADDR(.data);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Initialized data sections goes into RAM, load LMA copy after code */</span></span><br><span class="line">  .data : </span><br><span class="line">  &#123;</span><br><span class="line">    . = ALIGN(<span class="number">4</span>);</span><br><span class="line">    <span class="variable">_sdata</span> = .;        <span class="comment">/* create a global symbol at data start */</span></span><br><span class="line">    *(.data)           <span class="comment">/* .data sections */</span></span><br><span class="line">    *(.data*)          <span class="comment">/* .data* sections */</span></span><br><span class="line"></span><br><span class="line">    . = ALIGN(<span class="number">4</span>);</span><br><span class="line">    <span class="variable">_edata</span> = .;        <span class="comment">/* define a global symbol at data end */</span></span><br><span class="line">  &#125; &gt;RAM AT&gt; FLASH</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line">  <span class="comment">/* Uninitialized data section */</span></span><br><span class="line">  . = ALIGN(<span class="number">4</span>);</span><br><span class="line">  .bss :</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">/* This is used by the startup in order to initialize the .bss secion */</span></span><br><span class="line">    <span class="variable">_sbss</span> = .;         <span class="comment">/* define a global symbol at bss start */</span></span><br><span class="line">    <span class="variable">__bss_start__</span> = <span class="variable">_sbss</span>;</span><br><span class="line">    *(.bss)</span><br><span class="line">    *(.bss*)</span><br><span class="line">    *(COMMON)</span><br><span class="line"></span><br><span class="line">    . = ALIGN(<span class="number">4</span>);</span><br><span class="line">    <span class="variable">_ebss</span> = .;         <span class="comment">/* define a global symbol at bss end */</span></span><br><span class="line">    <span class="variable">__bss_end__</span> = <span class="variable">_ebss</span>;</span><br><span class="line">  &#125; &gt;RAM</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* User_heap_stack section, used to check that there is enough RAM left */</span></span><br><span class="line">  .<span class="variable">_user_heap_stack</span> :</span><br><span class="line">  &#123;</span><br><span class="line">    . = ALIGN(<span class="number">8</span>);</span><br><span class="line">    PROVIDE ( end = . );</span><br><span class="line">    PROVIDE ( <span class="variable">_end</span> = . );</span><br><span class="line">    . = . + <span class="variable">_Min_Heap_Size</span>;</span><br><span class="line">    . = . + <span class="variable">_Min_Stack_Size</span>;</span><br><span class="line">    . = ALIGN(<span class="number">8</span>);</span><br><span class="line">  &#125; &gt;RAM</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Remove information from the standard libraries */</span></span><br><span class="line">  /DISCARD/ :</span><br><span class="line">  &#123;</span><br><span class="line">    libc.a ( * )</span><br><span class="line">    libm.a ( * )</span><br><span class="line">    libgcc.a ( * )</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  .ARM.attributes <span class="number">0</span> : &#123; *(.ARM.attributes) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们简单看一下，最开始有个<code>ENTRY</code>指令，里面参数是<code>Reset_Handler</code>，显然它指向了一个所谓的复位句柄，那么这个句柄是在哪里呢？对，就是在我们前面说的startup汇编文件中，也就是说我们的入口程序实际上就是针对的这个句柄，然后后面通过这个句柄开始的程序进行逐渐执行，初始化硬件向量表这些，再然后才是开始运行我们的main程序，如果你需要写一些什么Bootloader之类的东西，其实也就是在这里看和改。</p>
+<p>之后我们再继续查看后面的东西，可以发现我们还标注了RAM的大小、堆栈大小、地址等信息，这些信息都会最终被编译到我们的程序中，并且配合我们的烧录器或仿真器被烧录的芯片中的指定位置。</p>
+<p>再之后就是每个区段section了，这些是对你的程序存储的划分，一般情况下我们是不需要对这些东西进行修改的，因为大部分芯片程序的运行存储理念都是差不多的，所以普通情况下我们需要修改的东西基本上就是前面的那些（当然，如果你换了其它芯片的架构，那可能还是要好好研究一下的）。</p>
+<h3 id="LIBS-LIBDIR"><a href="#LIBS-LIBDIR" class="headerlink" title="LIBS,LIBDIR"></a>LIBS,LIBDIR</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">LIBS = -lc -lm -lnosys</span><br><span class="line">LIBDIR =</span><br></pre></td></tr></table></figure>
+<p>LIBS里面的这几个东西，代表的链接库，其实就是C语言的标准库，比如说这个-lm就代表了链接了标准数学库，不过具体这几个库链接的都是哪几个，我就不是很清楚了，具体可能要参考GCC的手册，但是我感觉没啥必要，毕竟都是标准库，链接了就链接了呗。除非你需要自己添加引用一些其他的链接库或者你需要缩减代码体积的时候，到时候再去研究哪个有用哪个没用就是了。</p>
+<p>而对于LIBDIR，很明显也是一个库地址的意思，如果你使用的是非标准库需要从外面引用的话，就需要在这里添加东西了，添加的方法和前面添加c和汇编库的方法类似。</p>
+<h3 id="LDFLAGS"><a href="#LDFLAGS" class="headerlink" title="LDFLAGS"></a>LDFLAGS</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">LDFLAGS = <span class="variable">$(MCU)</span> -specs=nano.specs -T<span class="variable">$(LDSCRIPT)</span> <span class="variable">$(LIBDIR)</span> <span class="variable">$(LIBS)</span> -Wl,-Map=<span class="variable">$(BUILD_DIR)</span>/<span class="variable">$(TARGET)</span>.map,--cref -Wl,--gc-sections</span><br></pre></td></tr></table></figure>
+<p>这个就是链接的参数。</p>
+<p><code>-specs=nano.specs</code>替换精简c库以缩小代码大小。</p>
+<p><code>-T</code>使用脚本文件xxx作为链接器脚本，此脚本替换ld的默认链接脚本（而非加进去），因此命令文件必须给出所有输出文件所需的东西，这里的链接脚本我们在前面已经说过了。</p>
+<p><code>-Wl</code>如果链接器不是直接被使用的，而是被编译器使用（如gcc），则所有的链接命令前面必须加上-Wl参数（或其他特殊编译器对应的参数）。</p>
+<p><code>-MAP</code>打印一个链接表到map文件中。</p>
+<p><code>--cref</code>输出一个交叉引用表。如果一个链接映射文件正在被生成，交叉参照表将会被输出到映射文件中。否则，将会被输出到标准输出。</p>
+<p><code>--gc-sections</code>允许对未使用的段使用垃圾收集。在不支持这个选项的目标上将被自动忽略。默认的行为可用’–no-gc-sections’恢复。</p>
+<p>关于这部分的内容可以参考《<a href="https://blog.csdn.net/yyww322/article/details/50827683">LD说明文档—2.LD命令行命令翻译</a>》</p>
+<h3 id="all"><a href="#all" class="headerlink" title="all"></a>all</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">all: <span class="variable">$(BUILD_DIR)</span>/<span class="variable">$(TARGET)</span>.elf <span class="variable">$(BUILD_DIR)</span>/<span class="variable">$(TARGET)</span>.hex <span class="variable">$(BUILD_DIR)</span>/<span class="variable">$(TARGET)</span>.bin</span></span><br></pre></td></tr></table></figure>
+<p>默认执行全部编译，生成elf、hex和bin文件，文件地址和文件名在前面已经说过了。</p>
+<h3 id="OBJECTS"><a href="#OBJECTS" class="headerlink" title="OBJECTS"></a>OBJECTS</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">OBJECTS = <span class="variable">$(<span class="built_in">addprefix</span> <span class="variable">$(BUILD_DIR)</span>/,$(<span class="built_in">notdir</span> $(C_SOURCES:.c=.o)</span>))</span><br><span class="line"><span class="keyword">vpath</span> %.c <span class="variable">$(<span class="built_in">sort</span> $(<span class="built_in">dir</span> <span class="variable">$(C_SOURCES)</span>)</span>)</span><br><span class="line">OBJECTS += <span class="variable">$(<span class="built_in">addprefix</span> <span class="variable">$(BUILD_DIR)</span>/,$(<span class="built_in">notdir</span> $(ASM_SOURCES:.s=.o)</span>))</span><br><span class="line"><span class="keyword">vpath</span> %.s <span class="variable">$(<span class="built_in">sort</span> $(<span class="built_in">dir</span> <span class="variable">$(ASM_SOURCES)</span>)</span>)</span><br></pre></td></tr></table></figure>
+<p>这一大段都是makefile的语法，本质上代表了文件替换和名称命名等功能，一般而言我们修改芯片工程或其它什么时候，都不需要修改这个地方。该部分内容较多，另有博客对这一部分进行了比较详细的解释《<a href="https://blog.csdn.net/qwe5959798/article/details/112367495">(GCC)STM32CubeMX生成的Makefile详解</a>》。</p>
+<h3 id="BUILD"><a href="#BUILD" class="headerlink" title="BUILD"></a>BUILD</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="variable">$(BUILD_DIR)</span>/%.o: %.c Makefile | <span class="variable">$(BUILD_DIR)</span> </span><br><span class="line">	<span class="variable">$(CC)</span> -c <span class="variable">$(CFLAGS)</span> -Wa,-a,-ad,-alms=<span class="variable">$(BUILD_DIR)</span>/<span class="variable">$(<span class="built_in">notdir</span> $(&lt;:.c=.lst)</span>) <span class="variable">$&lt;</span> -o <span class="variable">$@</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$(BUILD_DIR)</span>/%.o: %.s Makefile | <span class="variable">$(BUILD_DIR)</span></span><br><span class="line">	<span class="variable">$(AS)</span> -c <span class="variable">$(CFLAGS)</span> <span class="variable">$&lt;</span> -o <span class="variable">$@</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$(BUILD_DIR)</span>/<span class="variable">$(TARGET)</span>.elf: <span class="variable">$(OBJECTS)</span> Makefile</span><br><span class="line">	<span class="variable">$(CC)</span> <span class="variable">$(OBJECTS)</span> <span class="variable">$(LDFLAGS)</span> -o <span class="variable">$@</span></span><br><span class="line">	<span class="variable">$(SZ)</span> <span class="variable">$@</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$(BUILD_DIR)</span>/%.hex: <span class="variable">$(BUILD_DIR)</span>/%.elf | <span class="variable">$(BUILD_DIR)</span></span><br><span class="line">	<span class="variable">$(HEX)</span> <span class="variable">$&lt;</span> <span class="variable">$@</span></span><br><span class="line">	</span><br><span class="line"><span class="variable">$(BUILD_DIR)</span>/%.bin: <span class="variable">$(BUILD_DIR)</span>/%.elf | <span class="variable">$(BUILD_DIR)</span></span><br><span class="line">	<span class="variable">$(BIN)</span> <span class="variable">$&lt;</span> <span class="variable">$@</span>	</span><br><span class="line">	</span><br><span class="line"><span class="variable">$(BUILD_DIR)</span>:</span><br><span class="line">	mkdir <span class="variable">$@</span></span><br></pre></td></tr></table></figure>
+<p>这一部分实际上前面那个博客也介绍得差不多了，但是他没有讲到里面的几个参数的功能。</p>
+<p>其中-c和-o这两个gcc最基础的参数就不说了，重点是第一部分中出现的<code>-Wa,-a,-ad,-alms</code>几个参数是什么意思。说实话，我最开始也没找到，翻了gcc的手册但是只找到关于Wa的一点描述，而且还不咋看得懂。但是解铃还须系铃人，我们想要知道这几个意思其实最好的办法就是去问一下STM32，然后我就去STM32的官方论坛问了一下，对方给出了答复，说明这几个参数其实就是针对GCC的汇编器的，主要功能是生成一些信息还有引用一些库之类的，一般情况下我们对其可以不做更改。关于这里的问答，可以<a href="https://community.st.com/s/feed/0D53W00001PXCcxSAH">跳转到论坛界面进行查看</a>。</p>
+<h3 id="clean"><a href="#clean" class="headerlink" title="clean"></a>clean</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm -fR <span class="variable">$(BUILD_DIR)</span></span><br></pre></td></tr></table></figure>
+<p>这个东西没啥好说的，就是清除编译出来的那一大堆文件，一般情况下写makefile都需要这个东西防止生成东西太多影响空间，使用方法就是<code>make clean</code>。</p>
+<h3 id="flash"><a href="#flash" class="headerlink" title="flash"></a>flash</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">flash:</span></span><br><span class="line">	openocd -f interface/cmsis-dap.cfg -f target/stm32f4x.cfg -c <span class="string">&quot;program <span class="variable">$(BUILD_DIR)</span>/<span class="variable">$(TARGET)</span>.elf reset exit&quot;</span></span><br></pre></td></tr></table></figure>
+<p>烧录程序，这个东西是我自己添加的，需要使用openocd并且配置环境变量，如果没有配置环境变量需要修改一下openocd命令的路径，而如果没有下载openocd的就无法使用这个功能了，这个功能不是必须的，如果需要可以直接使用stm32官方提供的烧录工具。</p>
+<h3 id="dependencies"><a href="#dependencies" class="headerlink" title="dependencies"></a>dependencies</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="keyword">-include</span> <span class="variable">$(<span class="built_in">wildcard</span> <span class="variable">$(BUILD_DIR)</span>/*.d)</span></span><br></pre></td></tr></table></figure>
+<p>依赖引用，这里引用就是前面我们生成的关联文件，这些东西有什么用呢，其实目的就是为了生成我们的o文件。如果你看不懂这个东西什么意思，那么我们随便打开一个d文件其实你应该就懂了（如果你看过一点makefile基础）：</p>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">build/gpio.o: Core/Src/gpio.c Core/Inc/gpio.h Core/Inc/main.h \</span></span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \</span><br><span class="line"> Core/Inc/stm32f4xx_hal_conf.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h \</span><br><span class="line"> Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h \</span><br><span class="line"> Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f411xe.h \</span><br><span class="line"> Drivers/CMSIS/Include/core_cm4.h Drivers/CMSIS/Include/cmsis_version.h \</span><br><span class="line"> Drivers/CMSIS/Include/cmsis_compiler.h Drivers/CMSIS/Include/cmsis_gcc.h \</span><br><span class="line"> Drivers/CMSIS/Include/mpu_armv7.h \</span><br><span class="line"> Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h</span><br><span class="line"><span class="section">Core/Inc/gpio.h:</span></span><br><span class="line"><span class="section">Core/Inc/main.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:</span></span><br><span class="line"><span class="section">Core/Inc/stm32f4xx_hal_conf.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h:</span></span><br><span class="line"><span class="section">Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h:</span></span><br><span class="line"><span class="section">Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f411xe.h:</span></span><br><span class="line"><span class="section">Drivers/CMSIS/Include/core_cm4.h:</span></span><br><span class="line"><span class="section">Drivers/CMSIS/Include/cmsis_version.h:</span></span><br><span class="line"><span class="section">Drivers/CMSIS/Include/cmsis_compiler.h:</span></span><br><span class="line"><span class="section">Drivers/CMSIS/Include/cmsis_gcc.h:</span></span><br><span class="line"><span class="section">Drivers/CMSIS/Include/mpu_armv7.h:</span></span><br><span class="line"><span class="section">Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>这个是gpio.d，看着是不是很熟悉，感觉和前面那个《<a href="https://blog.csdn.net/qwe5959798/article/details/112367495">(GCC)STM32CubeMX生成的Makefile详解</a>》说的把生成指令展开后C_INCLUDES、C_SOURCES生成的那一套很像？像就对了，这东西就是为了生成.d文件最顶部那个目标文件而存在的，而这里的gpio.d文件中所指的其实就是gpio.o，其余同理。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>好了，看到这你应该基本上理解了这个Makefile内部的功能和作用了，配合我找的这些资料以及官方文档，相信你可以学到更多。</p>
+<p>本文的存在更多是类似一个学习笔记，而且本人本身才疏学浅，里面内容不免可能会存在一些矛盾错误或疏漏的地方，如果发现欢迎指出。</p>
+]]></content>
+      <tags>
+        <tag>STM32</tag>
+        <tag>Makefile</tag>
+        <tag>gcc</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>AMD和云端部署Stable Diffusion</title>
+    <url>/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/AMD%E5%92%8C%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2Stable%20Diffusion/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><h3 id="怎么样？"><a href="#怎么样？" class="headerlink" title="怎么样？"></a>怎么样？</h3><p>目前AI绘画很火，很多朋友想要尝试，但试着试着发现自己的电脑好像不大行。</p>
+<p>一般觉得自己电脑不大行的主要原因有两个：出图速度和出图像素，而这两点其实都源自于电脑中的同一个组件——显卡。</p>
+<p>显卡，全称显示接口卡，顾名思义是用来给电脑提升显示性能的，但在AI领域，显卡象征着高性能高速计算。这其中的原因在于显卡的核心——GPU（部分人错误地直接以GPU称呼显卡，但是无所谓只是个名字），其架构和普通电脑的核心——CPU有所差异，它能够显著加速一些算法的运算，这对需要海量运算的AI算法而言是非常有必要的。此外显卡还分为集显和独显，集显（也就是集成显卡）说它是显卡，其实更加类似于一个被集成在CPU中的显示单元，从性能上而言远远不如独显（也就是独立的显卡），对于AI绘画而言我们一般都是考虑独显，所以后面所说的显卡都默认是指独显。</p>
+<span id="more"></span>
+<h4 id="显卡版本"><a href="#显卡版本" class="headerlink" title="显卡版本"></a>显卡版本</h4><p>对于AI绘画而言，你所谓判断自己电脑好不好，实际上就是判断自己的显卡好不好。打开你的设备管理器，然后选择显示适配器，就可以查看自己的显卡了，比如我这一台18年买的低端游戏本的显卡类型是NVIDIA的GTX1060。</p>
+<p>一般而言，普通人常用的显卡就是NVIDIA公司的10、20、30、40系列显卡，每个系列又会分60、70、80、90版本，系列影响较大，数字越大越好。同时根据架构还会分差一点的GTX和好一点的RTX（但不会太大，一般玩家可以不考虑）。具体显卡性能可以百度N卡天梯图。如果你的显卡不是这几种之一，请自行百度它的性能比较。</p>
+<p>此外如果你是A卡（也就是AMD公司的显卡，当然更古老的版本可能是ATI公司），现在社区正在制作AMD相关的环境适配，我会在后文告知如何安装。</p>
+<p>通常而言，显卡版本决定了你<strong>出图和训练的速度</strong>，但这并不绝对，一些专业显卡可能会有特殊的AI加速（说不准，但是既然都买专业显卡了肯定对这比我熟）。</p>
+<h4 id="显存大小"><a href="#显存大小" class="headerlink" title="显存大小"></a>显存大小</h4><p>除了显卡版本，还有一个非常关键的参数，那就是显存大小，它几乎决定了你这张显卡能不能玩AI。</p>
+<p>一般而言，AI在训练和推理的时候，会产生大量的临时数据，这些数据在本次计算中非常有必要且非常紧迫，所以需要全部保存在一个可以高速存取的内存中，也就是显存里，但是如果你训练和推理的东西数据量太大，显存装不下，就会溢出然后产生报错。</p>
+<p>那么对于AI绘画而言，需要多少显存呢？目前的答案是6G，这是你入门的门槛，只要达到了这个门槛你就可以参与到最基本简单的AI绘画。如果你的显存小于6G，那么你就只有使用CPU进行训练了，速度会比较慢。</p>
+<p>但是，6G版本仍然会导致你有很多功能无法使用，所以想要完整体验，最低要求则是8G。</p>
+<p>不过8G也只是能完整体验所有功能罢了，想要比较流畅的体验，你至少需要10G。</p>
+<p>至于更高，则看个人需求了，如果你对<strong>高清图和单次出图张数</strong>有所需求，就需要显存更高的显卡。</p>
+<h3 id="怎么办？"><a href="#怎么办？" class="headerlink" title="怎么办？"></a>怎么办？</h3><p>你已经明白自己缺点什么了，现在我们就需要考虑是不是要整张更好的显卡了。</p>
+<p>怎么整好显卡呢？目前有三种攻略——购买、白嫖和租用。</p>
+<h4 id="购买"><a href="#购买" class="headerlink" title="购买"></a>购买</h4><p>首先你需要明确一下你是否真的需要购买显卡，不要只是脑袋一热就买了。通常而言，显卡会影响3D游戏的画质体验，影视游戏测绘图形行业的办公体验，除此之外就不是特别有用了，如果你对上述两种没有特殊的高要求，一般不建议购买，当然富哥富姐另谈。</p>
+<p>（欢迎富姐联系我，本人男，身高一米八，23岁，未婚）</p>
+<p>而如果你要购买，建议根据需求选择，也就是你是用来玩游戏还是办公，这些具体需求和选型都可以在网上搜得到，我就不在这多说了，但最好是购买最新发售的那些显卡。</p>
+<h4 id="白嫖"><a href="#白嫖" class="headerlink" title="白嫖"></a>白嫖</h4><p>是的没错，很多时候我们可以选择进行白嫖，因为很多公司都推出了自己的公共AI体验平台，例如谷歌、百度、腾讯等，最出名的就是谷歌的Colab。这些平台的使用在它们官网有教程，网上资料也很多，而且不同平台的使用方法也不一样，所以这里不过多赘述，仅告诉你有这样一个东西。</p>
+<p>但是白嫖有一定的麻烦，首先白嫖的时间和量是限定的，如果要继续用就得充钱了。此外白嫖还有很多复杂的规则以及限制，同时能白嫖到的显卡性能也不会是特别好的那一级。不过反正都是白嫖了，也不要嫌这嫌那。</p>
+<h4 id="租用"><a href="#租用" class="headerlink" title="租用"></a>租用</h4><p>这是本教程将要主要讲的内容，也就是如何在一个租用的云服务器上玩到AI绘画。</p>
+<p>首先我们需要选择平台，目前很多公司都推出了自己的云算力平台，像是腾讯、百度等，去它们的云平台查看，可以在人工智能这种版块里面找到GPU出租的相关信息。</p>
+<p>不过目前而言，我还是推荐<a href="https://www.autodl.com/register?code=369bf7f3-b959-4c6d-a040-f0f5ae5ed96c">AutoDL</a>这个平台，它是目前性价比最高的一个（注意这里说的是性价比，如果你手头比较宽裕，而且可以和其他人合租，那么像是腾讯云、百度云这些平台会提供一些性能更加好的高端专业显卡）。</p>
+<p>从价格上来说，以AutoDL为例，按量计费租用一块3090，一个小时的价格是在一块五左右，每天如果连续玩八个小时，大概就是12元。如果每天都玩，一年365天大概花费在四千四左右（当然正常情况下我们也不一定会一天玩8小时还全年无休），而如果直接购买，大概需要一万五，也就是租用三年的价格。（不过现在4090出来了，直接买4090大概一万四左右，比买3090划算，但具体就要看各位的闲钱以及对显卡的想法是怎样的了）</p>
+<p>不过目前<a href="https://www.autodl.com/register?code=369bf7f3-b959-4c6d-a040-f0f5ae5ed96c">AutoDL</a>新人注册会给10块的体验券，可以先白嫖几个小时试试水，掌握好时间这十块钱足够训练几个模型出来了。</p>
+<h3 id="本教程有什么？"><a href="#本教程有什么？" class="headerlink" title="本教程有什么？"></a>本教程有什么？</h3><p>本教程会讲述：</p>
+<ul>
+<li>如何在云平台搭建Stable Diffusion WebUI环境</li>
+<li>AMD显卡用户如何搭建Stable Diffusion WebUI环境</li>
+<li>如何远程使用Stable Diffusion WebUI进行绘画</li>
+<li>如何在云平台上训练Lora模型</li>
+</ul>
+<h3 id="前置概念"><a href="#前置概念" class="headerlink" title="前置概念"></a>前置概念</h3><p>尽管本教程会尽量用比较简单的语言进行讲述，但是了解一些基本概念仍然会有助于加快你理解本教程以及明白一些其它教程，注意这里的介绍不会太严谨，更多是处于基础概念性的理解。</p>
+<ul>
+<li><p>模型</p>
+<p>人工智能训练程序通过读取数据并不断调整自身参数以产生某种符合预期的输出，然后人工智能训练程序会把这些参数打包出来，当人工智能推理程序重新读取到这些参数的时候，就可以把那些输出重新推理成它的输入，而打包出来装了参数的文件就被我们称为模型。</p>
+</li>
+<li><p>训练</p>
+<p>在AI绘画这个领域，把图像作为输入，文字作为输出，生成AI绘画模型的过程被称为训练。当然一些朋友可能会把这个过程称之为跑图。</p>
+</li>
+<li><p>推理</p>
+<p>在AI绘画这个领域，设置了某种模型，把文字作为输入，把图像作为输出，生成图像的过程称之为推理。当然一些朋友可能会把这个过程称之为出图。</p>
+</li>
+<li><p>Stable Diffusion</p>
+<p>一个开源的绘画AI程序集，包含了训练、推理和一些基础模型。</p>
+</li>
+<li><p>WebUI</p>
+<p>Stable Diffusion原本是运行在命令行的，但是为了方便操作，有人给它只做了一个UI（图形操作界面），因为这个UI是运行在浏览器上的，所以取名叫WebUI。WebUI并非必须的，但是操作起来会比较方便，如果感兴趣也可以尝试做一个本地不需要Web的UI，但是目前没必要。</p>
+</li>
+<li><p>NovelAI</p>
+<p>出自于Stable Diffusion的一个争议很大的模型（一说不只是模型，也对Stable Diffusion的底层进行了一些修改），争议主题在于未经授权把许多画师的画拿去训练，并进行收费的推理行为，因为争议而出现了黑客直接攻破他们服务器并把所有模型公开的事件，闹得很出圈，很多人也是这一次知道的AI绘画。</p>
+</li>
+<li><p>ChilloutMix</p>
+<p>写下这段文字的时间是2023年2月19日，在不久前因为AI绘画在写实领域展现了非常好的效果，而再次出圈。出圈模型应该是ChilloutMix这个模型（未确实考证），其在人像写实领域已经达到了接近于高P网图的效果。ChilloutMix是一个Checkout大模型，你可以理解为是Stable Diffusion原生支持的一种基础模型。</p>
+</li>
+<li><p>Lora和Embedding</p>
+<p>和Chill模型一起出圈的还有Lora模型，这是一种小型模型，与之类似的还有embedding模型，这些模型旨在以较小的数据集训练某种特定的特征，并可将之在推理过程中嵌入，以达到修改画风、人物、物品等效果。</p>
+</li>
+<li><p>云计算服务</p>
+<p>云计算服务是指一些厂家提供的收费出租GPU算力云服务器的服务。</p>
+</li>
+<li><p>Python</p>
+<p>一种方便的解释型编程语言，常用于AI领域。</p>
+</li>
+<li><p>命令行</p>
+<p>没有标准图像界面的依靠键盘输入命令进行操作的界面，Windows通过按住Win+R键输入cmd可以打开，而Linux是原生支持命令行的（图形操作界面才是附加品），我们在云服务器中通常使用的是Linux（也有Windows，但是比较难用而且资料很少）。</p>
+</li>
+<li><p>shell脚本</p>
+<p>正常情况我们输入命令需要用键盘一个命令一个命令地输入，但一些情况下我们也可以把这些命令全部写在一个文件里，然后让系统自动运行，其本质和键盘输入是一样的，只是在量大的情况下会比较方便。</p>
+</li>
+<li><p>vscode</p>
+<p>全称<a href="https://code.visualstudio.com/">Visual Studio Code</a>，微软官方推出的一款开源编辑器，我们将在Windows（Mac也行）上使用它来连接云服务器，关于具体安装事项可以百度，但是我感觉直接装就行了，没那么麻烦。</p>
+</li>
+<li><p>ssh</p>
+<p>一种远程连接工具，方便你在自己主机上操作服务器。</p>
+</li>
+<li><p>镜像</p>
+<p>一些服务器厂家为了用户操作方便，会提供镜像。镜像会把一个容器里面的所有环境和数据保存起来，其它服务器只要安装了这个镜像，就可以直接获得对应的环境，整体非常方便。</p>
+</li>
+<li><p>git</p>
+<p>一种开源的分布式版本控制系统，一般目前开源软件都是用的这个系统，你可以简单理解成有一个git服务器管理着一些git仓库（一个仓库相当于一个开源软件），而其它人可以用git拉取下载这些软件得到本地仓库，如果有能力的人还可以修改软件代码并上传，如果仓库管理员认为你的代码可以，他就可以把你的代码合并到服务器仓库里，其他人只要再次拉取修改，就可以得到这些修改后的代码。目前常见的git服务器有github、gitee等，Stable Diffusion的源码也在github上。</p>
+</li>
+<li><p>文件夹</p>
+<ul>
+<li><code>stable-diffusion-webui</code>是AI绘画的主体文件夹<ul>
+<li><code>models</code>是安装模型文件的<ul>
+<li><code>Stable-diffusion</code>装大模型</li>
+<li><code>Lora</code>装Lora模型</li>
+</ul>
+</li>
+<li><code>embeddings</code>安装embedding模型</li>
+<li><code>extentions</code>安装插件</li>
+<li><code>outputs</code>是输出图片</li>
+<li><code>log</code>存放你主动保存的图片</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="建议提前安装"><a href="#建议提前安装" class="headerlink" title="建议提前安装"></a>建议提前安装</h3><p>本地电脑上，最好安装一个git和一个vscode，具体安装教程请自行百度。如果无法访问github，可以尝试安装一个watt toolkit，该软件是用来加速steam的，但是里面也有加速github的功能，该软件可以在微软商店下载。</p>
+<h2 id="如何在云平台搭建Stable-Diffusion-WebUI环境"><a href="#如何在云平台搭建Stable-Diffusion-WebUI环境" class="headerlink" title="如何在云平台搭建Stable Diffusion WebUI环境"></a>如何在云平台搭建Stable Diffusion WebUI环境</h2><h3 id="AutoDL镜像安装"><a href="#AutoDL镜像安装" class="headerlink" title="AutoDL镜像安装"></a>AutoDL镜像安装</h3><p>我选这个镜像的作者也给了一个镜像<a href="https://www.zhihu.com/zvideo/1604816765296521216">安装视频</a>，但这里我仍然用文字版写一下，因为用他的方法不知道为啥需要注册两次账号我不是很喜欢。</p>
+<p>其它平台可能也有，但是我还没用过，所以快速通道只写这一个，后面会写具体的非快速通道安装教程。</p>
+<p>首先你需要<a href="https://www.autodl.com/register?code=369bf7f3-b959-4c6d-a040-f0f5ae5ed96c">注册AutoDL账号</a>，注册这里很简单就直接略过。</p>
+<p>然后右上角点击控制台，左侧点击容器实例，并选择租用新实例（界面可能会发生变化，但是意思就是这么个意思）。</p>
+<p>我们普通使用按量计费就好了，地区选择北京或内蒙（内蒙有A5000，和3090是同等级的显卡，可能稍微差一点但是便宜几角钱），当然如果主要是断断续续地玩而且不是连续出图，也可以选择3080，性价比会比较高。记住别租太差的显卡，那种性价比特别低。</p>
+<p>最后看到镜像，输入<code>stabledi</code>后就会出现一个镜像，选择下面那个。（你也可以用原文的方式）</p>
+<p><img src="/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/AMD%E5%92%8C%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2Stable%20Diffusion/image-20230219155619118-16775564652891.png" alt="image-20230219155619118"></p>
+<p>当你租用成功后，电脑会开机，我们等开机后选择JupyterLab。</p>
+<p><img src="/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/AMD%E5%92%8C%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2Stable%20Diffusion/image-20230219160454382-16775565347553-16775565394615-16775565409347.png" alt="image-20230219160454382"></p>
+<p>左侧有个文件夹目录，正常情况你进去会在一个叫stable-diffusion-webui的文件夹里。</p>
+<p>此时右侧点击选择终端，会打开命令行。</p>
+<p><img src="/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/AMD%E5%92%8C%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2Stable%20Diffusion/image-20230219160729556-16775565664429-167755656980811.png" alt="image-20230219160729556"></p>
+<p>输入<code>python webui.py --deepdanbooru --no-half --precision full --port 6006 --disable-safe-unpickle --share</code>，即可启动WebUI，等它启动一会，看到输出</p>
+<p><img src="/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/AMD%E5%92%8C%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2Stable%20Diffusion/image-20230219161530256-167755657306213.png" alt="image-20230219161530256"></p>
+<p>就表明启动成功了，现在回到控制台，并选择自定义服务，即可开启WebUI，然后开始操作了。</p>
+<p>不过注意，这个镜像只能用来出图和训练普通模型，而像是Lora则需要另外开其它镜像，后面会讲。</p>
+<p>当你玩累了不想玩时，回到刚才的命令行，按住Ctrl+C即可结束当前进程，然后你的Stable Diffusion会被关闭。</p>
+<p>现在你需要移动一下文件夹，在左边操作栏里将stable-diffusion-webui文件夹移动到autodl-tmp文件夹里，这里是数据盘。</p>
+<p>最后你只需要关机即可。</p>
+<p><strong>记住玩完一定要关机，否则会一直扣费。</strong></p>
+<p>此外，这里虽然一键安装了，但是我们仍然需要对其进行一些改进，</p>
+<h3 id="Linux自动安装"><a href="#Linux自动安装" class="headerlink" title="Linux自动安装"></a>Linux自动安装</h3><p>此处以AutoDL为例，使用Linux安装需要你选择一个基础镜像，至于哪一个随便选，因为都不重要，建议选miniconda的Ubuntu20.04-Python3.8版本，Cuda根据你选择的服务器支持最高Cuda进行选择。</p>
+<p>建议选3080来安装，因为这个过程会很漫长，所以会花比较多的钱，3080会更加便宜点。</p>
+<p><img src="/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/AMD%E5%92%8C%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2Stable%20Diffusion/image-20230219194720341-167755657619215.png" alt="image-20230219194720341"></p>
+<p>对于其它平台，也是同理，反正只要能安装上Linux的Ubuntu版本就行（其它版本也行但是得换指令，如果你不懂就不要改）。</p>
+<p>完成后，进入命令行，可以在控制台的JupyterLab打开。</p>
+<p>然后接下来一直输入命令改设置和安装东西。</p>
+<ol>
+<li><p>首先输入<code>cd autodl-tmp</code>进入数据盘，<code>cd</code>是跳转命令，跳转到一个地址，这里是让它打开<code>autodl-tmp</code>这个文件夹，在AutoDL的服务器里，这个文件夹代表数据盘。其它服务器可能是其它地址，总之就是先进入存储数据的那个盘而不是系统盘。</p>
+</li>
+<li><p>然后<a href="https://www.autodl.com/docs/network_turbo/">AutoDL学术资源加速</a>介绍，根据你服务器的地区输入相应指令。</p>
+</li>
+<li>输入<code>sudo apt update</code>更新资源链接。</li>
+<li>输入<code>sudo apt install wget git python3 python3-venv</code>安装基础软件。（看服务器镜像是不是自带，并不一定是必要的，输入一下以防万一吧。）</li>
+<li>输入<code>python -m pip install --upgrade pip</code>更新pip。</li>
+<li>输入<code>pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</code>更换清华大学pip源。</li>
+<li>输入<code>git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git</code>克隆WebUI仓库，你也可以用zip下载完了传上去，但是这样会不好更新。这样克隆，未来使用<code>git pull</code>可以直接更新。</li>
+<li><code>cd stable-diffusion-webui</code></li>
+<li>输入<code>python launch.py</code>开始自动安装，得等一阵。</li>
+<li>等完了就安装好了，最后放入模型就可以开始玩了，具体怎么玩请查看后面的<strong>如何远程使用Stable Diffusion WebUI进行绘画</strong>。</li>
+</ol>
+<h3 id="Linux手动安装"><a href="#Linux手动安装" class="headerlink" title="Linux手动安装"></a>Linux手动安装</h3><p>尽管自动安装很不错，但是有时候我们的网络并不会那么好，可能会出现安装失败的情况，那么这个时候你就需要考虑手动安装了。</p>
+<ol>
+<li>首先输入<code>cd autodl-tmp</code>进入数据盘，<code>cd</code>是跳转命令，跳转到一个地址，这里是让它打开<code>autodl-tmp</code>这个文件夹，在AutoDL的服务器里，这个文件夹代表数据盘。其它服务器可能是其它地址，总之就是先进入存储数据的那个盘而不是系统盘。</li>
+<li>然后<a href="https://www.autodl.com/docs/network_turbo/">AutoDL学术资源加速</a>介绍，根据你服务器的地区输入相应指令。</li>
+<li>输入<code>sudo apt update</code>更新资源链接。</li>
+<li>输入<code>sudo apt install wget git python3 python3-venv</code>安装基础软件。（看服务器镜像是不是自带，并不一定是必要的，输入一下以防万一吧。）</li>
+<li>输入<code>python -m pip install --upgrade pip</code>更新pip。</li>
+<li>输入<code>pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</code>更换清华大学pip源。</li>
+<li>安装CUDA版本的torch，输入<code>pip install torch --extra-index-url https://download.pytorch.org/whl/cu113</code></li>
+<li>输入<code>python -c &quot;import torch; print(torch.cuda.is_available())&quot;</code>，检查torch对GPU的适配情况，这里输出必须为<code>True</code>，否则你应该将你的CUDA版本升级或降级为CUDA 11。</li>
+<li>输入<code>git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git</code>以克隆Stable Diffusion WebUI仓库。</li>
+<li><code>cd stable-diffusion-webui</code></li>
+<li>输入<code>mkdir repositories</code>创建一个仓库文件夹，用于存放Stable Diffusion WebUI运行所需的一些项目，关于他们有什么用你可以直接访问他们的github仓库进行了解，也可以等下载完成后进入仓库文件夹查看他们的README.md文件。</li>
+<li>获得Stable Diffusion主体：<code>git clone https://github.com/CompVis/stable-diffusion.git repositories/stable-diffusion</code></li>
+<li>获得Transformer：<code>git clone https://github.com/CompVis/taming-transformers.git repositories/taming-transformers</code></li>
+<li>获得CodeFormer：<code>git clone https://github.com/sczhou/CodeFormer.git repositories/CodeFormer</code></li>
+<li>获得BLIP：<code>git clone https://github.com/salesforce/BLIP.git repositories/BLIP</code></li>
+<li>下载Stable Diffusion的依赖Transformers版本：<code>pip install transformers==4.19.2 diffusers invisible-watermark --prefer-binary</code></li>
+<li>下载k-diffusion：<code>pip install git+https://github.com/crowsonkb/k-diffusion.git --prefer-binary</code></li>
+<li>这是两个可选项，用于面部修复的两个项目：<code>pip install git+https://github.com/TencentARC/GFPGAN.git --prefer-binary</code>和<code>pip install -r repositories/CodeFormer/requirements.txt --prefer-binary</code></li>
+<li>安装WebUI的依赖：<code>pip install -r requirements.txt  --prefer-binary</code></li>
+<li>升级numpy库：<code>pip install -U numpy  --prefer-binary</code></li>
+<li>等完了就安装好了，最后放入模型就可以开始玩了，具体怎么玩请查看后面的<strong>如何远程使用Stable Diffusion WebUI进行绘画</strong>。</li>
+</ol>
+<h2 id="AMD显卡用户如何搭建Stable-Diffusion-WebUI环境"><a href="#AMD显卡用户如何搭建Stable-Diffusion-WebUI环境" class="headerlink" title="AMD显卡用户如何搭建Stable Diffusion WebUI环境"></a>AMD显卡用户如何搭建Stable Diffusion WebUI环境</h2><p>并非每个人都是买的N卡，部分朋友可能买了A卡，这个时候就犯难了，AI绘画现在不支持AMD显卡该怎么办，不过幸运的是，社区已经在进行适配了，预计过不了多久就会有稳定版，但目前你仍然可以使用测试版进行尝试。但注意，因为是测试版，可能会出现bug，你可以去分支仓库提交Issue，这会有助于开发者了解到问题在未来版本进行修改，部分问题甚至是可以现场解决的，会有人回应你。</p>
+<hr>
+<p><strong>注意</strong></p>
+<p>使用此方法需要你的网络通畅，并且安装有git，同时我自身没有AMD显卡，所以不能保证这种方法的可行性，有AMD显卡的朋友尝试后可以说一下。这里仅给出Windows的解决办法，如果有用Linux的朋友可以在下面留言。此外如果有人成功了，也可以在下面留言或者去官方<a href="https://github.com/AUTOMATIC1111/stable-diffusion-webui/discussions/7870">留言评论</a>。</p>
+<hr>
+<ol>
+<li><p>进入<a href="https://github.com/lshqqytiger/stable-diffusion-webui-directml">stable-diffusion-webui-directml</a>仓库并下载它的zip包，如果git正常也可以直接克隆。</p>
+<p><img src="/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/AMD%E5%92%8C%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2Stable%20Diffusion/image-20230220142025399.png" alt="image-20230220142025399"></p>
+</li>
+<li><p>解压后在里面创建一个文件夹<code>repositories</code>，即你可以获得一个这样的路径<code>stable-diffusion-webui-directml/repositories/</code></p>
+</li>
+<li>进入<code>repositories</code>，然后在里面分别下载解压或克隆：<a href="https://github.com/lshqqytiger/k-diffusion-directml/tree/master">k-diffusion-directml</a>和<a href="https://github.com/lshqqytiger/stablediffusion-directml/tree/main">stablediffusion-directml</a>，并分别命名为<code>k-diffusion</code>和<code>stable-diffusion-stability-ai</code>。</li>
+<li>接着随便把一个大模型放到你的<code>models/Stable-diffusion</code>目录下。</li>
+<li>如果你的显存只有4G到6G，需要在<code>webui-user.bat</code>里面添加<code>COMMANDLINE_ARGS=--opt-sub-quad-attention --lowvram --disable-nan-check</code>，记住如果不要直接双击，你应该右键选择打开方式用某种文本编辑器打开。</li>
+<li>你还可以添加<code>--autolaunch</code>以自动打开浏览器。</li>
+<li>双击打开<code>webui-user.bat</code>。</li>
+<li>如果在安装<code>gfpgan</code>或<code>gfgan</code>时看起来卡住了，按回车应该可以继续。</li>
+<li>从原理上来说，这个东西应该是支持秋叶的那个图形界面的，有A卡的朋友可以试试并在下面反馈。</li>
+</ol>
+<h2 id="如何远程使用Stable-Diffusion-WebUI进行绘画"><a href="#如何远程使用Stable-Diffusion-WebUI进行绘画" class="headerlink" title="如何远程使用Stable Diffusion WebUI进行绘画"></a>如何远程使用Stable Diffusion WebUI进行绘画</h2><p>在AutoDL中如果我们想使用WebUI，需要在打开WebUI前通过参数<code>--port 6006</code>把这个端口映射出来，并可以通过AutoDL提供的网址进行访问，但是这样有一个问题，就是安全性比较低而且监管较严，为此我们可以尝试内网穿透来访问，这种方式会更加安全。其它平台也是同理。</p>
+<ol>
+<li><p>首先你需要在你的主机电脑上生成ssh密钥，打开powershell，输入<code>ssh-keygen</code>，一路回车，如果原来没有密钥，它会生成密钥，如果原来有，那么一路回车也不会把原来的密钥覆盖。Mac用户可以自行查找生成ssh密钥的方法。</p>
+</li>
+<li><p>只要你刚才是一路回车的，那么理论上应该可以在<code>C:\Users\用户名\.ssh</code>目录下看到一个叫<code>id_rsa</code>的文件，用某个文本编辑器打开它。</p>
+</li>
+<li><p>进入你的控制台，AutoDL的右上角有设置密钥登陆，点击它设置密钥，其它平台请根据自己需要查找。</p>
+</li>
+<li><p>添加SSH公钥并把刚才id_rsa文件里的东西全部复制进去。</p>
+</li>
+<li><p>现在打开vscode，在左边侧栏中找到扩展，搜索ssh，然后选择作者是Microsoft的那个Remote-SSH插件，并安装它。</p>
+</li>
+<li><p>安装完成后，你应该可以在左边侧栏看到一个远程资源管理器的图标，进入，然后在SSH栏中新建远程。（此外，最左下角也会有一个小小的绿色图标，点开后在中间弹窗点击<code>Connect to Host</code>然后选择<code>Add New SSH Host</code>也是同样效果）</p>
+</li>
+<li><p>现在回到控制台，在你打开的主机一栏中找到登录指令，将其复制到vscode刚才弹出来的输入框中。</p>
+</li>
+<li><p>选择你的ssh密钥，如果出现了多余的，直接默认刚才我们找id_rsa的文件夹就行。</p>
+</li>
+<li><p>右下角点击connect。</p>
+</li>
+<li><p>从控制台复制密码，并在新弹出来的vscode的终端里输入。（Ctrl+V或鼠标右键单击都可以输入，输入后不会有显示，直接回车就可以）</p>
+</li>
+<li><p>接着终端会启动，此时我们左上角点击一下vscode的资源管理器，打开文件夹。</p>
+</li>
+<li><p>现在的弹窗应该会显示远程服务器的文件夹，我们打开<code>/root/</code>文件夹。</p>
+</li>
+<li><p>这次会再次要求你输入密码，还是刚才的操作就行。</p>
+</li>
+<li><p>在vscode的终端的右上角，有一个小小的加号标志，点击它可以打开一个新的终端，注意不要关闭现在这个install终端，它是保证你ssh链接的基础。</p>
+</li>
+<li><p>打然后，按照<a href="https://www.autodl.com/docs/network_turbo/">AutoDL学术资源加速</a>介绍，根据你服务器的地区输入相应指令。</p>
+</li>
+<li><p>输入<code>sudo apt update</code></p>
+</li>
+<li><p>输入<code>sudo apt install screen</code>安装守护进程软件</p>
+</li>
+<li><p>输入<code>screen</code>打开这个软件，然后回车关闭它的介绍界面，你可以发现你终端的名字现在变成了screen。</p>
+</li>
+<li><p>在screen守护的这个终端里，你进行的所有操作将会得到守护，以防止ssh断网而使进程中断，要结束这个软件也很简单，按住<code>Ctrl+A</code>然后按下<code>空格</code>并输入<code>exit</code>即可关闭。如果你的网络断了，可以在重新打开的一个空白终端里，输入<code>screen -r</code>即可恢复该screen终端。</p>
+</li>
+<li><p><code>cd autodl-tmp/stable-diffusion-webui</code></p>
+</li>
+<li><p>输入<code>python webui.py --deepdanbooru --no-half --precision full --port 7001 --disable-safe-unpickle --share</code>即可打开WebUI，根据你的需要你可以更改port后面的数字以更换任何端口，但不建议6006，因为该端口会暴露在公网上。</p>
+</li>
+<li><p>然后vscode会提示可以用浏览器打开或者vscode打开，随你选择，我喜欢浏览器打开。</p>
+</li>
+<li><p>接着正常使用WebUI进行画图即可。</p>
+</li>
+<li><p>如果你觉得每次这样打开很麻烦，可以在<code>autodl-tmp</code>文件夹下新建一个<code>StartWebUI.sh</code>文件，里面输入如下内容：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">export</span> http_proxy=http://192.168.1.174:12798 &amp;&amp; <span class="built_in">export</span> https_proxy=http://192.168.1.174:12798</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">这个根据自己的地区进行修改</span></span><br><span class="line">cd stable-diffusion-webui</span><br><span class="line">python webui.py --deepdanbooru --no-half --precision full --port 7001 --disable-safe-unpickle --share --xformers</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">--xformers看你觉得想不想加，我觉得加上没什么问题</span></span><br><span class="line">cd ..</span><br></pre></td></tr></table></figure>
+<p>之后只需要每次在<code>autodl-tmp</code>文件夹路径下输入<code>. StartWebUI.sh</code>即可开启（事实上输入<code>. St</code>然后按<code>Tab</code>就可以自动补全，然后回车打开即可）</p>
+</li>
+</ol>
+<h2 id="如何在云平台上训练Lora模型"><a href="#如何在云平台上训练Lora模型" class="headerlink" title="如何在云平台上训练Lora模型"></a>如何在云平台上训练Lora模型</h2><p>云端部署我本来想写一下，但是仔细看了一下秋叶的教程，感觉也没有什么好补充的，可以结合论坛里的另外一个文字版教程结合使用。</p>
+<p><a href="https://www.bilibili.com/read/cv21450198">【AI绘画】LoRA 在线云端训练教程 AutoDL</a></p>
+<p><a href="https://dfldata.xyz/forum.php?mod=viewthread&amp;tid=12796&amp;extra=page%3D1">AI绘画之训练自己的Lora模型</a></p>
+]]></content>
+      <tags>
+        <tag>AI绘画</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>如何在Windows11中安装WSL2</title>
+    <url>/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/%E5%A6%82%E4%BD%95%E5%9C%A8Windows11%E4%B8%AD%E5%AE%89%E8%A3%85WSL2/</url>
+    <content><![CDATA[<p><a href="https://docs.microsoft.com/zh-cn/windows/wsl/install-manual">https://docs.microsoft.com/zh-cn/windows/wsl/install-manual</a></p>
+]]></content>
+      <tags>
+        <tag>WSL</tag>
+        <tag>Windows</tag>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>如何解决VSCode Arduino的红色波浪线报错</title>
+    <url>/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3VSCode%20Arduino%E7%9A%84%E7%BA%A2%E8%89%B2%E6%B3%A2%E6%B5%AA%E7%BA%BF%E6%8A%A5%E9%94%99/</url>
+    <content><![CDATA[<p><em>之前我在B站上发了一系列教学视频，里面有一期<a href="https://www.bilibili.com/video/BV1QP4y1b7JA?spm_id_from=333.999.0.0"># [云雾海]嵌入式培训(10)——VSCode_Arduino配置</a>是关于VSCode Arduino安装配置的，里面存在一些问题这里进行一定补正。因为本文是在评论区被阴阳人阴阳怪气后发的，所以内容可能有点暴躁。</em></p>
+<span id="more"></span>
+<h2 id="一些牢骚"><a href="#一些牢骚" class="headerlink" title="一些牢骚"></a>一些牢骚</h2><p><em>本文为该视频下评论（已删）——”自己都不懂还在这做培训“所著，感谢这位让我明白了什么叫好心当成驴肝肺。</em></p>
+<p><em>首先我只是个学生又不是什么培训机构的老师，我上传到网上也没有收费。这个培训本身就很随意且只是针对我的队员而不幸被你这种人看到了而已。况且这个培训主要目的也不是教怎么安装环境的，只是当时想到了临时加了上去罢了；</em></p>
+<p><em>其次，我的整个操作本身是不存在问题的，如果按照正常C++编程这些问题是可以解决的，只是vscode_arduino这个插件在设计的时候没有完全遵照i这个流程罢了，详情可以看github上的<a href="https://github.com/microsoft/vscode-arduino/issues/438">issue</a>，这个问题早就老生常谈了，你在百度上面找到的所有方法百分之八十都是错的或者不严谨的；</em></p>
+<p><em>最后，最后这块安装部分本身你真的可以爱看不看，如果你觉得我后面是废话那就说明你看到了后面并且认为前面是有用的，那么它就可以称之为一场教学，如果你觉得通篇废话什么也没学到，那你还看这么久我不清楚你的脑袋怎么想的，被驴踢了吗还是门夹了？</em></p>
+<p><strong>你可以说出你的疑问或者指出我视频存在的具体问题，比如说你认为我的Intellisence配置部分讲得云里雾里什么的，然后怼着这个说这都没问题，但没必要用这样高高在上的语气说什么“自己都没搞懂就做培训”，啊对对对，就你懂。我只是想做个技术分享，你却希望我像收了费的老师一样给你什么都讲好了？我翻车了一下就不配做培训教学了（甚至还是免费的）？如果觉得我这培训没用自己去买课看或者去花几个月看人家原子野火之类的正经教程，跑评论区来找什么存在感？</strong></p>
+<h2 id="正题"><a href="#正题" class="headerlink" title="正题"></a>正题</h2><p>现在回到正题，我会在这里告诉你为什么我会在视频里做那些事并且说明具体目的，同时也会告诉你们解决方法。</p>
+<h3 id="正确方法"><a href="#正确方法" class="headerlink" title="正确方法"></a>正确方法</h3><p>首先说明一下正确方法，无论是上面我提到的百度搜索的结果或者issue里面提出的解决方案，现在都是错误的，事实上不知道是什么时候更新的还是之前修复的，你只需要像我前面一样配置，同时为vscode_arduino插件添加上arduino路径后，现在你只需要放一个示例工程在你的工作空间里面，然后verify一下，arduino就会自动帮你填充出一个完整正确的c_cpp_properties，具体流程如下：</p>
+<p><img src="https://s2.loli.net/2022/01/29/34JM2o9SmpCgLau.png" alt="Snipaste_2022-01-29_14-36-48.png"></p>
+<p><img src="https://s2.loli.net/2022/01/29/4oMWBPtJrQUL3Cl.png" alt="Snipaste_2022-01-29_14-38-25.png"></p>
+<p><img src="https://s2.loli.net/2022/01/29/UuTEfkLmg97BJVA.png" alt="Snipaste_2022-01-29_14-39-54.png"></p>
+<p><img src="https://s2.loli.net/2022/01/29/w6fZpxWIYV5Gy2m.png" alt="Snipaste_2022-01-29_14-41-35.png"></p>
+<p><img src="https://s2.loli.net/2022/01/29/pEUjbtmWZcTDFIQ.png" alt="Snipaste_2022-01-29_14-43-26.png"></p>
+<p><img src="https://s2.loli.net/2022/01/29/Cwc3e2rQgf1W6Ls.png" alt="Snipaste_2022-01-29_14-45-19.png"></p>
+<p>可以看到在arduino自动生成的properties中修改了编译器，添加了引用路径，添加了编译参数同时还添加了一大堆define，这些东西都会影响到我们的intellicense结果导致出错，而arduino不会主动帮你添加这些且在相当一段长时间里我们都是需要手动添加，尤其是define的部分很多很麻烦，所以网上经常有教你怎么解决这些红色波浪线报错的时候教你直接关闭语法检查，这种做法不是很好因为他会让你的工作变得有点麻烦，但是实际上你关不关报不报错都没有问题，只要你按照标准C++语言规范来写东西，这个东西也不会影响到最后的编译。</p>
+<p>而如果在一般C或C++编程中，我们只需要添加include path即可，因为一般我们在基础编程的时候不需要给编译器选那么麻烦的参数或添加一些define来满足编译需求，同时vscode就会主动给我们使用clang作为intellicense工具，一般在Windows编程中这些工具是正确够用的，而且在类似arm之类的单片机编程中也不会有太大问题。但是arduino因为使用的是内部工具，所以我们此时不能完全按照C++的标准来，而要顺应他的方式进行添加。所幸现在插件已经升级更新了，所以我们不再需要辛苦地添加那么多麻烦的配置。</p>
+<p>好的，现在你看到这应该明白为什么我在视频里我看见红线报错会那么麻烦地在那添加include path，说白了就是为了应付intellicense而已，不改其实也能编译（因为调用的是arduino内部的api）只是编程的时候可能看上去不好看，同时如果不添加include path，最大的问题在于你将无法实现工作空间外的ctrl+鼠标左键跳转函数和数据定义，这也是今后如果你使用vscode在进行C或C++编程时需要经常考虑的问题。</p>
+<p>此外我们还可以看到那个issue中被称为解决方案的内容是在.vscode文件中添加settings.json配置文件，然后在其中添加配置:”C_Cpp.intelliSenseEngine”: “Tag Parser”，这个部分说白了就是给你的intellicense添加模糊感知，这会让intellicense引擎更加智能，但是同样因为是模糊感知所以也容易在你乱写东西的时候检查不出来（绝大多数情况下是没问题的），它是一个很好的辅助，但是我建议你在自己写非Arduino程序的时候不要用这东西，毕竟代替intellicense的最好方法就是你好好写程序别乱来，按照规范写总不会错。而且现在在arduino这个插件已经更新的情况下，你可以不再需要用这个东西了，所以也没有必要专门再去添加一个这个文件和配置。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>所以懂了吗？这些东西非常简单但是大家一般都只是懒得找资料或者找到一些错误的资料罢了，光靠安装个插件就可以看出一个人不配做培训，这种人我只能说不配学这些东西。</p>
+]]></content>
+      <tags>
+        <tag>vscode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>算法：Maximum Subsequence Sum</title>
+    <url>/blog/%E7%AE%97%E6%B3%95%E7%BC%96%E7%A8%8B/%E7%AE%97%E6%B3%95%EF%BC%9AMaximum%20Subsequence%20Sum/</url>
+    <content><![CDATA[<h2 id="题目来源"><a href="#题目来源" class="headerlink" title="题目来源"></a>题目来源</h2><p>浙大数据结构MOOC-PTA的课后题</p>
+<span id="more"></span>
+<h2 id="题目内容"><a href="#题目内容" class="headerlink" title="题目内容"></a>题目内容</h2><p><img src="https://s2.loli.net/2022/04/02/2z6p8tKPZljTE4s.png" alt></p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>这一题时最大子列和问题的变形，需要输出最大子列和的子列首项与末项，且在数列全为负的情况下，最大子列和为0，且需要输出首尾。而且如果出现了前后有相同都是最大子列的情况，选择前面的那一个。</p>
+<p>我继续沿用了最大子列和问题中的在线处理算法，但是加上了对子列首尾的处理。</p>
+<p>说实话这题有点难，我的做法也稍微有点取巧，使用专门的标志来处理非正有0的情况，不过总体来说结果是过了。</p>
+<h2 id="我的程序"><a href="#我的程序" class="headerlink" title="我的程序"></a>我的程序</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 获取数据</span></span><br><span class="line">    <span class="type">int</span> size;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;size);</span><br><span class="line">    <span class="type">int</span> num[size];</span><br><span class="line">    <span class="type">int</span> max = <span class="number">0</span>, this = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 记录首尾位置</span></span><br><span class="line">    <span class="type">int</span> start = <span class="number">0</span>, end = <span class="number">0</span>, temp = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 记录负数和正数的个数</span></span><br><span class="line">    <span class="type">int</span> negFlag = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> posFlag = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 在线处理，寻找最大子列和同时记录该子列和首尾位置</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, num + i);</span><br><span class="line">        <span class="comment">// 记录正数和负数的个数，等会有用</span></span><br><span class="line">        <span class="keyword">if</span>(num[i] &lt; <span class="number">0</span>)negFlag++;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(num[i] &gt; <span class="number">0</span>)posFlag++;</span><br><span class="line">        <span class="comment">// 计算子列和</span></span><br><span class="line">        this += num[i];</span><br><span class="line">        <span class="keyword">if</span>(this &gt; max)</span><br><span class="line">        &#123;</span><br><span class="line">            max = this;</span><br><span class="line">            <span class="comment">// 当最大子列和发生了变化，记录其末尾，并将之前缓存的首部放入start</span></span><br><span class="line">            end = i;</span><br><span class="line">            start = temp;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(this &lt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            this = <span class="number">0</span>;</span><br><span class="line">            <span class="comment">// 当在线处理发现了子列和为负数的情况，需要丢弃前面的子列和，此时使用temp记录此次更新，因为它可能成为最大子列和的首项</span></span><br><span class="line">            temp = i + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(negFlag == size)<span class="built_in">printf</span>(<span class="string">&quot;%d %d %d&quot;</span>, <span class="number">0</span>, num[<span class="number">0</span>], num[size - <span class="number">1</span>]);	<span class="comment">// 全是负数，输出最大值0和首尾项</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(posFlag &gt; <span class="number">0</span>)<span class="built_in">printf</span>(<span class="string">&quot;%d %d %d&quot;</span>, max, num[start], num[end]);	<span class="comment">// 如果有正数，则必然存在非零最大子列</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(posFlag == <span class="number">0</span>)<span class="built_in">printf</span>(<span class="string">&quot;0 0 0&quot;</span>);	<span class="comment">// 如果没有正数，又不全是负数，则最大子列和是0，且子列内容也全是0，直接输出0</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h2><p><img src="https://mooc-image.nosdn.127.net/d976597f33b0454692b3a79c67e41799.png" alt></p>
+]]></content>
+      <categories>
+        <category>算法笔记</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>算法：两数之和（哈希算法）</title>
+    <url>/blog/%E7%AE%97%E6%B3%95%E7%BC%96%E7%A8%8B/%E7%AE%97%E6%B3%95%EF%BC%9A%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C%EF%BC%88%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="题目来源"><a href="#题目来源" class="headerlink" title="题目来源"></a>题目来源</h2><p>LeetCode：<a href="https://leetcode-cn.com/problems/two-sum">https://leetcode-cn.com/problems/two-sum</a></p>
+<span id="more"></span>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>具体思想可以参考这个题解的演示：<a href="https://leetcode-cn.com/problems/two-sum/solution/tu-jie-guan-fang-tui-jian-ti-jie-liang-s-02xs/，LeetCode中使用的哈希算法是通过`uthash.h`这个文件实现的，该文件本来是个开源项目，目前已整合到gcc中，关于其使用请参考uthash的文档：https://troydhanson.github.io/uthash/userguide.html。">https://leetcode-cn.com/problems/two-sum/solution/tu-jie-guan-fang-tui-jian-ti-jie-liang-s-02xs/，LeetCode中使用的哈希算法是通过`uthash.h`这个文件实现的，该文件本来是个开源项目，目前已整合到gcc中，关于其使用请参考uthash的文档：https://troydhanson.github.io/uthash/userguide.html。</a></p>
+<h2 id="我的程序"><a href="#我的程序" class="headerlink" title="我的程序"></a>我的程序</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">numsHash</span>&#123;</span></span><br><span class="line">    <span class="type">int</span> key;	<span class="comment">// 键值</span></span><br><span class="line">    <span class="type">int</span> val;	<span class="comment">// 数据</span></span><br><span class="line">    UT_hash_handle hh;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">numsHash</span>* <span class="title">pNumsHashHead</span> =</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> numsHash* <span class="title function_">Find_NumsHash</span><span class="params">(<span class="type">int</span> targetKey)</span>	<span class="comment">// 定义查询函数</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">numsHash</span> *<span class="title">pReturn</span>;</span></span><br><span class="line">    HASH_FIND_INT(pNumsHashHead, &amp;targetKey, pReturn);</span><br><span class="line">    <span class="keyword">return</span> pReturn;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">Add_NumsHash</span><span class="params">(<span class="type">int</span> addKey, <span class="type">int</span> addVal)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">numsHash</span>* <span class="title">pTarget</span> =</span> Find_NumsHash(addKey);</span><br><span class="line">    <span class="keyword">if</span>(pTarget == <span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">numsHash</span>* <span class="title">pTempHash</span> =</span> <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> numsHash));</span><br><span class="line">        pTempHash-&gt;key = addKey;</span><br><span class="line">        pTempHash-&gt;val = addVal;</span><br><span class="line">        HASH_ADD_INT(pNumsHashHead, key, pTempHash);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span>* <span class="title function_">twoSum</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> numsSize, <span class="type">int</span> target, <span class="type">int</span>* returnSize)</span> &#123;</span><br><span class="line">    pNumsHashHead = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; numsSize; i++)&#123;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">numsHash</span>* <span class="title">pTempHash</span> =</span> Find_NumsHash(target - nums[i]);</span><br><span class="line">        <span class="keyword">if</span>(pTempHash != <span class="literal">NULL</span>)&#123;</span><br><span class="line">            <span class="type">int</span>* ret = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>) * <span class="number">2</span>);</span><br><span class="line">            ret[<span class="number">0</span>] = pTempHash-&gt;val;</span><br><span class="line">            ret[<span class="number">1</span>] = i;</span><br><span class="line">            *returnSize = <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">return</span> ret;</span><br><span class="line">        &#125;</span><br><span class="line">        Add_NumsHash(nums[i], i);</span><br><span class="line">    &#125;</span><br><span class="line">    *returnSize = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>执行用时</th>
+<th>内存消耗</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4ms</td>
+<td>7.6MB</td>
+</tr>
+</tbody>
+</table>
+</div>
+]]></content>
+      <categories>
+        <category>算法笔记</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>算法：两数之和（暴力枚举）</title>
+    <url>/blog/%E7%AE%97%E6%B3%95%E7%BC%96%E7%A8%8B/%E7%AE%97%E6%B3%95%EF%BC%9A%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C%EF%BC%88%E6%9A%B4%E5%8A%9B%E6%9E%9A%E4%B8%BE%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="题目来源"><a href="#题目来源" class="headerlink" title="题目来源"></a>题目来源</h2><p>LeetCode：<a href="https://leetcode-cn.com/problems/two-sum">https://leetcode-cn.com/problems/two-sum</a></p>
+<span id="more"></span>
+<h2 id="我的程序"><a href="#我的程序" class="headerlink" title="我的程序"></a>我的程序</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Note: The returned array must be malloced, assume caller calls free().</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span>* <span class="title function_">twoSum</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> numsSize, <span class="type">int</span> target, <span class="type">int</span>* returnSize)</span>&#123;</span><br><span class="line">    <span class="type">int</span>* ret = <span class="literal">NULL</span>;</span><br><span class="line">    *returnSize = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> temp = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; numsSize; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = i + <span class="number">1</span>; j &lt; numsSize; ++j)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[i] + nums[j] == target)</span><br><span class="line">            &#123;</span><br><span class="line">                *returnSize += <span class="number">2</span>;</span><br><span class="line">                ret = <span class="built_in">realloc</span>(ret, <span class="keyword">sizeof</span>(<span class="type">int</span>) * (*returnSize));</span><br><span class="line">                ret[temp++] = i;</span><br><span class="line">                ret[temp++] = j;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>执行用时</th>
+<th>内存消耗</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>152ms</td>
+<td>6.1MB</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="官方答案"><a href="#官方答案" class="headerlink" title="官方答案"></a>官方答案</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span>* <span class="title function_">twoSum</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> numsSize, <span class="type">int</span> target, <span class="type">int</span>* returnSize)</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; numsSize; ++i) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = i + <span class="number">1</span>; j &lt; numsSize; ++j) &#123;</span><br><span class="line">            <span class="keyword">if</span> (nums[i] + nums[j] == target) &#123;</span><br><span class="line">                <span class="type">int</span>* ret = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>) * <span class="number">2</span>);</span><br><span class="line">                ret[<span class="number">0</span>] = i, ret[<span class="number">1</span>] = j;</span><br><span class="line">                *returnSize = <span class="number">2</span>;</span><br><span class="line">                <span class="keyword">return</span> ret;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    *returnSize = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="结果-1"><a href="#结果-1" class="headerlink" title="结果"></a>结果</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>执行用时</th>
+<th>内存消耗</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>92ms</td>
+<td>6.3MB</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>我的程序是整个完全遍历完了找出所有解，而官方是找到后直接跳出。相对于这道题来说官方的答案很显然更加贴近题意，但是我的程序更加具有普遍性（因为适合满足多组解的情况）。</p>
+]]></content>
+      <categories>
+        <category>算法笔记</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>算法：二分查找</title>
+    <url>/blog/%E7%AE%97%E6%B3%95%E7%BC%96%E7%A8%8B/%E7%AE%97%E6%B3%95%EF%BC%9A%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</url>
+    <content><![CDATA[<h2 id="题目来源"><a href="#题目来源" class="headerlink" title="题目来源"></a>题目来源</h2><p>浙大数据结构MOOC-PTA的课后题</p>
+<span id="more"></span>
+<h2 id="题目内容"><a href="#题目内容" class="headerlink" title="题目内容"></a>题目内容</h2><p><img src="https://s2.loli.net/2022/04/02/oWiVFUXaIfDvkQj.png" alt></p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>就是个普通的二分查找，没啥好分析的。</p>
+<h2 id="我的程序"><a href="#我的程序" class="headerlink" title="我的程序"></a>我的程序</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">Position <span class="title function_">BinarySearch</span><span class="params">( List L, ElementType X )</span></span><br><span class="line">&#123;</span><br><span class="line">    Position left, right;</span><br><span class="line">    left = <span class="number">1</span>;</span><br><span class="line">    right = L-&gt;Last;</span><br><span class="line">    <span class="keyword">while</span>(left &lt;= right)</span><br><span class="line">    &#123;</span><br><span class="line">        Position middle = (left + right) / <span class="number">2</span>;    <span class="comment">// 记录中间位置</span></span><br><span class="line">        <span class="keyword">if</span>(L-&gt;Data[middle] == X)<span class="keyword">return</span> middle;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(L-&gt;Data[middle] &lt; X)left = middle +<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(L-&gt;Data[middle] &gt; X)right = middle - <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> NotFound;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h2><p><img src="https://s2.loli.net/2022/04/02/7wgC4vDJbFxrIph.png" alt></p>
+]]></content>
+      <categories>
+        <category>算法笔记</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>算法：最大子列和问题</title>
+    <url>/blog/%E7%AE%97%E6%B3%95%E7%BC%96%E7%A8%8B/%E7%AE%97%E6%B3%95%EF%BC%9A%E6%9C%80%E5%A4%A7%E5%AD%90%E5%88%97%E5%92%8C%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h2 id="题目来源"><a href="#题目来源" class="headerlink" title="题目来源"></a>题目来源</h2><p>浙大数据结构MOOC-PTA的课后题</p>
+<span id="more"></span>
+<h2 id="题目内容"><a href="#题目内容" class="headerlink" title="题目内容"></a>题目内容</h2><p><img src="https://s2.loli.net/2022/04/02/VL8rfTWXjHEAOoB.png" alt></p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>这个程序在课程里讲过，一共有四种方法，其中两种是同一种方法，只是进行了优化，这道题没有什么好分析的，直接写就行了。</p>
+<h2 id="我的程序"><a href="#我的程序" class="headerlink" title="我的程序"></a>我的程序</h2><ol>
+<li><p>暴力穷举：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 获取数据</span></span><br><span class="line">    <span class="type">int</span> size;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;size);</span><br><span class="line">    <span class="type">int</span> num[size];</span><br><span class="line">    <span class="type">int</span> max = <span class="number">0</span>, this = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, num + i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 穷举所有子列并找出最大和</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; size; i++)	<span class="comment">// 分别以每个项作为子列起点，然后计算这个起点所有子列和</span></span><br><span class="line">    &#123;</span><br><span class="line">        this = <span class="number">0</span>;	<span class="comment">// 每次计算完子列，都需要清空</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = i; j &lt; size; j++)	<span class="comment">// 计算当前所在起点的所有子列和</span></span><br><span class="line">        &#123;</span><br><span class="line">            this += num[j];</span><br><span class="line">            <span class="keyword">if</span>(this &gt; max)max = this;	<span class="comment">// 当出现了更大的子列和时，将其存入max</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, max);	<span class="comment">// 打印出来</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种解法的时间复杂度为O(N^2^)，虽然能用但是还差点意思。</p>
+</li>
+<li><p>分而治之：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">getMaxSequenceSum</span><span class="params">(<span class="type">int</span>* num, <span class="type">int</span> size)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> size;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;size);</span><br><span class="line">    <span class="type">int</span> num[size];</span><br><span class="line">    <span class="type">int</span> max = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, num + i);</span><br><span class="line">    &#125;</span><br><span class="line">    max = getMaxSequenceSum(num, size);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, max);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">getMaxSequenceSum</span><span class="params">(<span class="type">int</span>* num, <span class="type">int</span> size)</span> <span class="comment">// 分而治之，左右分并分别计算最大子列和，然后从中间向两边延申计算最大子列和，比较三者，最终得到最大子列和</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(size == <span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> num[<span class="number">0</span>]&gt;<span class="number">0</span>?num[<span class="number">0</span>]:<span class="number">0</span>;  <span class="comment">// 不可再分时，最大子列和就是本身或0（小于0的情况）</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> left = getMaxSequenceSum(num, size / <span class="number">2</span>);</span><br><span class="line">    <span class="type">int</span> right = getMaxSequenceSum(num + size / <span class="number">2</span>, size - size / <span class="number">2</span>);</span><br><span class="line">    <span class="type">int</span> mid_l = <span class="number">0</span>, mid_r = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> max = <span class="number">0</span>, this = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= size / <span class="number">2</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        this += num[size / <span class="number">2</span> - i];</span><br><span class="line">        <span class="keyword">if</span>(mid_l &lt; this)mid_l = this;</span><br><span class="line">    &#125;</span><br><span class="line">    this = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; size / <span class="number">2</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        this += num[size / <span class="number">2</span> + i];</span><br><span class="line">        <span class="keyword">if</span>(mid_r &lt; this)mid_r = this;</span><br><span class="line">    &#125;</span><br><span class="line">    max = mid_l + mid_r &gt; left?mid_l + mid_r:left;</span><br><span class="line">    <span class="keyword">return</span> max &gt; right?max:right;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种解法的时间复杂度为O(NlogN)，已经是一种非常优秀的解法了。</p>
+</li>
+<li><p>在线处理：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 获取数据</span></span><br><span class="line">    <span class="type">int</span> size;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;size);</span><br><span class="line">    <span class="type">int</span> num[size];</span><br><span class="line">    <span class="type">int</span> max = <span class="number">0</span>, this = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, num + i);</span><br><span class="line">        this += num[i];</span><br><span class="line">        <span class="keyword">if</span>(this &gt; max)max = this;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(this &lt; <span class="number">0</span>)this = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, max);	<span class="comment">// 打印出来</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在线处理的时间复杂度是O(N)，时间复杂度是线性的算法，是该问题的最优解。</p>
+</li>
+</ol>
+<h2 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h2><p><em>下面的配图是我在MOOC中提交的图，里面代码没有优化，所以结果可能和预期有一点差别，不过整体大差没差。</em></p>
+<p>1.暴力穷举</p>
+<p><img src="https://mooc-image.nosdn.127.net/d61bf61634f04dd1abcf8db59db3b1d2.png" alt></p>
+<p>2.分而治之</p>
+<p><img src="https://mooc-image.nosdn.127.net/fad469ccf3ea40079fe61ca7e157f23f.png" alt></p>
+<p>3.在线处理</p>
+<p><img src="https://mooc-image.nosdn.127.net/f3eac9b97ff749068e2e000cca20dc6e.png" alt></p>
+]]></content>
+      <categories>
+        <category>算法笔记</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C语言可以使用变量定义数组</title>
+    <url>/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/C_C++/C%E8%AF%AD%E8%A8%80%E5%8F%AF%E4%BB%A5%E4%BD%BF%E7%94%A8%E5%8F%98%E9%87%8F%E5%AE%9A%E4%B9%89%E6%95%B0%E7%BB%84/</url>
+    <content><![CDATA[<p>这是在一次研讨会中发现的我知识上的纰漏，在此进行记录。</p>
+<span id="more"></span>
+<p>当时想给学弟学妹讲一下关于动态内存的问题，在讲述时我用了一个初始化变量时不能用变量作为下标。例如：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> i = <span class="number">5</span>;</span><br><span class="line"><span class="type">char</span> test[i];</span><br></pre></td></tr></table></figure>
+<p>然而事实上，在这样写了之后我发现编译没有出错，这和我最开始学C语言时老师给我们讲的内容并不相同。我最初怀疑时因为此时i已经被赋值了而后在此期间没有进行计算，所以编译器可能将其直接作为一个宏定义来解析了。但是我们又尝试了如下两种写法。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> i = <span class="number">5</span>;</span><br><span class="line">i++;</span><br><span class="line"><span class="type">char</span> test[i];</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> i;</span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;i);</span><br><span class="line"><span class="type">char</span> test[i];</span><br></pre></td></tr></table></figure>
+<p>此时编译器仍然没有报错，而且生成的程序运行起来也是正常的。故而这样的写法其实是正确的，其运行逻辑应该是这种语句在被编译的时候成为了类似于malloc的语句，同时在后面的某个位置自动添加了free，不过因为我对汇编并不是特别熟，只能从理论层面大概分析一下，具体内容各位可以使用反汇编自行查看。</p>
+<p>不过需要注意的是，在定义的时候不能直接赋值：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> i = <span class="number">5</span>;</span><br><span class="line"><span class="type">char</span> test[i] = &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;;</span><br></pre></td></tr></table></figure>
+<p>原因可能在于等号赋值是先右后左，虽然在普通直接使用常量定义数组的时候没有关系，但那应该是在编译状态就可以计算出的内容，只要赋值的长度不超就没事，而这种变量赋值则类似于一种动态分配，编译器并不能预测在运行时这个变量究竟是多少，哪怕你知道它只能是这么多，但是编译器并没有那么智能，不如就直接报错处理了。</p>
+<p>考虑到最开始学到这个知识的时候老师讲课用的书是谭浩强的那本，限于时代因素那本书使用的C语言标准应该是在C89左右，而当时实验课我们使用DEV-C++进行编译也会遇到这种问题，故而我怀疑可能在C99或者C11的版本中发生了某种改变，毕竟我现在用的是C11的gcc了。不过具体是什么时候不重要，记住这个结论就好了。</p>
+<p>另外我真认为各高校确实该换本教科书了……</p>
+]]></content>
+      <tags>
+        <tag>C</tag>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C连接符及其应用</title>
+    <url>/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/C_C++/C%E8%BF%9E%E6%8E%A5%E7%AC%A6%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/</url>
+    <content><![CDATA[<p>在学习LwIP的时候，发现源码中出现了<code>#define LWIP_MEMPOOL(name, num, size, desc) MEMP_##name</code>这样的语句，了解到了C编译器中##这个连接符。顺便查了一下资料，还发现了#这个字符转换符。</p>
+<span id="more"></span>
+<h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><p><code>##</code>可以作为宏定义中的变量替换，<code>#</code>则作为字符替换，一般他们都是用于带参宏定义中。</p>
+<p>比如：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> func1(a) printf(#a<span class="string">&quot;\n&quot;</span>)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> func(num, a) func##num(a)</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    func1(hello);</span><br><span class="line">    func(<span class="number">1</span>, hello);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述程序将会输出两个hello。</p>
+<p>第一个hello源自于<code>func1(hello);</code>这句话因为宏定义将会变成<code>printf(“hello”);</code>其中hello之所以变成字符串，就是因为在宏定义的时候使用了<code>#</code>，另外相邻且未被任何字符隔开的两个字符串在C中会被合并在一起，故这里相当于还加上了一个回车。</p>
+<p>第二个hello源自于<code>func(1, hello);</code>这句话因为宏定义首先会变成<code>func1(hello);</code>其中之所以参数1会出现在变量名中，就是因为在宏定义中使用了<code>##</code>，它相当于将宏定义中的参数num变成了真正Token中的内容。Token可以理解为我们在C语言中写的变量名、函数名等等。然后<code>func1(hello);</code>又变成<code>printf(&quot;hello&quot;);</code>。</p>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><p>它们的应用不在于提高代码效率或缩减体积，而在于简化编程难度和提高易读性。</p>
+<p>比如，我有一堆字符串口令，为了方便，我对它们进行了宏定义：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> TEST_HELLO 	<span class="string">&quot;Hello&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> TEST_BYE	<span class="string">&quot;Bye&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> TEST_NAME1	<span class="string">&quot;Tom&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> TEST_NAME2	<span class="string">&quot;Jerry&quot;</span></span></span><br></pre></td></tr></table></figure>
+<p>现在，我希望把这几个口令以一定的方式打印出来，最直接的方法就是如下：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%s %s %s %s&quot;</span>, TEST_HELLO, TEST_NAME1, TEST_BYE, TEST_NAME2);</span><br></pre></td></tr></table></figure>
+<p>不过上述的方式太单一了，而且封装程度不好，如果我们未来想到一个新的问候词要替换呢？可能有人想到用这样的方法来替换：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">SaySomething</span><span class="params">(<span class="type">char</span>* sth1, <span class="type">char</span>* sth2, <span class="type">char</span>* name1, <span class="type">char</span>* name2)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s %s %s %s&quot;</span>, sth1, name1, sth2, name2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样封装后我们使用：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">SaySomething(TEST_HELLO, TEST_NAME1, TEST_BYE, TEST_NAME2);</span><br></pre></td></tr></table></figure>
+<p>就可以完成上面的工作了，但是似乎还是太麻烦而且可扩展性以及封装度有点差，这时我们可以观察上面的所有问候语都是以<code>TEST_</code>开头的且后面的问候句与下划线后的文字直接相关，而人的名字则以<code>TEST_NAME</code>开头，然后接上一个数字编号，那么我们是否可以依靠这个来做点什么呢？</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> SaySomething(sth1, sth2, name1, name2) printf(#sth1<span class="string">&quot; %s &quot;</span>#sth2<span class="string">&quot; %s&quot;</span>, TEST_NAME##name1, TEST_NAME##name2)</span></span><br></pre></td></tr></table></figure>
+<p>通过这样一个封装，我们就可以实现前面的功能了，用法如下：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">SaySomething(Hello, Bye, <span class="number">1</span>, <span class="number">2</span>);</span><br></pre></td></tr></table></figure>
+<p>之所以它们可以连接在一起是因为C语言中直接相连的两个字符串是会被视为一个整体的。</p>
+<p>由此可见当我们宏定义了一大堆功能类似名字类似且可以相互替换的常量时，<code>#</code>和<code>##</code>就变得非常有用了。</p>
+<h2 id="效果图"><a href="#效果图" class="headerlink" title="效果图"></a>效果图</h2><p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/C_C++/C%E8%BF%9E%E6%8E%A5%E7%AC%A6%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/image-20210616181721810.png" alt="image-20210616181721810"></p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/C_C++/C%E8%BF%9E%E6%8E%A5%E7%AC%A6%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/image-20210616181843316.png" alt="image-20210616181843316"></p>
+]]></content>
+      <tags>
+        <tag>C</tag>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>声明和定义</title>
+    <url>/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/C_C++/%E5%A3%B0%E6%98%8E%E5%92%8C%E5%AE%9A%E4%B9%89/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>很多编程语言的语法中都有关于声明和定义的概念，这种概念一般会应用于函数或变量的创建和使用中，但是为什么要这么做？</p>
+<p>以C语言为例，一些书籍或教程会要求读者在程序文件开头写上函数和变量的声明，然后再在后面对其进行定义（对于变量也可以叫初始化）。这不免让人感到有一丝疑惑，为什么要这样做？我能不能先定义再声明？或者我能否不声明直接定义？</p>
+<p>事实上这样做很多时候也是可以的，但是为什么呢？</p>
+<p>为此我们需要明确一些基本的概念。</p>
+<span id="more"></span>
+<h2 id="编译和链接"><a href="#编译和链接" class="headerlink" title="编译和链接"></a>编译和链接</h2><p>以C和C++为例，如果你正在使用某个IDE进行编程，那么你应该可以发现，在你写好一个程序后需要将它运行之前，往往需要先进行构建（有的IDE里面写的是生成或build），然后经过一段时间的等待后，你就会获得一个可执行程序，之后你就可以运行这个程序文件得到想要的效果。</p>
+<p>这个过程中发生了什么呢？一般情况下这个过程分为了三步——预处理、编译、链接。预处理过程一般是C和C++的特色，你所见到的那些带<code>#</code>的语句一般被称为宏，而这些宏将会被预处理器进行预处理。通常而言，你只需要知道<code>#define</code>（将被定义的内容用定义的内容进行替换）和<code>#include</code>（将被引用的文件全部原样复制到此）两个宏就够了。</p>
+<p>不过预处理并不是我们讨论的焦点。</p>
+<p>编译一般发生于预处理之后，一般而言，当预处理结束后，所有有用的<code>.h</code>文件都已经通过<code>#include</code>被原样复制到了<code>.c</code>文件中了，所以整个工程现在就只剩下一堆<code>.c</code>文件。而编译器会检测每个<code>.c</code>文件然后将它们编译称为对应的汇编文件，再然后将汇编文件翻译成二进制文件。不过一般而言，翻译成为汇编文件这个过程都是被隐藏的，至少如果不单独设置你是无法看到生成汇编文件这个过程。不过没关系，这样也可以简化我们的思路，所以直接将编译过程理解为从<code>.c</code>文件到二进制文件（这个文件后缀根据编译器和系统的不同可能有所差异，一般是<code>.o</code>或<code>.obj</code>，当然具体是什么后缀都不重要）。</p>
+<p>编译结束后，显然我们会得到一堆二进制文件，它们和之前写的<code>.c</code>文件一般是一一对应的。但是很显然，这些二进制文件还不是可执行程序，而且它们太分散了。这个时候就需要链接器进行工作，链接器会根据链接表将所有二进制文件进行重组和拼装，最后形成一个完整的可执行文件。</p>
+<h2 id="声明和定义"><a href="#声明和定义" class="headerlink" title="声明和定义"></a>声明和定义</h2><p>那么，声明和定义在这里有什么用呢？</p>
+<h3 id="为什么要声明"><a href="#为什么要声明" class="headerlink" title="为什么要声明"></a>为什么要声明</h3><p>现在我们假设一个工程中有两个<code>.c</code>文件，一个是<code>main.c</code>，里面放了一个空的main函数，此外什么也没有。另一个是<code>hello.c</code>，里面放了一个<code>void SayHello()</code>函数并引用了<code>stdio.h</code>文件，这个函数的功能是输出一个<code>Hello World</code>。</p>
+<p>显然，<code>hello.c</code>里面实现了对<code>SayHello</code>函数的定义，也就是说我们的工程中已经实现了<code>SayHello</code>这个函数，此时我们是否能够在<code>main</code>函数中调用它呢？</p>
+<p>如果你尝试直接在<code>main</code>函数中调用<code>SayHello</code>，然后分别对<code>main.c</code>和<code>hello.c</code>进行编译（一般IDE会有单独的编译选项，右键单击某个c文件就可以选择，而且这个编译事实上还是包括了预处理过程的），你会发现对<code>main.c</code>进行编译的时候会出现报错。</p>
+<p>编译器会提示你，没有对<code>SayHello</code>函数进行定义。</p>
+<p>但是我们明明在<code>hello.c</code>中进行定义了啊？难道是我需要先编译一下<code>hello.c</code>然后再编译<code>main.c</code>？事实上你换一下顺序结果也是一样。</p>
+<p>因为编译器是没有记忆的，当他编译完一个文件，就会马上忘记它在这个文件里都发现了什么东西，所以哪怕它刚刚才在<code>hello.c</code>里面编译了<code>SayHello</code>的定义，但是现在它在编译<code>main.c</code>，它就已经忘记了这回事了。</p>
+<p>那么我们有什么办法可以解决这种情况呢？</p>
+<p>第一种方法就是，在<code>main.c</code>的前面加上对<code>SayHello</code>的定义，注意尤其一定要在<code>main</code>函数的前面。有人会问，为什么一定要在前面，后面不行吗？事实上确实不行，因为当编译器发现一个它从来没见过的函数调用时，就会马上报错，不会那么智能地再在后面找一遍你是不是定义在后面了，所以唯有在调用之前就定义好，他才知道你有好好定义这个函数，然后它就不会闹了。</p>
+<p>但是显然，如果我希望在多个文件里面调用<code>SayHello</code>函数，那么这个方法就不起效了。</p>
+<p>所以我们就有了第二种方法，在<code>main.c</code>文件前面加上一句对<code>SayHello</code>的声明。声明只需要写上函数返回值、函数名和函数参数表就可以了，不需要写完整的实现。声明其实是程序员对编译器的保证，意思就是“我保证我在其它某个地方肯定会写这个函数的定义的”，然后编译器会相信程序员，虽然你并没有实际在这个文件中定义这个函数，但是当你调用这个函数的时候，编译器不会报错。注意，声明也需要写在调用的前面，逻辑和第一种方法一样。</p>
+<p>现在你大概理解了声明的意思了，而一般情况下，声明会被写在一个<code>.h</code>文件中，要使用某个函数之前只要<code>#include</code>这个文件并且将它对应的<code>.c</code>文件包含在工程内即可。</p>
+<p>注意，除了<code>#include</code>，你一定也要将它对应的<code>.c</code>文件包含在工程内，因为<code>.c</code>文件里包含了对这些函数的定义。</p>
+<h3 id="为什么要定义"><a href="#为什么要定义" class="headerlink" title="为什么要定义"></a>为什么要定义</h3><p>没有定义显然是不行的，否则这个函数就是一个空有名字和输入输出的不明物，很显然这是程序员的疏忽（或像我们故意）造成的错误，是需要被发现检测出来的。</p>
+<p>现在，我们做个简单的小实验，还是刚才的工程，但是我们将<code>hello.c</code>里的<code>SayHello</code>注释掉（如果你不怕麻烦想要更好的体验，可以直接删掉<code>hello.c</code>或将它移出工程），此时我们再次编译<code>hello.c</code>和<code>main.c</code>，你会发现，编译器仍然没有报错。</p>
+<p>是不是有点疑惑，现在明显没有<code>SayHello</code>的定义，但是为什么编译器不报错呢？</p>
+<p>很显然，是因为编译器非常相信你，你在<code>main.c</code>中声明了，你一定会定义<code>SayHello</code>的，所以编译器就理所当然地相信了你，而没有记忆的它显然是无法发现自己被骗了。而<code>hello.c</code>文件里什么都没有，那么自然也不会有什么错（如果你直接将其移除了工程就更加不可能报错了）。</p>
+<p>但是这并不代表你能一直骗它，我们知道编译结束后还得链接才能得到可执行程序，不过IDE一般没有单独的链接按钮，所以我们得使用构建，当按下这个按钮后整个工程都将完整经历完前面说的三个过程——预处理、编译和链接。其中预处理和编译仍然是刚才我们的编译器进行的，它和刚才一样，没有发现任何问题。</p>
+<p>但是你骗不了链接器，因为它会对程序进行重新组装，但是在组装的过程中它会发现，有一个本来应该出现的函数定义却在此刻不见了，然后它会发出一个<code>L</code>字母开头的报错，唯有你在工程中重新创建了这个函数的定义并重新构建才可以消除。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这里用C语言的函数声明与定义解释了为什么要声明和定义以及它们有什么用，用相同的逻辑它也可以扩展到变量以及其它语言的声明与定义中。</p>
+]]></content>
+      <tags>
+        <tag>C</tag>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>第一章-硬件基础</title>
+    <url>/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/C_C++/%E7%BC%96%E7%A8%8B%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%A1%AC%E4%BB%B6%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<h2 id="开篇碎碎念"><a href="#开篇碎碎念" class="headerlink" title="开篇碎碎念"></a>开篇碎碎念</h2><p>我写这样一个教程的主要目的其实只是为了检验自己的学习情况，同时做个简单的记录方便之后回顾。但同时也是希望用一种我认为更加合理的方法来讲述如何学习任何一门编程语言，能够方便到其他有需要的朋友。整个教程将按照以下顺序进行讲述：</p>
+<span id="more"></span>
+<ol>
+<li>硬件基础：这个部分我将以很简单的电路知识为引子，对程序在硬件层面所作工作做一个简单介绍，方便之后的理解。</li>
+<li>指令和数据：有了硬件基础后，我们已经可以大致明白一个程序的工作流程，在这一部分我们将从指令与数据的调用层面，来理解一个编程语言的设计理念。</li>
+<li>基础语法：在已经明白了指令和数据的调用后，我们的脑海中自然而然会构想出如何设计出一门语言，无论如何构想，但是有一些基础的设计总是相似的，你几乎可以在任何一门语言上看到和这些功能相关的语法设计。</li>
+<li>语法糖：有了基础语法后，一门语言想要脱颖而出往往离不开对一些功能的简化写法，它们被称为语法糖。不同语言的语法糖总是千奇百怪的，不可能面面俱到，故将着重围绕C++来介绍它的语法糖，而其它语言的语法糖可能有所差别，但设计理念总是大差不差的。</li>
+<li>语言的差异：不同的语言之间肯定是存在差异的，除了基础语法和语法糖的设计不同外，面向对象和面向过程、解释语言和编译语言等内容也常常是不同语言之间性能、难度、写法存在差异的根源。不过这个部分涉及面太过广泛，以我的知识水平不可能面面俱到，更多还需各位在实践中慢慢学习体会。</li>
+</ol>
+<p>以上五个部分将以C++为主线，中间穿插其它语言的内容，它并不能让人直接成为编程高手，但是对于编程的入门而言我想应该会有很大帮助。</p>
+<p>现在，我们进入第一章的正题。</p>
+<h2 id="硬件基础"><a href="#硬件基础" class="headerlink" title="硬件基础"></a>硬件基础</h2><h3 id="开关与信号"><a href="#开关与信号" class="headerlink" title="开关与信号"></a>开关与信号</h3><p>这是一个简单的带开关LED电路：</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/C_C++/%E7%BC%96%E7%A8%8B%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%A1%AC%E4%BB%B6%E5%9F%BA%E7%A1%80/image-20221231203203435.png" alt="image-20221231203203435"></p>
+<p>VCC是电源输出，GND是电源接地，KEY是一个开关，LED是一个发光二极管。当开关闭合时，发光二极管会发光，断开时LED会熄灭（当然，事实上正常情况下这个电路还需要加上一个电阻来防止LED烧坏，但是我们现在只需要关注它的开关和亮灭，所以不要在意麻烦的细节）。</p>
+<p>现在，通过改变开关的开合，我们就可以控制LED的亮灭，此时LED拥有两种状态，如果我们规定，每过一秒整的时候，可以按一下开关，那么通过连续监测LED的状态，我们就可以实现信号的传递了。</p>
+<p>而为了方便我们在信号发送和接收时的表示，我们可以用两个数字来分别代表不同的状态，比如开关断开和LED熄灭的状态我们用0来表示，开关闭合和LED发光的状态我们用1来表示。</p>
+<p>你很快意识到这个表示方法和二进制非常类似。现在假设有两个人，在不同的房间，一个房间只有开关，另一个房间只有LED灯，有开关房间的这一个人希望给另一个房间的人发送一个数字”5“，那么他可以做的就是，第一秒闭合开关，第二秒打开开关，第三秒闭合开关，另外一个房间的人就会接收到LED亮灭亮的信号，转换称数字标识就是”101“，再转换成十进制就是数字”5“。（当然更严谨地进行实现，发送者还应在发送之前通过某种方式提醒接收者，否则想要发送111或者100这种信号就可能产生误解，不过这不是我们这里的讨论重点）</p>
+<h3 id="半导体与MOS管"><a href="#半导体与MOS管" class="headerlink" title="半导体与MOS管"></a>半导体与MOS管</h3><p>但是我们并不希望每次发送一个0和1都需要专门配置一个人在那摁开关，有没有一种方法可以依靠电路自身就可以控制开关呢？很幸运，人类发现了半导体，并以此研制出了MOS管，它分为NMOS和PMOS，以NMOS为例，其内部结构大概是这样：</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/C_C++/%E7%BC%96%E7%A8%8B%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%A1%AC%E4%BB%B6%E5%9F%BA%E7%A1%80/image-20221231210321014.png" alt="image-20221231210321014"></p>
+<p>我们可以看到N沟道场效应管（即NMOS）的漏极和源极连接着两块写着N的区域，栅极则通过一层金属和氧化物连接着NPN三块区域。具体原理有点复杂，但是你可以简单理解成N区域（N沟道）内存在大量电子，P区域（P沟道）内存在大量空穴（简单当成带正电的电子也行），正常情况下想要把两个N区域的电子进行交换需要让电子穿过P区域，但是电子会和空穴复合，一般情况下就过不去。但是如果我们给栅极一个正电压，那么N沟道里的电子就会被吸引过来，但是隔着一层氧化物薄膜，电子又过不去，最终堆积起来，在两个N沟道中间堆积形成了一座桥，这个时候漏极和源极的N沟道电子就可以流通了。</p>
+<p>再简单抽象一下，其实就是通过控制栅极的电压，就可以控制漏极和源极的导通，就像一个电子开关一样。如果我们把可以导通开关的电压视为1，那么不能导通的电压就视为0。</p>
+<h3 id="逻辑门电路"><a href="#逻辑门电路" class="headerlink" title="逻辑门电路"></a>逻辑门电路</h3><p>现在把各种MOS电路组合一下，我们就可以搭建各种电路，而这些电路中又以逻辑电路最为重要。</p>
+<p>所谓逻辑电路，就是可以表达逻辑运算的电路，而逻辑运算，非常巧合的是，它可以和二进制计算相联系起来。逻辑运算的主要运算类型分为与或非三种，以与运算为例，两个一位二进制数进行与运算的规则就是有0取0，没0取1（或运算是有1取1，没1取0；非运算仅针对一个一位二进制数，结果取反）。下面这个图就是表示的一个与门，A和B分别代表两个一位二进制数，Y则代表它们两个进行与运算后的输出。</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/C_C++/%E7%BC%96%E7%A8%8B%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%A1%AC%E4%BB%B6%E5%9F%BA%E7%A1%80/resize,m_lfit,w_268,limit_1.png" alt="img"></p>
+<p>假设A输入为1，B输入为0，那么Y的输出就是0。</p>
+<h3 id="锁存器"><a href="#锁存器" class="headerlink" title="锁存器"></a>锁存器</h3><p>现在我们得到了逻辑电路的基础门电路了，试着将他们组装一下，我们不难得到一种神奇的元器件——锁存器，下面就是一个SR锁存器的示意图：</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/C_C++/%E7%BC%96%E7%A8%8B%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%A1%AC%E4%BB%B6%E5%9F%BA%E7%A1%80/v2-fe189919a854e1e9c293dc38dbb993ab_r.jpg" alt="img"></p>
+<p>通过两个与非门接成反馈电路，S\’和R\’是输入，Q和Q\’是输出。</p>
+<p>我们假设前一时刻，Q和Q\’的输出是1和0，那么当下一时刻S\’和R\’输入若都为1，那么Q和Q\’的结果仍然为1和0，这样就形成了一个储存电路。如果把S\’和R\’的状态与Q和Q\’的前一刻状态做一张表，最终得到的Q和Q\’输出结果可以为：</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/C_C++/%E7%BC%96%E7%A8%8B%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%A1%AC%E4%BB%B6%E5%9F%BA%E7%A1%80/v2-9058077377c540c3ab7455b03bc044ed_720w.webp" alt="img"></p>
+<p>SR锁存器似乎拥有了存储的功能，至少当S\’和R\’的输入都是1时确实可以，但是任何时候我们稍微改变一下S或者R的输入，输出结果就改变了。</p>
+<p>很显然，锁存器的变化是非同步控制的，若多个锁存器一起作为存储设备进行工作就容易产生问题。且锁存器对输入电平非常敏感，极易因电路问题产生毛刺（电平突变）而导致存储结果失效。</p>
+<h3 id="触发器"><a href="#触发器" class="headerlink" title="触发器"></a>触发器</h3><p>所以我们希望实现一种电路，能够同步电路，控制时序且过滤毛刺，而很幸运的是，可以实现且非常简单。我们只需要在一个SR锁存器前加上两个与非门，同时用一个规律方波CLK作为时钟信号控制时序，就可以得到同步SR触发器。</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/C_C++/%E7%BC%96%E7%A8%8B%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%A1%AC%E4%BB%B6%E5%9F%BA%E7%A1%80/v2-0d3aea95db0335a46603135e0f7e3e7e_720w.webp" alt="img"></p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/C_C++/%E7%BC%96%E7%A8%8B%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%A1%AC%E4%BB%B6%E5%9F%BA%E7%A1%80/v2-126e31f173d571c392cb5e7f764f6266_720w.webp" alt="img"></p>
+<p>同步SR触发器的输出结果此时不但与S和R的输入有关，还和CLK的状态以及Q的前一刻输出有关。</p>
+<p>例如当CLK为0时，S和R无论为任意值，都不会改变Q的输出，而当CLK为1时，假设S和R为0，则输出Q的值与前一刻Q的值一致。其余结果同样可以列出真值表：</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/C_C++/%E7%BC%96%E7%A8%8B%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%A1%AC%E4%BB%B6%E5%9F%BA%E7%A1%80/v2-4cb694cc380298a15fda439c784df0cf_720w.webp" alt="img"></p>
+<p>其中Q*代表触发器在下一刻的输出状态。</p>
+<p>你可能看着有点晕，但是不用在意这些0和1，毕竟触发器的种类非常多，而我们的重点是编程不是电路设计。我在这里真正想说的是，通过触发器，我们就可以实现在一定条件下，才可以根据电路上一刻的状态改变存储电路数据的值，得到新的结果。</p>
+<p>而这个一定条件，是不是非常类似于我们最开始说的开关LED例子中每一秒整的时候才能进行开关这个条件？</p>
+<p>事实上通过晶振（一种可以产生稳定频率震荡信号的元件）或者其它方式，我们就可以得到一个同步信号，然后在这个同步信号的控制下，触发器中的数据就能得到存储和有规律的变化。</p>
+<h3 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h3><p>你应该也想到了这一点，并且敏锐地意识到我们是不是有办法把触发器组装一下，让它可以存储一些更加复杂的数据？</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/C_C++/%E7%BC%96%E7%A8%8B%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%A1%AC%E4%BB%B6%E5%9F%BA%E7%A1%80/watermark,image_d2F0ZXIvYmFpa2U4MA==,g_7,xp_5,yp_5.jpeg" alt="img"></p>
+<p>这是一个由四个D触发器促成的四位移位寄存器。D触发器是一种边沿触发器，当CLK的信号发生跳变的瞬间，触发器会得到触发，如果是0变到1的跳变（即上升沿，反之为下降沿），则输出Q等于输入D，如果是下降沿则保持原输出不变。</p>
+<p>现在观察上面的四位移位寄存器，当我们假设最开始从左到右的并行输出为0000，串行输出为0。若发生第一个上升沿跳变时串行输入为1，那么跳变结束后并行输出结果为1000，串行输出为0。在之后一个周期内的保持状态和下降沿中，四个D触发器不会发生改变，输出结果也不会变。直到下一次上升沿，若之后每次上升沿时串行输入均为0，那么接下来3个周期，并行输出结果会为0100，0010，0001，串行输出为0，0，1。</p>
+<p>不难发现，每个周期中，1都发生了向右移位，并且在移动了四次后，串行输出得到了1的输出标志。</p>
+<p>如果要实现更加复杂的寄存器，思想也差不多是如此，只是实现方式和结果可能更加复杂多样罢了。</p>
+<h3 id="运算器"><a href="#运算器" class="headerlink" title="运算器"></a>运算器</h3><p>通过寄存器、触发器、门电路，我们就可以实现很多复杂的功能电路了。</p>
+<p>除了我们刚才寄存器提到的移位寄存器功能，寄存器还可以组合实现存储器的功能。</p>
+<p>而通过门电路我们也可以组成加法器，加法器可以实现二进制数的加法，通过加法器的组合，还可以组成乘法器等运算电路。</p>
+<p>例如下图就是一个四位全加器74LS83芯片的逻辑图：</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/C_C++/%E7%BC%96%E7%A8%8B%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%A1%AC%E4%BB%B6%E5%9F%BA%E7%A1%80/o4YBAFsPTDeAK6vWAAB4SIYEb64136.jpg" alt="全加器"></p>
+<p>它可以完成两个4位二进制数字的加法。</p>
+<p>如果你对冯诺依曼结构有所了解，可能会突然意识到些什么。</p>
+<p>是的，冯诺依曼结构，也就是当今世界计算机普遍使用的计算机设计架构，指出了计算机由五个部分组成——运算器、存储器、控制器、输入设备、输出设备。</p>
+<p>很显然，我们已经搞懂了运算器和存储器的原理，那么剩下三种又是怎么回事呢？</p>
+<h3 id="控制器"><a href="#控制器" class="headerlink" title="控制器"></a>控制器</h3><p>其实当你明白运算器和存储器的概念时，你就已经明白控制器是怎么回事了，控制器所作的工作其实就是读取指令然后根据指令输出操作指令到规定的地址。而读取指令，实际上是在做什么呢？是的，就是触发器在触发时刻接受输入的过程，而输出操作到规定的地址，其实就是控制器经过一定的运算后把指令数据处理，最终得到的输出。</p>
+<p>不过说到这里，就不得不提一嘴地址是怎么回事了。</p>
+<h3 id="地址和总线"><a href="#地址和总线" class="headerlink" title="地址和总线"></a>地址和总线</h3><p>想象一下，我们在一个8位寄存器中存储了一个8位二进制数，这个二进制数可以通过8根线传输出去。我们知道，8位二进制数可以代表0~255的数，一共256（也就是2的8次方）个数。</p>
+<p>那么，这256个数其实就可以对应到256个存储单元上，它们也就被称为这256个存储单元各自的地址，而这8根线就被称为地址总线。当计算机每次想要访问哪个存储单元的数据，只需要指定好地址，然后通过地址总线寻访到指定存储单元的数据，将其取出。</p>
+<p>而数据取出时走的则是数据总线，地址总线长度和数据总线长度不需要相等，但是它们的设计思路是相同的。</p>
+<h3 id="输入设备和输出设备"><a href="#输入设备和输出设备" class="headerlink" title="输入设备和输出设备"></a>输入设备和输出设备</h3><p>关于输入设备和输出设备其实没什么好说的，输入设备就是键盘、鼠标、U盘等人从外部把数据输入到电脑中的设备，而输出设备就是屏幕、打印机这类计算机把数据表示成人能看懂的形式的设备。仍然以我们最开始的开关LED为例，输入设备就是按键开关，输出设备就是LED灯。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>看完这一章你可能感觉学到了很多，也可能感觉什么都没学懂，这都没关系，毕竟这只是刚开始，很多东西还没落到实处。</p>
+<p>以上硬件基础可以方便你理解我们在后面学习的一些概念，然而事实上很多会编程的人可能对这些基础一窍不通，但是他们编程技术最终也还是不错。所以学习这些东西更多是希望你能在后面学习中不但知其然，还能知其所以然，你在学了指令和数据之后，能想明白所谓指令和数据对于电脑而言究竟是个什么东西，什么支撑着程序的运行，又是什么完成了计算等等。</p>
+]]></content>
+      <categories>
+        <category>编程教程</category>
+      </categories>
+      <tags>
+        <tag>编程教程</tag>
+      </tags>
+  </entry>
+</search>

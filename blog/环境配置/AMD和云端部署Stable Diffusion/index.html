@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yunwuhai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言怎么样？目前AI绘画很火，很多朋友想要尝试，但试着试着发现自己的电脑好像不大行。 一般觉得自己电脑不大行的主要原因有两个：出图速度和出图像素，而这两点其实都源自于电脑中的同一个组件——显卡。 显卡，全称显示接口卡，顾名思义是用来给电脑提升显示性能的，但在AI领域，显卡象征着高性能高速计算。这其中的原因在于显卡的核心——GPU（部分人错误地直接以GPU称呼显卡，但是无所谓只是个名字），其架构和普">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AMD和云端部署Stable Diffusion">
+<meta property="og:url" content="https://yunwuhai.github.io/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/AMD%E5%92%8C%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2Stable%20Diffusion/index.html">
+<meta property="og:site_name" content="云雾海的博客">
+<meta property="og:description" content="前言怎么样？目前AI绘画很火，很多朋友想要尝试，但试着试着发现自己的电脑好像不大行。 一般觉得自己电脑不大行的主要原因有两个：出图速度和出图像素，而这两点其实都源自于电脑中的同一个组件——显卡。 显卡，全称显示接口卡，顾名思义是用来给电脑提升显示性能的，但在AI领域，显卡象征着高性能高速计算。这其中的原因在于显卡的核心——GPU（部分人错误地直接以GPU称呼显卡，但是无所谓只是个名字），其架构和普">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/AMD%E5%92%8C%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2Stable%20Diffusion/image-20230219155619118-16775564652891.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/AMD%E5%92%8C%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2Stable%20Diffusion/image-20230219160454382-16775565347553-16775565394615-16775565409347.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/AMD%E5%92%8C%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2Stable%20Diffusion/image-20230219160729556-16775565664429-167755656980811.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/AMD%E5%92%8C%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2Stable%20Diffusion/image-20230219161530256-167755657306213.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/AMD%E5%92%8C%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2Stable%20Diffusion/image-20230219194720341-167755657619215.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/AMD%E5%92%8C%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2Stable%20Diffusion/image-20230220142025399.png">
+<meta property="article:published_time" content="2023-02-17T06:52:06.105Z">
+<meta property="article:modified_time" content="2023-02-28T08:13:35.150Z">
+<meta property="article:author" content="yunwuhai">
+<meta property="article:tag" content="AI绘画">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://yunwuhai.github.io/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/AMD%E5%92%8C%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2Stable%20Diffusion/image-20230219155619118-16775564652891.png">
+
+<link rel="canonical" href="https://yunwuhai.github.io/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/AMD%E5%92%8C%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2Stable%20Diffusion/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>AMD和云端部署Stable Diffusion | 云雾海的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">云雾海的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习和生活</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/home/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">14</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">14</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/yunwuhai" class="github-corner" title="我的GitHub" aria-label="我的GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://yunwuhai.github.io/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/AMD%E5%92%8C%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2Stable%20Diffusion/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="yunwuhai">
+      <meta itemprop="description" content="正在学习中">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="云雾海的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AMD和云端部署Stable Diffusion
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-02-17 14:52:06" itemprop="dateCreated datePublished" datetime="2023-02-17T14:52:06+08:00">2023-02-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-02-28 16:13:35" itemprop="dateModified" datetime="2023-02-28T16:13:35+08:00">2023-02-28</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><h3 id="怎么样？"><a href="#怎么样？" class="headerlink" title="怎么样？"></a>怎么样？</h3><p>目前AI绘画很火，很多朋友想要尝试，但试着试着发现自己的电脑好像不大行。</p>
+<p>一般觉得自己电脑不大行的主要原因有两个：出图速度和出图像素，而这两点其实都源自于电脑中的同一个组件——显卡。</p>
+<p>显卡，全称显示接口卡，顾名思义是用来给电脑提升显示性能的，但在AI领域，显卡象征着高性能高速计算。这其中的原因在于显卡的核心——GPU（部分人错误地直接以GPU称呼显卡，但是无所谓只是个名字），其架构和普通电脑的核心——CPU有所差异，它能够显著加速一些算法的运算，这对需要海量运算的AI算法而言是非常有必要的。此外显卡还分为集显和独显，集显（也就是集成显卡）说它是显卡，其实更加类似于一个被集成在CPU中的显示单元，从性能上而言远远不如独显（也就是独立的显卡），对于AI绘画而言我们一般都是考虑独显，所以后面所说的显卡都默认是指独显。</p>
+<span id="more"></span>
+<h4 id="显卡版本"><a href="#显卡版本" class="headerlink" title="显卡版本"></a>显卡版本</h4><p>对于AI绘画而言，你所谓判断自己电脑好不好，实际上就是判断自己的显卡好不好。打开你的设备管理器，然后选择显示适配器，就可以查看自己的显卡了，比如我这一台18年买的低端游戏本的显卡类型是NVIDIA的GTX1060。</p>
+<p>一般而言，普通人常用的显卡就是NVIDIA公司的10、20、30、40系列显卡，每个系列又会分60、70、80、90版本，系列影响较大，数字越大越好。同时根据架构还会分差一点的GTX和好一点的RTX（但不会太大，一般玩家可以不考虑）。具体显卡性能可以百度N卡天梯图。如果你的显卡不是这几种之一，请自行百度它的性能比较。</p>
+<p>此外如果你是A卡（也就是AMD公司的显卡，当然更古老的版本可能是ATI公司），现在社区正在制作AMD相关的环境适配，我会在后文告知如何安装。</p>
+<p>通常而言，显卡版本决定了你<strong>出图和训练的速度</strong>，但这并不绝对，一些专业显卡可能会有特殊的AI加速（说不准，但是既然都买专业显卡了肯定对这比我熟）。</p>
+<h4 id="显存大小"><a href="#显存大小" class="headerlink" title="显存大小"></a>显存大小</h4><p>除了显卡版本，还有一个非常关键的参数，那就是显存大小，它几乎决定了你这张显卡能不能玩AI。</p>
+<p>一般而言，AI在训练和推理的时候，会产生大量的临时数据，这些数据在本次计算中非常有必要且非常紧迫，所以需要全部保存在一个可以高速存取的内存中，也就是显存里，但是如果你训练和推理的东西数据量太大，显存装不下，就会溢出然后产生报错。</p>
+<p>那么对于AI绘画而言，需要多少显存呢？目前的答案是6G，这是你入门的门槛，只要达到了这个门槛你就可以参与到最基本简单的AI绘画。如果你的显存小于6G，那么你就只有使用CPU进行训练了，速度会比较慢。</p>
+<p>但是，6G版本仍然会导致你有很多功能无法使用，所以想要完整体验，最低要求则是8G。</p>
+<p>不过8G也只是能完整体验所有功能罢了，想要比较流畅的体验，你至少需要10G。</p>
+<p>至于更高，则看个人需求了，如果你对<strong>高清图和单次出图张数</strong>有所需求，就需要显存更高的显卡。</p>
+<h3 id="怎么办？"><a href="#怎么办？" class="headerlink" title="怎么办？"></a>怎么办？</h3><p>你已经明白自己缺点什么了，现在我们就需要考虑是不是要整张更好的显卡了。</p>
+<p>怎么整好显卡呢？目前有三种攻略——购买、白嫖和租用。</p>
+<h4 id="购买"><a href="#购买" class="headerlink" title="购买"></a>购买</h4><p>首先你需要明确一下你是否真的需要购买显卡，不要只是脑袋一热就买了。通常而言，显卡会影响3D游戏的画质体验，影视游戏测绘图形行业的办公体验，除此之外就不是特别有用了，如果你对上述两种没有特殊的高要求，一般不建议购买，当然富哥富姐另谈。</p>
+<p>（欢迎富姐联系我，本人男，身高一米八，23岁，未婚）</p>
+<p>而如果你要购买，建议根据需求选择，也就是你是用来玩游戏还是办公，这些具体需求和选型都可以在网上搜得到，我就不在这多说了，但最好是购买最新发售的那些显卡。</p>
+<h4 id="白嫖"><a href="#白嫖" class="headerlink" title="白嫖"></a>白嫖</h4><p>是的没错，很多时候我们可以选择进行白嫖，因为很多公司都推出了自己的公共AI体验平台，例如谷歌、百度、腾讯等，最出名的就是谷歌的Colab。这些平台的使用在它们官网有教程，网上资料也很多，而且不同平台的使用方法也不一样，所以这里不过多赘述，仅告诉你有这样一个东西。</p>
+<p>但是白嫖有一定的麻烦，首先白嫖的时间和量是限定的，如果要继续用就得充钱了。此外白嫖还有很多复杂的规则以及限制，同时能白嫖到的显卡性能也不会是特别好的那一级。不过反正都是白嫖了，也不要嫌这嫌那。</p>
+<h4 id="租用"><a href="#租用" class="headerlink" title="租用"></a>租用</h4><p>这是本教程将要主要讲的内容，也就是如何在一个租用的云服务器上玩到AI绘画。</p>
+<p>首先我们需要选择平台，目前很多公司都推出了自己的云算力平台，像是腾讯、百度等，去它们的云平台查看，可以在人工智能这种版块里面找到GPU出租的相关信息。</p>
+<p>不过目前而言，我还是推荐<a target="_blank" rel="noopener" href="https://www.autodl.com/register?code=369bf7f3-b959-4c6d-a040-f0f5ae5ed96c">AutoDL</a>这个平台，它是目前性价比最高的一个（注意这里说的是性价比，如果你手头比较宽裕，而且可以和其他人合租，那么像是腾讯云、百度云这些平台会提供一些性能更加好的高端专业显卡）。</p>
+<p>从价格上来说，以AutoDL为例，按量计费租用一块3090，一个小时的价格是在一块五左右，每天如果连续玩八个小时，大概就是12元。如果每天都玩，一年365天大概花费在四千四左右（当然正常情况下我们也不一定会一天玩8小时还全年无休），而如果直接购买，大概需要一万五，也就是租用三年的价格。（不过现在4090出来了，直接买4090大概一万四左右，比买3090划算，但具体就要看各位的闲钱以及对显卡的想法是怎样的了）</p>
+<p>不过目前<a target="_blank" rel="noopener" href="https://www.autodl.com/register?code=369bf7f3-b959-4c6d-a040-f0f5ae5ed96c">AutoDL</a>新人注册会给10块的体验券，可以先白嫖几个小时试试水，掌握好时间这十块钱足够训练几个模型出来了。</p>
+<h3 id="本教程有什么？"><a href="#本教程有什么？" class="headerlink" title="本教程有什么？"></a>本教程有什么？</h3><p>本教程会讲述：</p>
+<ul>
+<li>如何在云平台搭建Stable Diffusion WebUI环境</li>
+<li>AMD显卡用户如何搭建Stable Diffusion WebUI环境</li>
+<li>如何远程使用Stable Diffusion WebUI进行绘画</li>
+<li>如何在云平台上训练Lora模型</li>
+</ul>
+<h3 id="前置概念"><a href="#前置概念" class="headerlink" title="前置概念"></a>前置概念</h3><p>尽管本教程会尽量用比较简单的语言进行讲述，但是了解一些基本概念仍然会有助于加快你理解本教程以及明白一些其它教程，注意这里的介绍不会太严谨，更多是处于基础概念性的理解。</p>
+<ul>
+<li><p>模型</p>
+<p>人工智能训练程序通过读取数据并不断调整自身参数以产生某种符合预期的输出，然后人工智能训练程序会把这些参数打包出来，当人工智能推理程序重新读取到这些参数的时候，就可以把那些输出重新推理成它的输入，而打包出来装了参数的文件就被我们称为模型。</p>
+</li>
+<li><p>训练</p>
+<p>在AI绘画这个领域，把图像作为输入，文字作为输出，生成AI绘画模型的过程被称为训练。当然一些朋友可能会把这个过程称之为跑图。</p>
+</li>
+<li><p>推理</p>
+<p>在AI绘画这个领域，设置了某种模型，把文字作为输入，把图像作为输出，生成图像的过程称之为推理。当然一些朋友可能会把这个过程称之为出图。</p>
+</li>
+<li><p>Stable Diffusion</p>
+<p>一个开源的绘画AI程序集，包含了训练、推理和一些基础模型。</p>
+</li>
+<li><p>WebUI</p>
+<p>Stable Diffusion原本是运行在命令行的，但是为了方便操作，有人给它只做了一个UI（图形操作界面），因为这个UI是运行在浏览器上的，所以取名叫WebUI。WebUI并非必须的，但是操作起来会比较方便，如果感兴趣也可以尝试做一个本地不需要Web的UI，但是目前没必要。</p>
+</li>
+<li><p>NovelAI</p>
+<p>出自于Stable Diffusion的一个争议很大的模型（一说不只是模型，也对Stable Diffusion的底层进行了一些修改），争议主题在于未经授权把许多画师的画拿去训练，并进行收费的推理行为，因为争议而出现了黑客直接攻破他们服务器并把所有模型公开的事件，闹得很出圈，很多人也是这一次知道的AI绘画。</p>
+</li>
+<li><p>ChilloutMix</p>
+<p>写下这段文字的时间是2023年2月19日，在不久前因为AI绘画在写实领域展现了非常好的效果，而再次出圈。出圈模型应该是ChilloutMix这个模型（未确实考证），其在人像写实领域已经达到了接近于高P网图的效果。ChilloutMix是一个Checkout大模型，你可以理解为是Stable Diffusion原生支持的一种基础模型。</p>
+</li>
+<li><p>Lora和Embedding</p>
+<p>和Chill模型一起出圈的还有Lora模型，这是一种小型模型，与之类似的还有embedding模型，这些模型旨在以较小的数据集训练某种特定的特征，并可将之在推理过程中嵌入，以达到修改画风、人物、物品等效果。</p>
+</li>
+<li><p>云计算服务</p>
+<p>云计算服务是指一些厂家提供的收费出租GPU算力云服务器的服务。</p>
+</li>
+<li><p>Python</p>
+<p>一种方便的解释型编程语言，常用于AI领域。</p>
+</li>
+<li><p>命令行</p>
+<p>没有标准图像界面的依靠键盘输入命令进行操作的界面，Windows通过按住Win+R键输入cmd可以打开，而Linux是原生支持命令行的（图形操作界面才是附加品），我们在云服务器中通常使用的是Linux（也有Windows，但是比较难用而且资料很少）。</p>
+</li>
+<li><p>shell脚本</p>
+<p>正常情况我们输入命令需要用键盘一个命令一个命令地输入，但一些情况下我们也可以把这些命令全部写在一个文件里，然后让系统自动运行，其本质和键盘输入是一样的，只是在量大的情况下会比较方便。</p>
+</li>
+<li><p>vscode</p>
+<p>全称<a target="_blank" rel="noopener" href="https://code.visualstudio.com/">Visual Studio Code</a>，微软官方推出的一款开源编辑器，我们将在Windows（Mac也行）上使用它来连接云服务器，关于具体安装事项可以百度，但是我感觉直接装就行了，没那么麻烦。</p>
+</li>
+<li><p>ssh</p>
+<p>一种远程连接工具，方便你在自己主机上操作服务器。</p>
+</li>
+<li><p>镜像</p>
+<p>一些服务器厂家为了用户操作方便，会提供镜像。镜像会把一个容器里面的所有环境和数据保存起来，其它服务器只要安装了这个镜像，就可以直接获得对应的环境，整体非常方便。</p>
+</li>
+<li><p>git</p>
+<p>一种开源的分布式版本控制系统，一般目前开源软件都是用的这个系统，你可以简单理解成有一个git服务器管理着一些git仓库（一个仓库相当于一个开源软件），而其它人可以用git拉取下载这些软件得到本地仓库，如果有能力的人还可以修改软件代码并上传，如果仓库管理员认为你的代码可以，他就可以把你的代码合并到服务器仓库里，其他人只要再次拉取修改，就可以得到这些修改后的代码。目前常见的git服务器有github、gitee等，Stable Diffusion的源码也在github上。</p>
+</li>
+<li><p>文件夹</p>
+<ul>
+<li><code>stable-diffusion-webui</code>是AI绘画的主体文件夹<ul>
+<li><code>models</code>是安装模型文件的<ul>
+<li><code>Stable-diffusion</code>装大模型</li>
+<li><code>Lora</code>装Lora模型</li>
+</ul>
+</li>
+<li><code>embeddings</code>安装embedding模型</li>
+<li><code>extentions</code>安装插件</li>
+<li><code>outputs</code>是输出图片</li>
+<li><code>log</code>存放你主动保存的图片</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="建议提前安装"><a href="#建议提前安装" class="headerlink" title="建议提前安装"></a>建议提前安装</h3><p>本地电脑上，最好安装一个git和一个vscode，具体安装教程请自行百度。如果无法访问github，可以尝试安装一个watt toolkit，该软件是用来加速steam的，但是里面也有加速github的功能，该软件可以在微软商店下载。</p>
+<h2 id="如何在云平台搭建Stable-Diffusion-WebUI环境"><a href="#如何在云平台搭建Stable-Diffusion-WebUI环境" class="headerlink" title="如何在云平台搭建Stable Diffusion WebUI环境"></a>如何在云平台搭建Stable Diffusion WebUI环境</h2><h3 id="AutoDL镜像安装"><a href="#AutoDL镜像安装" class="headerlink" title="AutoDL镜像安装"></a>AutoDL镜像安装</h3><p>我选这个镜像的作者也给了一个镜像<a target="_blank" rel="noopener" href="https://www.zhihu.com/zvideo/1604816765296521216">安装视频</a>，但这里我仍然用文字版写一下，因为用他的方法不知道为啥需要注册两次账号我不是很喜欢。</p>
+<p>其它平台可能也有，但是我还没用过，所以快速通道只写这一个，后面会写具体的非快速通道安装教程。</p>
+<p>首先你需要<a target="_blank" rel="noopener" href="https://www.autodl.com/register?code=369bf7f3-b959-4c6d-a040-f0f5ae5ed96c">注册AutoDL账号</a>，注册这里很简单就直接略过。</p>
+<p>然后右上角点击控制台，左侧点击容器实例，并选择租用新实例（界面可能会发生变化，但是意思就是这么个意思）。</p>
+<p>我们普通使用按量计费就好了，地区选择北京或内蒙（内蒙有A5000，和3090是同等级的显卡，可能稍微差一点但是便宜几角钱），当然如果主要是断断续续地玩而且不是连续出图，也可以选择3080，性价比会比较高。记住别租太差的显卡，那种性价比特别低。</p>
+<p>最后看到镜像，输入<code>stabledi</code>后就会出现一个镜像，选择下面那个。（你也可以用原文的方式）</p>
+<p><img src="/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/AMD%E5%92%8C%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2Stable%20Diffusion/image-20230219155619118-16775564652891.png" alt="image-20230219155619118"></p>
+<p>当你租用成功后，电脑会开机，我们等开机后选择JupyterLab。</p>
+<p><img src="/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/AMD%E5%92%8C%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2Stable%20Diffusion/image-20230219160454382-16775565347553-16775565394615-16775565409347.png" alt="image-20230219160454382"></p>
+<p>左侧有个文件夹目录，正常情况你进去会在一个叫stable-diffusion-webui的文件夹里。</p>
+<p>此时右侧点击选择终端，会打开命令行。</p>
+<p><img src="/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/AMD%E5%92%8C%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2Stable%20Diffusion/image-20230219160729556-16775565664429-167755656980811.png" alt="image-20230219160729556"></p>
+<p>输入<code>python webui.py --deepdanbooru --no-half --precision full --port 6006 --disable-safe-unpickle --share</code>，即可启动WebUI，等它启动一会，看到输出</p>
+<p><img src="/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/AMD%E5%92%8C%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2Stable%20Diffusion/image-20230219161530256-167755657306213.png" alt="image-20230219161530256"></p>
+<p>就表明启动成功了，现在回到控制台，并选择自定义服务，即可开启WebUI，然后开始操作了。</p>
+<p>不过注意，这个镜像只能用来出图和训练普通模型，而像是Lora则需要另外开其它镜像，后面会讲。</p>
+<p>当你玩累了不想玩时，回到刚才的命令行，按住Ctrl+C即可结束当前进程，然后你的Stable Diffusion会被关闭。</p>
+<p>现在你需要移动一下文件夹，在左边操作栏里将stable-diffusion-webui文件夹移动到autodl-tmp文件夹里，这里是数据盘。</p>
+<p>最后你只需要关机即可。</p>
+<p><strong>记住玩完一定要关机，否则会一直扣费。</strong></p>
+<p>此外，这里虽然一键安装了，但是我们仍然需要对其进行一些改进，</p>
+<h3 id="Linux自动安装"><a href="#Linux自动安装" class="headerlink" title="Linux自动安装"></a>Linux自动安装</h3><p>此处以AutoDL为例，使用Linux安装需要你选择一个基础镜像，至于哪一个随便选，因为都不重要，建议选miniconda的Ubuntu20.04-Python3.8版本，Cuda根据你选择的服务器支持最高Cuda进行选择。</p>
+<p>建议选3080来安装，因为这个过程会很漫长，所以会花比较多的钱，3080会更加便宜点。</p>
+<p><img src="/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/AMD%E5%92%8C%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2Stable%20Diffusion/image-20230219194720341-167755657619215.png" alt="image-20230219194720341"></p>
+<p>对于其它平台，也是同理，反正只要能安装上Linux的Ubuntu版本就行（其它版本也行但是得换指令，如果你不懂就不要改）。</p>
+<p>完成后，进入命令行，可以在控制台的JupyterLab打开。</p>
+<p>然后接下来一直输入命令改设置和安装东西。</p>
+<ol>
+<li><p>首先输入<code>cd autodl-tmp</code>进入数据盘，<code>cd</code>是跳转命令，跳转到一个地址，这里是让它打开<code>autodl-tmp</code>这个文件夹，在AutoDL的服务器里，这个文件夹代表数据盘。其它服务器可能是其它地址，总之就是先进入存储数据的那个盘而不是系统盘。</p>
+</li>
+<li><p>然后<a target="_blank" rel="noopener" href="https://www.autodl.com/docs/network_turbo/">AutoDL学术资源加速</a>介绍，根据你服务器的地区输入相应指令。</p>
+</li>
+<li>输入<code>sudo apt update</code>更新资源链接。</li>
+<li>输入<code>sudo apt install wget git python3 python3-venv</code>安装基础软件。（看服务器镜像是不是自带，并不一定是必要的，输入一下以防万一吧。）</li>
+<li>输入<code>python -m pip install --upgrade pip</code>更新pip。</li>
+<li>输入<code>pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</code>更换清华大学pip源。</li>
+<li>输入<code>git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git</code>克隆WebUI仓库，你也可以用zip下载完了传上去，但是这样会不好更新。这样克隆，未来使用<code>git pull</code>可以直接更新。</li>
+<li><code>cd stable-diffusion-webui</code></li>
+<li>输入<code>python launch.py</code>开始自动安装，得等一阵。</li>
+<li>等完了就安装好了，最后放入模型就可以开始玩了，具体怎么玩请查看后面的<strong>如何远程使用Stable Diffusion WebUI进行绘画</strong>。</li>
+</ol>
+<h3 id="Linux手动安装"><a href="#Linux手动安装" class="headerlink" title="Linux手动安装"></a>Linux手动安装</h3><p>尽管自动安装很不错，但是有时候我们的网络并不会那么好，可能会出现安装失败的情况，那么这个时候你就需要考虑手动安装了。</p>
+<ol>
+<li>首先输入<code>cd autodl-tmp</code>进入数据盘，<code>cd</code>是跳转命令，跳转到一个地址，这里是让它打开<code>autodl-tmp</code>这个文件夹，在AutoDL的服务器里，这个文件夹代表数据盘。其它服务器可能是其它地址，总之就是先进入存储数据的那个盘而不是系统盘。</li>
+<li>然后<a target="_blank" rel="noopener" href="https://www.autodl.com/docs/network_turbo/">AutoDL学术资源加速</a>介绍，根据你服务器的地区输入相应指令。</li>
+<li>输入<code>sudo apt update</code>更新资源链接。</li>
+<li>输入<code>sudo apt install wget git python3 python3-venv</code>安装基础软件。（看服务器镜像是不是自带，并不一定是必要的，输入一下以防万一吧。）</li>
+<li>输入<code>python -m pip install --upgrade pip</code>更新pip。</li>
+<li>输入<code>pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</code>更换清华大学pip源。</li>
+<li>安装CUDA版本的torch，输入<code>pip install torch --extra-index-url https://download.pytorch.org/whl/cu113</code></li>
+<li>输入<code>python -c &quot;import torch; print(torch.cuda.is_available())&quot;</code>，检查torch对GPU的适配情况，这里输出必须为<code>True</code>，否则你应该将你的CUDA版本升级或降级为CUDA 11。</li>
+<li>输入<code>git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git</code>以克隆Stable Diffusion WebUI仓库。</li>
+<li><code>cd stable-diffusion-webui</code></li>
+<li>输入<code>mkdir repositories</code>创建一个仓库文件夹，用于存放Stable Diffusion WebUI运行所需的一些项目，关于他们有什么用你可以直接访问他们的github仓库进行了解，也可以等下载完成后进入仓库文件夹查看他们的README.md文件。</li>
+<li>获得Stable Diffusion主体：<code>git clone https://github.com/CompVis/stable-diffusion.git repositories/stable-diffusion</code></li>
+<li>获得Transformer：<code>git clone https://github.com/CompVis/taming-transformers.git repositories/taming-transformers</code></li>
+<li>获得CodeFormer：<code>git clone https://github.com/sczhou/CodeFormer.git repositories/CodeFormer</code></li>
+<li>获得BLIP：<code>git clone https://github.com/salesforce/BLIP.git repositories/BLIP</code></li>
+<li>下载Stable Diffusion的依赖Transformers版本：<code>pip install transformers==4.19.2 diffusers invisible-watermark --prefer-binary</code></li>
+<li>下载k-diffusion：<code>pip install git+https://github.com/crowsonkb/k-diffusion.git --prefer-binary</code></li>
+<li>这是两个可选项，用于面部修复的两个项目：<code>pip install git+https://github.com/TencentARC/GFPGAN.git --prefer-binary</code>和<code>pip install -r repositories/CodeFormer/requirements.txt --prefer-binary</code></li>
+<li>安装WebUI的依赖：<code>pip install -r requirements.txt  --prefer-binary</code></li>
+<li>升级numpy库：<code>pip install -U numpy  --prefer-binary</code></li>
+<li>等完了就安装好了，最后放入模型就可以开始玩了，具体怎么玩请查看后面的<strong>如何远程使用Stable Diffusion WebUI进行绘画</strong>。</li>
+</ol>
+<h2 id="AMD显卡用户如何搭建Stable-Diffusion-WebUI环境"><a href="#AMD显卡用户如何搭建Stable-Diffusion-WebUI环境" class="headerlink" title="AMD显卡用户如何搭建Stable Diffusion WebUI环境"></a>AMD显卡用户如何搭建Stable Diffusion WebUI环境</h2><p>并非每个人都是买的N卡，部分朋友可能买了A卡，这个时候就犯难了，AI绘画现在不支持AMD显卡该怎么办，不过幸运的是，社区已经在进行适配了，预计过不了多久就会有稳定版，但目前你仍然可以使用测试版进行尝试。但注意，因为是测试版，可能会出现bug，你可以去分支仓库提交Issue，这会有助于开发者了解到问题在未来版本进行修改，部分问题甚至是可以现场解决的，会有人回应你。</p>
+<hr>
+<p><strong>注意</strong></p>
+<p>使用此方法需要你的网络通畅，并且安装有git，同时我自身没有AMD显卡，所以不能保证这种方法的可行性，有AMD显卡的朋友尝试后可以说一下。这里仅给出Windows的解决办法，如果有用Linux的朋友可以在下面留言。此外如果有人成功了，也可以在下面留言或者去官方<a target="_blank" rel="noopener" href="https://github.com/AUTOMATIC1111/stable-diffusion-webui/discussions/7870">留言评论</a>。</p>
+<hr>
+<ol>
+<li><p>进入<a target="_blank" rel="noopener" href="https://github.com/lshqqytiger/stable-diffusion-webui-directml">stable-diffusion-webui-directml</a>仓库并下载它的zip包，如果git正常也可以直接克隆。</p>
+<p><img src="/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/AMD%E5%92%8C%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2Stable%20Diffusion/image-20230220142025399.png" alt="image-20230220142025399"></p>
+</li>
+<li><p>解压后在里面创建一个文件夹<code>repositories</code>，即你可以获得一个这样的路径<code>stable-diffusion-webui-directml/repositories/</code></p>
+</li>
+<li>进入<code>repositories</code>，然后在里面分别下载解压或克隆：<a target="_blank" rel="noopener" href="https://github.com/lshqqytiger/k-diffusion-directml/tree/master">k-diffusion-directml</a>和<a target="_blank" rel="noopener" href="https://github.com/lshqqytiger/stablediffusion-directml/tree/main">stablediffusion-directml</a>，并分别命名为<code>k-diffusion</code>和<code>stable-diffusion-stability-ai</code>。</li>
+<li>接着随便把一个大模型放到你的<code>models/Stable-diffusion</code>目录下。</li>
+<li>如果你的显存只有4G到6G，需要在<code>webui-user.bat</code>里面添加<code>COMMANDLINE_ARGS=--opt-sub-quad-attention --lowvram --disable-nan-check</code>，记住如果不要直接双击，你应该右键选择打开方式用某种文本编辑器打开。</li>
+<li>你还可以添加<code>--autolaunch</code>以自动打开浏览器。</li>
+<li>双击打开<code>webui-user.bat</code>。</li>
+<li>如果在安装<code>gfpgan</code>或<code>gfgan</code>时看起来卡住了，按回车应该可以继续。</li>
+<li>从原理上来说，这个东西应该是支持秋叶的那个图形界面的，有A卡的朋友可以试试并在下面反馈。</li>
+</ol>
+<h2 id="如何远程使用Stable-Diffusion-WebUI进行绘画"><a href="#如何远程使用Stable-Diffusion-WebUI进行绘画" class="headerlink" title="如何远程使用Stable Diffusion WebUI进行绘画"></a>如何远程使用Stable Diffusion WebUI进行绘画</h2><p>在AutoDL中如果我们想使用WebUI，需要在打开WebUI前通过参数<code>--port 6006</code>把这个端口映射出来，并可以通过AutoDL提供的网址进行访问，但是这样有一个问题，就是安全性比较低而且监管较严，为此我们可以尝试内网穿透来访问，这种方式会更加安全。其它平台也是同理。</p>
+<ol>
+<li><p>首先你需要在你的主机电脑上生成ssh密钥，打开powershell，输入<code>ssh-keygen</code>，一路回车，如果原来没有密钥，它会生成密钥，如果原来有，那么一路回车也不会把原来的密钥覆盖。Mac用户可以自行查找生成ssh密钥的方法。</p>
+</li>
+<li><p>只要你刚才是一路回车的，那么理论上应该可以在<code>C:\Users\用户名\.ssh</code>目录下看到一个叫<code>id_rsa</code>的文件，用某个文本编辑器打开它。</p>
+</li>
+<li><p>进入你的控制台，AutoDL的右上角有设置密钥登陆，点击它设置密钥，其它平台请根据自己需要查找。</p>
+</li>
+<li><p>添加SSH公钥并把刚才id_rsa文件里的东西全部复制进去。</p>
+</li>
+<li><p>现在打开vscode，在左边侧栏中找到扩展，搜索ssh，然后选择作者是Microsoft的那个Remote-SSH插件，并安装它。</p>
+</li>
+<li><p>安装完成后，你应该可以在左边侧栏看到一个远程资源管理器的图标，进入，然后在SSH栏中新建远程。（此外，最左下角也会有一个小小的绿色图标，点开后在中间弹窗点击<code>Connect to Host</code>然后选择<code>Add New SSH Host</code>也是同样效果）</p>
+</li>
+<li><p>现在回到控制台，在你打开的主机一栏中找到登录指令，将其复制到vscode刚才弹出来的输入框中。</p>
+</li>
+<li><p>选择你的ssh密钥，如果出现了多余的，直接默认刚才我们找id_rsa的文件夹就行。</p>
+</li>
+<li><p>右下角点击connect。</p>
+</li>
+<li><p>从控制台复制密码，并在新弹出来的vscode的终端里输入。（Ctrl+V或鼠标右键单击都可以输入，输入后不会有显示，直接回车就可以）</p>
+</li>
+<li><p>接着终端会启动，此时我们左上角点击一下vscode的资源管理器，打开文件夹。</p>
+</li>
+<li><p>现在的弹窗应该会显示远程服务器的文件夹，我们打开<code>/root/</code>文件夹。</p>
+</li>
+<li><p>这次会再次要求你输入密码，还是刚才的操作就行。</p>
+</li>
+<li><p>在vscode的终端的右上角，有一个小小的加号标志，点击它可以打开一个新的终端，注意不要关闭现在这个install终端，它是保证你ssh链接的基础。</p>
+</li>
+<li><p>打然后，按照<a target="_blank" rel="noopener" href="https://www.autodl.com/docs/network_turbo/">AutoDL学术资源加速</a>介绍，根据你服务器的地区输入相应指令。</p>
+</li>
+<li><p>输入<code>sudo apt update</code></p>
+</li>
+<li><p>输入<code>sudo apt install screen</code>安装守护进程软件</p>
+</li>
+<li><p>输入<code>screen</code>打开这个软件，然后回车关闭它的介绍界面，你可以发现你终端的名字现在变成了screen。</p>
+</li>
+<li><p>在screen守护的这个终端里，你进行的所有操作将会得到守护，以防止ssh断网而使进程中断，要结束这个软件也很简单，按住<code>Ctrl+A</code>然后按下<code>空格</code>并输入<code>exit</code>即可关闭。如果你的网络断了，可以在重新打开的一个空白终端里，输入<code>screen -r</code>即可恢复该screen终端。</p>
+</li>
+<li><p><code>cd autodl-tmp/stable-diffusion-webui</code></p>
+</li>
+<li><p>输入<code>python webui.py --deepdanbooru --no-half --precision full --port 7001 --disable-safe-unpickle --share</code>即可打开WebUI，根据你的需要你可以更改port后面的数字以更换任何端口，但不建议6006，因为该端口会暴露在公网上。</p>
+</li>
+<li><p>然后vscode会提示可以用浏览器打开或者vscode打开，随你选择，我喜欢浏览器打开。</p>
+</li>
+<li><p>接着正常使用WebUI进行画图即可。</p>
+</li>
+<li><p>如果你觉得每次这样打开很麻烦，可以在<code>autodl-tmp</code>文件夹下新建一个<code>StartWebUI.sh</code>文件，里面输入如下内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">export</span> http_proxy=http://192.168.1.174:12798 &amp;&amp; <span class="built_in">export</span> https_proxy=http://192.168.1.174:12798</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">这个根据自己的地区进行修改</span></span><br><span class="line">cd stable-diffusion-webui</span><br><span class="line">python webui.py --deepdanbooru --no-half --precision full --port 7001 --disable-safe-unpickle --share --xformers</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">--xformers看你觉得想不想加，我觉得加上没什么问题</span></span><br><span class="line">cd ..</span><br></pre></td></tr></table></figure>
+<p>之后只需要每次在<code>autodl-tmp</code>文件夹路径下输入<code>. StartWebUI.sh</code>即可开启（事实上输入<code>. St</code>然后按<code>Tab</code>就可以自动补全，然后回车打开即可）</p>
+</li>
+</ol>
+<h2 id="如何在云平台上训练Lora模型"><a href="#如何在云平台上训练Lora模型" class="headerlink" title="如何在云平台上训练Lora模型"></a>如何在云平台上训练Lora模型</h2><p>云端部署我本来想写一下，但是仔细看了一下秋叶的教程，感觉也没有什么好补充的，可以结合论坛里的另外一个文字版教程结合使用。</p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv21450198">【AI绘画】LoRA 在线云端训练教程 AutoDL</a></p>
+<p><a target="_blank" rel="noopener" href="https://dfldata.xyz/forum.php?mod=viewthread&amp;tid=12796&amp;extra=page%3D1">AI绘画之训练自己的Lora模型</a></p>
+
+    </div>
+
+    
+    
+    
+      
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>yunwuhai
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://yunwuhai.github.io/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/AMD%E5%92%8C%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2Stable%20Diffusion/" title="AMD和云端部署Stable Diffusion">https://yunwuhai.github.io/blog/环境配置/AMD和云端部署Stable Diffusion/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI%E7%BB%98%E7%94%BB/" rel="tag"># AI绘画</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/C_C++/%E5%A3%B0%E6%98%8E%E5%92%8C%E5%AE%9A%E4%B9%89/" rel="prev" title="声明和定义">
+      <i class="fa fa-chevron-left"></i> 声明和定义
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E6%A0%B7%EF%BC%9F"><span class="nav-text">怎么样？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%98%BE%E5%8D%A1%E7%89%88%E6%9C%AC"><span class="nav-text">显卡版本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%98%BE%E5%AD%98%E5%A4%A7%E5%B0%8F"><span class="nav-text">显存大小</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F"><span class="nav-text">怎么办？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B4%AD%E4%B9%B0"><span class="nav-text">购买</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%99%BD%E5%AB%96"><span class="nav-text">白嫖</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A7%9F%E7%94%A8"><span class="nav-text">租用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E6%95%99%E7%A8%8B%E6%9C%89%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-text">本教程有什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E6%A6%82%E5%BF%B5"><span class="nav-text">前置概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E8%AE%AE%E6%8F%90%E5%89%8D%E5%AE%89%E8%A3%85"><span class="nav-text">建议提前安装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%9C%A8%E4%BA%91%E5%B9%B3%E5%8F%B0%E6%90%AD%E5%BB%BAStable-Diffusion-WebUI%E7%8E%AF%E5%A2%83"><span class="nav-text">如何在云平台搭建Stable Diffusion WebUI环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AutoDL%E9%95%9C%E5%83%8F%E5%AE%89%E8%A3%85"><span class="nav-text">AutoDL镜像安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux%E8%87%AA%E5%8A%A8%E5%AE%89%E8%A3%85"><span class="nav-text">Linux自动安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85"><span class="nav-text">Linux手动安装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AMD%E6%98%BE%E5%8D%A1%E7%94%A8%E6%88%B7%E5%A6%82%E4%BD%95%E6%90%AD%E5%BB%BAStable-Diffusion-WebUI%E7%8E%AF%E5%A2%83"><span class="nav-text">AMD显卡用户如何搭建Stable Diffusion WebUI环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E4%BD%BF%E7%94%A8Stable-Diffusion-WebUI%E8%BF%9B%E8%A1%8C%E7%BB%98%E7%94%BB"><span class="nav-text">如何远程使用Stable Diffusion WebUI进行绘画</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%9C%A8%E4%BA%91%E5%B9%B3%E5%8F%B0%E4%B8%8A%E8%AE%AD%E7%BB%83Lora%E6%A8%A1%E5%9E%8B"><span class="nav-text">如何在云平台上训练Lora模型</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">yunwuhai</p>
+  <div class="site-description" itemprop="description">正在学习中</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yunwuhai</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yunwuhai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="基础介绍因为项目原因，需要对编译系统进行一些比较复杂的使用，但是我对于编译系统这一块并不是非常精通了解，所以需要进行一下学习。正巧，众所周知STM32推出过非常实用的工具——STM32CubeMX，这个工具可以对STM32进行一些基础配置并设置一些配置代码，基本可以靠图形界面完成对STM32的所有初始化配置，然后它就会生成一个基础工程，编程者在这个基础上进行设置即可。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="STM32CubeMX GCC工程Makefile内容详解">
+<meta property="og:url" content="https://yunwuhai.github.io/blog/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/STM32CubeMX%20GCC%E5%B7%A5%E7%A8%8BMakefile%E5%86%85%E5%AE%B9%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="云雾海的博客">
+<meta property="og:description" content="基础介绍因为项目原因，需要对编译系统进行一些比较复杂的使用，但是我对于编译系统这一块并不是非常精通了解，所以需要进行一下学习。正巧，众所周知STM32推出过非常实用的工具——STM32CubeMX，这个工具可以对STM32进行一些基础配置并设置一些配置代码，基本可以靠图形界面完成对STM32的所有初始化配置，然后它就会生成一个基础工程，编程者在这个基础上进行设置即可。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2022/03/04/olTYWtfcu9gSspM.png">
+<meta property="article:published_time" content="2022-03-04T14:08:46.307Z">
+<meta property="article:modified_time" content="2023-02-28T08:13:57.689Z">
+<meta property="article:author" content="yunwuhai">
+<meta property="article:tag" content="STM32">
+<meta property="article:tag" content="Makefile">
+<meta property="article:tag" content="gcc">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/03/04/olTYWtfcu9gSspM.png">
+
+<link rel="canonical" href="https://yunwuhai.github.io/blog/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/STM32CubeMX%20GCC%E5%B7%A5%E7%A8%8BMakefile%E5%86%85%E5%AE%B9%E8%AF%A6%E8%A7%A3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>STM32CubeMX GCC工程Makefile内容详解 | 云雾海的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">云雾海的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习和生活</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/home/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">14</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">14</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/yunwuhai" class="github-corner" title="我的GitHub" aria-label="我的GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://yunwuhai.github.io/blog/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/STM32CubeMX%20GCC%E5%B7%A5%E7%A8%8BMakefile%E5%86%85%E5%AE%B9%E8%AF%A6%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="yunwuhai">
+      <meta itemprop="description" content="正在学习中">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="云雾海的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          STM32CubeMX GCC工程Makefile内容详解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-03-04 22:08:46" itemprop="dateCreated datePublished" datetime="2022-03-04T22:08:46+08:00">2022-03-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-02-28 16:13:57" itemprop="dateModified" datetime="2023-02-28T16:13:57+08:00">2023-02-28</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="基础介绍"><a href="#基础介绍" class="headerlink" title="基础介绍"></a>基础介绍</h2><p>因为项目原因，需要对编译系统进行一些比较复杂的使用，但是我对于编译系统这一块并不是非常精通了解，所以需要进行一下学习。正巧，众所周知STM32推出过非常实用的工具——STM32CubeMX，这个工具可以对STM32进行一些基础配置并设置一些配置代码，基本可以靠图形界面完成对STM32的所有初始化配置，然后它就会生成一个基础工程，编程者在这个基础上进行设置即可。</p>
+<span id="more"></span>
+<p>当然，本文主要关注点是在编译系统，所以该工具的配置什么的就不详细说了，基本上就是简单随便配置一下时钟就可以了（事实上应该时钟都不需要配置），重点在于我们生成工程的时候需要选择生成Makefile工程，这样才可以使用我们的开源工具链进行配置。</p>
+<p>之后我们可以得到如下的工程目录（当然，众所周知CubeMX的一些设置会影响到工程根目录的具体结构，不过这都不是重点）：</p>
+<p><img src="https://s2.loli.net/2022/03/04/olTYWtfcu9gSspM.png" alt></p>
+<p>其中build目录是编译后生成的，先不管，另外Core文件夹下的Test文件夹及其中内容是我进行测试的时候添加的，暂时也先不管。</p>
+<p>我们先来看看其它的东西，首先是Core中的内容，这部分的内容基本上就完全是STM32CubeMX生成的，Inc中放h文件而Src中放c文件，里面的文件都是在CubeMX中配置过的东西，这些东西是每次CubeMX在修改后都会重新生成的东西（也有可能是你修改了哪一部分，就会重新生成哪一部分的文件，这个是CubeMX自己的机制，不重要）。</p>
+<p>其次是Drivers中的内容，这些内容实际上都是从 CubeMX的安装目录里的sdk中复制过来的，如果我们在配置的时候没有选择要将这些东西复制过来，那么CubeMX也不会生成这个目录下的内容（或者不能说生成，而就是直接复制过来），但是取而代之的就是你使用的所有sdk的库函数，都是直接调用的安装目录里的东西，那么为了安全性着想，就不要在编程的时候修改他们了，否则你的库函数就被你的代码污染了，当然这样做的好处就是你的代码复用性会提高而且工程体积会稍微小点。</p>
+<p>然后是下面的<code>.mxproject</code>文件，CubeMX的工程文件，不管。</p>
+<p>接着就是我们等会最重要的Makefile，这个是Make工具的脚本文件，如果你不知道Make工具是啥，建议先了解一下再看本文会好一点。</p>
+<p>之后是<code>MakeTest.ioc</code>文件，CubeMX的配置文件，不管。</p>
+<p>然后是后缀为s的start文件，这个文件是芯片的项目启动文件，一般不需要管，里面放了中断向量表之类的东西。</p>
+<p>最后是后缀为ld的链接脚本文件，这个是用于链接的，等会会说。</p>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>本文的解析结构并没有按照makefile的解析顺序来，而是采用从上到下的顺序来解说的（当然会根据实际情况进行跳跃），主要原因在于我学习这个东西的目的主要是直接把这个Makefile当成一个模板，然后未来直接在这个模板上进行修改就可以了，而到目前为止我暂时还不打算自己从头来写个Makefile（毕竟能用就行，平时哪需要那么麻烦）。</p>
+<p>考虑到篇幅，就不单独把全部makefile列出来了，需要时你直接用CubeMX生成一个工程然后看它Makefile即可，只要STM32公司那边没有对这个规则进行大改，那么下面这些内容应该都大差不差。</p>
+<p>此外，本文中很多东西其实可以在<a target="_blank" rel="noopener" href="https://gcc.gnu.org/onlinedocs/">gcc的手册</a>中找到答案，如果感兴趣可以去看看。</p>
+<h2 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h2><h3 id="TARGET"><a href="#TARGET" class="headerlink" title="TARGET"></a>TARGET</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TARGET = MakeTest</span><br></pre></td></tr></table></figure>
+<p>设置目标文件名，实际上就是做了个变量，并且把Makefile这个作为参数传入。平时当成工程名即可，如果要换工程，就自己随便重新取个名字。</p>
+<h3 id="DEBUG"><a href="#DEBUG" class="headerlink" title="DEBUG"></a>DEBUG</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DEBUG = 1</span><br></pre></td></tr></table></figure>
+<p>是否进行调试编译，这里表示是，release版关闭调试时将1改成其它数即可，具体原因后面会讲到。</p>
+<h3 id="OPT"><a href="#OPT" class="headerlink" title="OPT"></a>OPT</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">OPT = -Og</span><br></pre></td></tr></table></figure>
+<p>优化等级，这里使用Og的目的是因为开启了调试，所以优化时需要产生合理的优化而不和调试选项冲突。如果是release版本，可以使用<code>-Os</code>（提高速度并优化体积）或<code>-O3</code>（大幅提高速度但会增大体积）等命令，关于这部分的介绍可以参考<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/27090458/answer/137944410">知乎回答</a>。</p>
+<h3 id="BUILD-DIR"><a href="#BUILD-DIR" class="headerlink" title="BUILD_DIR"></a>BUILD_DIR</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BUILD_DIR = build</span><br></pre></td></tr></table></figure>
+<p>编译目标地址，这也是前面提到为什么我会生成一个build文件夹，实际上就是这个变量进行的命名，如果你需要，可以把它修改成任何名字，然后编译出来的所有文件就都会放在这个你新命名的文件夹里面了。不过一般不建议修改，因为大家通用的都是build，不建议太特立独行。</p>
+<h3 id="C-SOURCES"><a href="#C-SOURCES" class="headerlink" title="C_SOURCES"></a>C_SOURCES</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">C_SOURCES =  \</span><br><span class="line">Core/Src/main.c \</span><br><span class="line">Core/Src/gpio.c \</span><br><span class="line">Core/Src/usart.c \</span><br><span class="line">Core/Src/stm32f4xx_it.c \</span><br><span class="line">Core/Src/stm32f4xx_hal_msp.c \</span><br><span class="line">Core/Test/test.c\</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c \</span><br><span class="line">Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c \</span><br><span class="line">Core/Src/system_stm32f4xx.c  </span><br></pre></td></tr></table></figure>
+<p>其实从名字我们不难理解，这里放的就是所有用到的c文件。如果我们需要自己写个什么库自己写了什么新的c文件，而且最后会被编译到程序里面的话，就都需要自己在这里添加一行c文件地址。这些地址可以是相对路径，相对的就是makefile文件的地址，而如果不好相对路径，那么也可以设置为绝对路径，例如这里面所有Drivers的文件，如果我们没有配置为复制到工程里面，那么这些文件就会被写为绝对路径并导航到你的CubeMX的sdk存储地址里面。</p>
+<p>此外，注意我添加了一行test.c的路径，这一行就是我自己写的文件，里面定义了一个全局变量，并被对应的test.h使用extern引用，然后在Src文件夹下面被main.c引用test.h后使用。这里我想说明的是，哪怕你用h文件做了个跳板（而不是直接extern过来）然后调用了test.c的东西，而且test.c中连个函数都没有，但是只要你使用了里面的东西，就必须要把文件地址填在上面的文件列表中。</p>
+<p>不过说实话我个人感觉这样做非常麻烦，这里我有点想知道为什么不能直接添加一个文件夹然后遍历下面的所有c文件并添加呢？为此我还稍微查询了一下，找到了这个博客《<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq849635649/article/details/52935079">一点一点学写Makefile(6)-遍历当前目录源文件及其子目录下源文件</a>》，感兴趣可以看看。</p>
+<h3 id="ASM-SOURCES"><a href="#ASM-SOURCES" class="headerlink" title="ASM_SOURCES"></a>ASM_SOURCES</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ASM_SOURCES =  \</span><br><span class="line">startup_stm32f411xe.s</span><br></pre></td></tr></table></figure>
+<p>所有汇编文件的地址，添加方法可以继续参考前面C文件的添加方法，也是绝对地址和相对地址添加即可。而这里的start文件，一般不需要用户自己写，这些厂商在开发好芯片后都至少会提供一个startup的c或s文件的，我们需要做的就只是把他添加进来即可（有的可能不是汇编s文件，如果是c文件，正常添加到前面C文件的路径下面即可，这种情况下汇编这里就不需要添加startup了，不过此外你自己写的其他汇编文件倒是仍然可以正常这样写进去）。</p>
+<h3 id="PREFIX"><a href="#PREFIX" class="headerlink" title="PREFIX"></a>PREFIX</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PREFIX = arm-none-eabi-</span><br></pre></td></tr></table></figure>
+<p>工具链起始名，说白了就是你使用的开源工具链（当然你有钱也可以买闭源的，不过没啥必要而且使用起来需要再自行研究一下），这里变量的内容是arm-none-eabi-，其实这个是一个gcc工具链的名字，这个工具链全程一般叫<code>arm-none-eabi-gcc</code>，arm表示架构平台，none表示无系统，eabi表示嵌入式应用二进制接口，gcc表示其遵守的GNU GCC的设计规范。这东西我记得之前在哪个很古老的博客上面看到的，但是当时忘了收藏，所以现在找不到了。总之，开发者将这个工具链除gcc部分命名后，里面的所有工具就全部使用这个前缀了，这个东西我们在后面会说。</p>
+<p>如果你需要对linux的arm设备进行开发，那么你可能需要安装arm-linux-eabi-gcc（当然也可能是其他名字或顺序，这个是开发者自己决定的，因为里面还可以添加开发者名称，所以好像没有非常严格的规范），如果你需要对riscv架构的设备进行开发，那么可能需要使用riscv-none-gcc，总之，需要什么自己去芯片官网上先看看有没有推荐，然后下载并改这里的参数即可。</p>
+<h3 id="CC-AS-CP-SZ"><a href="#CC-AS-CP-SZ" class="headerlink" title="CC,AS,CP,SZ"></a>CC,AS,CP,SZ</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ifdef</span> GCC_PATH</span><br><span class="line">CC = <span class="variable">$(GCC_PATH)</span>/<span class="variable">$(PREFIX)</span>gcc</span><br><span class="line">AS = <span class="variable">$(GCC_PATH)</span>/<span class="variable">$(PREFIX)</span>gcc -x assembler-with-cpp</span><br><span class="line">CP = <span class="variable">$(GCC_PATH)</span>/<span class="variable">$(PREFIX)</span>objcopy</span><br><span class="line">SZ = <span class="variable">$(GCC_PATH)</span>/<span class="variable">$(PREFIX)</span>size</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">CC = <span class="variable">$(PREFIX)</span>gcc</span><br><span class="line">AS = <span class="variable">$(PREFIX)</span>gcc -x assembler-with-cpp</span><br><span class="line">CP = <span class="variable">$(PREFIX)</span>objcopy</span><br><span class="line">SZ = <span class="variable">$(PREFIX)</span>size</span><br><span class="line"><span class="keyword">endif</span></span><br></pre></td></tr></table></figure>
+<p>这里我们需要分别看两个东西，其中是ifdef部分，这东西是一个判断你有没有定义某个变量，看名字大概也可以猜到，这个就是我们gcc工具链的地址。这就涉及到一个问题，也就是环境变量，如果你将你的工具链的工具目录地址添加到环境变量中，那么我们就可以在命令行中直接通过工具的名称调用这个工具，否则我们就需要输入绝对路径来调用工具。</p>
+<p>比如你的arm-none-eabi-gcc存储在D盘根目录下，那么你很可能需要在环境变量中添加<code>D:\arm-none-eabi-gcc\bin\</code>文件夹地址，此时我们就可以在命令行中直接使用<code>arm-none-eabi-gcc</code>来运行<code>D:\arm-none-eabi-gcc\bin\arm-none-eabi-gcc.exe</code>程序，否则，我们就需要输入完整的绝对路径来调用该程序。</p>
+<p>而GCC_PATH就是用来帮助你添加这个绝对路径的，如果你没有添加环境变量，那么就可以在makefile前面定义GCC_PATH并添加上地址，如<code>D:\arm-none-eabi-gcc\bin</code>，那么之后我们会运行ifdef中的程序（如果没定义就直接使用后面else的程序），makefile所有变量的本质其实就是字符替换，此时例如CC，就会被编译为<code>D:\arm-none-eabi-gcc\bin\arm-none-eabi-gcc.exe</code>，其余同理。当然，如果你不想在makefile中添加这个变量，也可以选择在输入<code>make</code>指令的时候添加<code>GCC_PATH=D:\arm-none-eabi-gcc\bin</code>。</p>
+<p><code>PREFIX</code>前面也已经说过了，不赘述。</p>
+<p>然后我们关注到这四个工具，其中gcc出现了两次，分别在CC和AS中，CC中直接使用gcc，其实代表了其默认参数编译C语言，而AS从名字在可以猜是代表了汇编器，其使用了-x参数表示更换编译语言，只不过代表所更换的参数assembler-with-cpp，似乎不只是可以汇编，还可以处理C++？不过我把test.c改名成test.cpp后分别添加到汇编和C的Sources列表中似乎都不行，会编译错误，有点不是很懂，不过总之其可以编译汇编语言成为机器语言是肯定的。</p>
+<p>之后是CP的objcopy，这是个复制文件内容的工具，具体介绍可以参考《<a target="_blank" rel="noopener" href="https://my.oschina.net/dake/blog/196707">objcopy命令介绍 - Dake的信息摘录博客</a>》。</p>
+<p>SZ是一个记录生成程序内部各分段的大小的工具，这个在编译后查看编译出的文件大小进行项目优化的时候会比较有用，makefile中也用了这个工具，在编译到最后会输出这样的内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">arm-none-eabi-size build/MakeTest.elf</span><br><span class="line">   text    data     bss     dec     hex filename</span><br><span class="line">   6524      24    1640    8188    1ffc build/MakeTest.elf</span><br></pre></td></tr></table></figure>
+<p>值得注意的是这个size工具只能对elf文件进行解析，而hex和bin文件中是不包含代码段数据段这些东西的。这里的大概意思是我的代码段有6524字节，数据段有24字节，bss段有1640字节，总共加起来有8188字节。关于这些段的介绍，参考可以参考这个博客《<a target="_blank" rel="noopener" href="https://blog.csdn.net/zhy557/article/details/80832268">堆栈、BSS段、代码段、数据段、RO、RW、ZI等概念区分</a>》。</p>
+<h3 id="HEX-BIN"><a href="#HEX-BIN" class="headerlink" title="HEX,BIN"></a>HEX,BIN</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HEX = <span class="variable">$(CP)</span> -O ihex</span><br><span class="line">BIN = <span class="variable">$(CP)</span> -O binary -S</span><br></pre></td></tr></table></figure>
+<p>从名字我们就不难看出，这里其实指的就是生成十六进制文件和二进制文件，他们都是可以被烧录到stm32中的代码文件格式，而其中的参数也很好懂，分别就是生成十六进制和二进制所需的参数，没啥好解释的，直接用就行。</p>
+<h3 id="CPU"><a href="#CPU" class="headerlink" title="CPU"></a>CPU</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CPU = -mcpu=cortex-m4</span><br></pre></td></tr></table></figure>
+<p>选择cpu的架构，因为我使用的是stm32f4的芯片，故这里的架构是cortex-m4，如果是其它架构需要进行修改。</p>
+<h3 id="FPU"><a href="#FPU" class="headerlink" title="FPU"></a>FPU</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FPU = -mfpu=fpv4-sp-d16</span><br></pre></td></tr></table></figure>
+<p>选择fpu的架构，这里是因为F4系列有fpu，所以可以添加，如果没有就需要关闭，关闭后无法使用fpu对浮点数计算进行加速，相关概念可以参考《<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42415539/article/details/110139722">【arm-gcc开发STM32】开启stm32f4的FPU</a>》。</p>
+<h3 id="FLOAT-ABI"><a href="#FLOAT-ABI" class="headerlink" title="FLOAT-ABI"></a>FLOAT-ABI</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FLOAT-ABI = -mfloat-abi=hard</span><br></pre></td></tr></table></figure>
+<p>硬浮点或软浮点，如果有FPU就可以开启硬浮点，这里开启了，相关概念可以参考《<a target="_blank" rel="noopener" href="http://blog.chinaunix.net/uid-27875-id-5785166.html">浮点 <em> 运算处理方式(软硬-mfloat-abi=) </em> 浮点协处理器类型 -mfpu=</a>》。</p>
+<h3 id="MCU"><a href="#MCU" class="headerlink" title="MCU"></a>MCU</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MCU = <span class="variable">$(CPU)</span> -mthumb <span class="variable">$(FPU)</span> $(FLOAT-ABI)</span><br></pre></td></tr></table></figure>
+<p>此处代表了所有针对MCU硬件的配置，其它的我们已经说过，而这个<code>-mthumb</code>代表的是T32指令集，如果使用了另外一种指令集的架构就需要换这里的参数，具体参考《<a target="_blank" rel="noopener" href="http://blog.sina.com.cn/s/blog_675a80790102ylnk.html">【解读经典】ARM体系结构与编程（3）</a>》。</p>
+<h3 id="AD-DEFS-C-DEFS"><a href="#AD-DEFS-C-DEFS" class="headerlink" title="AD_DEFS,C_DEFS"></a>AD_DEFS,C_DEFS</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">AS_DEFS = </span><br><span class="line"></span><br><span class="line">C_DEFS =  \</span><br><span class="line">-DUSE_HAL_DRIVER \</span><br><span class="line">-DSTM32F411xE</span><br></pre></td></tr></table></figure>
+<p>分别是汇编和C的宏定义，这个项目中的汇编里面因为不需要，所以啥也没写，如果你不需要在汇编程序中增加什么外部的宏定义，就不需要这个。</p>
+<p>而C文件宏定义，真正的宏需要去掉每个宏定义开头的-D，例如此处的-DUSE_HAL_DRIVER，实际上是宏定义了USE_HAL_DRIVER，这些宏定义会影响到c文件里面相关宏的内容，例如这个HAL，其实就代表了HAL库，那么C文件里面引用的东西就会选择HAL库而非LL库的内容。如果你想的话，也可以自己添加一些宏定义在c文件中作为开关，然后在这里添加东西表示打开。</p>
+<h3 id="AS-INCLUDES-C-INCLUDES"><a href="#AS-INCLUDES-C-INCLUDES" class="headerlink" title="AS_INCLUDES,C_INCLUDES"></a>AS_INCLUDES,C_INCLUDES</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">AS_INCLUDES = </span><br><span class="line"></span><br><span class="line">C_INCLUDES =  \</span><br><span class="line">-ICore/Inc \</span><br><span class="line">-IDrivers/STM32F4xx_HAL_Driver/Inc \</span><br><span class="line">-IDrivers/STM32F4xx_HAL_Driver/Inc/Legacy \</span><br><span class="line">-IDrivers/CMSIS/Device/ST/STM32F4xx/Include \</span><br><span class="line">-IDrivers/CMSIS/Include</span><br></pre></td></tr></table></figure>
+<p>汇编和C的引用文件所在文件夹，其中因为汇编没有引用外部文件，所以什么也没有，如果有需要自己添加。</p>
+<p>注意这里添加的是文件夹地址而不是具体的文件地址。</p>
+<p>对于C来说，如果在自己的代码#include中使用了相对地址或绝对地址，则可以不添加，如果是只写了引用文件名或非本文件的文件名，则需要添加，以辅助编译器找到对应文件，编译器会主动从上述路径作为相对路径寻找include的文件。这里-I也全部是前缀。</p>
+<p>例如我们需要在<code>Core\Src\main.c</code>中引用<code>Core\Test\test.h</code>，那么我们需要在main.c中写<code>#include &quot;test.h&quot;</code>并在<code>C_INCLUDES</code>中添加<code>-ICore/Test</code>，而如果我们不在<code>C_INCLUDES</code>中进行添加，那么main.c中就必须写相对或绝对地址，例如<code>#include &quot;../Test/test.h&quot;</code>，这样才能保证我们的编译器能够找准位置。</p>
+<h3 id="ASFLAGS-CFLAGS"><a href="#ASFLAGS-CFLAGS" class="headerlink" title="ASFLAGS,CFLAGS"></a>ASFLAGS,CFLAGS</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ASFLAGS = <span class="variable">$(MCU)</span> <span class="variable">$(AS_DEFS)</span> <span class="variable">$(AS_INCLUDES)</span> <span class="variable">$(OPT)</span> -Wall -fdata-sections -ffunction-sections</span><br><span class="line">CFLAGS = <span class="variable">$(MCU)</span> <span class="variable">$(C_DEFS)</span> <span class="variable">$(C_INCLUDES)</span> <span class="variable">$(OPT)</span> -Wall -fdata-sections -ffunction-sections</span><br></pre></td></tr></table></figure>
+<p>编译参数，分别针对汇编和C语言，他们各自前面四个变量参数已经讲过，不再赘述。</p>
+<p><code>-Wall</code>的功能主要是开启一些警告检测，如果我们的代码出现了不规范的地方，那么通过这个参数，编译器就会检查到这些地方并告知我们。关于这个参数的具体介绍可以参考《<a target="_blank" rel="noopener" href="http://blog.sina.com.cn/s/blog_553230d70101efqv.html">gcc -Wall详解</a>》。</p>
+<p><code>-fdata-sections</code>表示对程序中每个数据创建一个section，而<code>-ffunction-sections</code>则是针对函数创建section，GCC的链接操作是以section作为最小的处理单元，只要一个section中的某个符号被引用，该section就会被加到可执行程序中。关于这个部分具体可以参考《<a target="_blank" rel="noopener" href="https://blog.csdn.net/pengfei240/article/details/55228228">gcc -ffunction-sections -fdata-sections -Wl,–gc-sections 参数详解</a>》</p>
+<h3 id="ifeq-DEBUG-1"><a href="#ifeq-DEBUG-1" class="headerlink" title="ifeq ($(DEBUG), 1)"></a>ifeq ($(DEBUG), 1)</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ifeq</span> (<span class="variable">$(DEBUG)</span>, 1)</span><br><span class="line">CFLAGS += -g -gdwarf-2</span><br><span class="line"><span class="keyword">endif</span></span><br></pre></td></tr></table></figure>
+<p>语句很好理解，如果DEBUG=1，就执行，如果不是1，就不执行。很显然，这段话就是检测目前是否是调试模式，而注意这里CFLAGS前面其实已经出现过，而这里再次出现时使用的就不再是等号=了，而是+=符号，这个符号在makefile中表示在已有变量后面补上新的符号。</p>
+<p>而补上的其实就是两个新的参数，我们应该不难猜测这两个参数就是针对的调试生成的。</p>
+<p><code>-g</code>表示的意思是生成调试信息，如果不生成的话我们在使用gdb调试的时候就很难做到代码定位，当然如果你不使用gdb，还可以使用<code>-gformat</code>然后加上你想要的格式。而<code>-gdwarf-2</code>的意思是生成DWARF version2 的格式的调试信息，常用于IRIXX6上的DBX调试器。GCC会使用DWARF version3的一些特性。关于这两个参数的使用，可以参考《<a target="_blank" rel="noopener" href="https://blog.csdn.net/luguifang2011/article/details/80642692">GCC 编译及编译选项</a>》。</p>
+<h3 id="CFLAGS"><a href="#CFLAGS" class="headerlink" title="CFLAGS"></a>CFLAGS</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CFLAGS += -MMD -MP -MF<span class="string">&quot;$(@:%.o=%.d)&quot;</span></span><br></pre></td></tr></table></figure>
+<p>关于这个部分的内容又是针对CFLAGS，这里出现了三个新的参数，同时后面有一串makefile语法的宏。</p>
+<p>这一串东西的主要功能是生成关联信息，关联信息会对链接产生影响，其中<code>-MMD</code>表示会把关联信息输出到.d文件中，<code>-MF</code>是指定用于存放关联信息的文件，<code>-MP</code>生成的依赖文件里面，依赖规则中的所有 .h 依赖项都会在该文件中生成一个伪目标，其不依赖任何其他依赖项。该伪规则将避免删除了对应的头文件而没有更新 “Makefile” 去匹配新的依赖关系而导致 make 出错的情况出现。</p>
+<p>关于这三个参数以及相关信息的介绍可以参考《<a target="_blank" rel="noopener" href="https://blog.csdn.net/linuxandroidwince/article/details/75221300">GCC -M,-MM,-MMD,-MF,-MT</a>》和《<a target="_blank" rel="noopener" href="https://blog.csdn.net/QQ1452008/article/details/50855810">Linux Makefile 生成 *.d 依赖文件以及 gcc -M -MF -MP 等相关选项说明</a>》。</p>
+<p>而后面那一堆宏，说实话我也不太看得懂，毕竟我对Makefile的语法研究不深，不过看样子意思大概是针对MF的，而且大概含义是把所有o文件的名字复制生成对应的d文件，然后配合前面的参数，把关联信息生成到这些d文件中，而且通过build中的确d文件和o文件基本可以对应上，也侧面应证了这个猜想。</p>
+<h3 id="LDSCRIPTS"><a href="#LDSCRIPTS" class="headerlink" title="LDSCRIPTS"></a>LDSCRIPTS</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LDSCRIPT = STM32F411CEUx_FLASH.ld</span><br></pre></td></tr></table></figure>
+<p>链接脚本，里面包括了链接时各程序的组织架构，以及包括堆栈地址大小等信息，这个东西是CubeMX生成的，所以里面其实很多东西你在CubeMX中都可以修改。这里的内容不只是修改芯片，只要修改了了中断向量、堆栈大小等信息，均需要修改此部分，它其实就代表了你的程序在芯片的ROM中是怎么存储的，感兴趣可以自行查看一下这个文件，我把我的这个文件复制上来给各位看一下（删除了一些无用的注释）：</p>
+<figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Entry Point */</span></span><br><span class="line">ENTRY(Reset_Handler)</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Highest address of the user mode stack */</span></span><br><span class="line"><span class="variable">_estack</span> = <span class="number">0</span>x20020000;    <span class="comment">/* end of RAM */</span></span><br><span class="line"><span class="comment">/* Generate a link error if heap and stack don&#x27;t fit into RAM */</span></span><br><span class="line"><span class="variable">_Min_Heap_Size</span> = <span class="number">0</span>x200;      <span class="comment">/* required amount of heap  */</span></span><br><span class="line"><span class="variable">_Min_Stack_Size</span> = <span class="number">0</span>x400; <span class="comment">/* required amount of stack */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Specify the memory areas */</span></span><br><span class="line">MEMORY</span><br><span class="line">&#123;</span><br><span class="line">RAM (xrw)      : ORIGIN = <span class="number">0</span>x20000000, LENGTH = <span class="number">128</span>K</span><br><span class="line">FLASH (rx)      : ORIGIN = <span class="number">0</span>x8000000, LENGTH = <span class="number">512</span>K</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Define output sections */</span></span><br><span class="line">SECTIONS</span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">/* The startup code goes first into FLASH */</span></span><br><span class="line">  .isr_vector :</span><br><span class="line">  &#123;</span><br><span class="line">    . = ALIGN(<span class="number">4</span>);</span><br><span class="line">    KEEP(*(.isr_vector)) <span class="comment">/* Startup code */</span></span><br><span class="line">    . = ALIGN(<span class="number">4</span>);</span><br><span class="line">  &#125; &gt;FLASH</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* The program code and other data goes into FLASH */</span></span><br><span class="line">  .<span class="built_in">text</span> :</span><br><span class="line">  &#123;</span><br><span class="line">    . = ALIGN(<span class="number">4</span>);</span><br><span class="line">    *(.<span class="built_in">text</span>)           <span class="comment">/* .text sections (code) */</span></span><br><span class="line">    *(.<span class="built_in">text</span>*)          <span class="comment">/* .text* sections (code) */</span></span><br><span class="line">    *(.glue_7)         <span class="comment">/* glue arm to thumb code */</span></span><br><span class="line">    *(.glue_7t)        <span class="comment">/* glue thumb to arm code */</span></span><br><span class="line">    *(.eh_frame)</span><br><span class="line"></span><br><span class="line">    KEEP (*(.init))</span><br><span class="line">    KEEP (*(.fini))</span><br><span class="line"></span><br><span class="line">    . = ALIGN(<span class="number">4</span>);</span><br><span class="line">    <span class="variable">_etext</span> = .;        <span class="comment">/* define a global symbols at end of code */</span></span><br><span class="line">  &#125; &gt;FLASH</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Constant data goes into FLASH */</span></span><br><span class="line">  .rodata :</span><br><span class="line">  &#123;</span><br><span class="line">    . = ALIGN(<span class="number">4</span>);</span><br><span class="line">    *(.rodata)         <span class="comment">/* .rodata sections (constants, strings, etc.) */</span></span><br><span class="line">    *(.rodata*)        <span class="comment">/* .rodata* sections (constants, strings, etc.) */</span></span><br><span class="line">    . = ALIGN(<span class="number">4</span>);</span><br><span class="line">  &#125; &gt;FLASH</span><br><span class="line"></span><br><span class="line">  .ARM.extab   : &#123; *(.ARM.extab* .gnu.linkonce.armextab.*) &#125; &gt;FLASH</span><br><span class="line">  .ARM : &#123;</span><br><span class="line">    <span class="variable">__exidx_start</span> = .;</span><br><span class="line">    *(.ARM.exidx*)</span><br><span class="line">    <span class="variable">__exidx_end</span> = .;</span><br><span class="line">  &#125; &gt;FLASH</span><br><span class="line"></span><br><span class="line">  .preinit_array     :</span><br><span class="line">  &#123;</span><br><span class="line">    PROVIDE_HIDDEN (<span class="variable">__preinit_array_start</span> = .);</span><br><span class="line">    KEEP (*(.preinit_array*))</span><br><span class="line">    PROVIDE_HIDDEN (<span class="variable">__preinit_array_end</span> = .);</span><br><span class="line">  &#125; &gt;FLASH</span><br><span class="line">  .init_array :</span><br><span class="line">  &#123;</span><br><span class="line">    PROVIDE_HIDDEN (<span class="variable">__init_array_start</span> = .);</span><br><span class="line">    KEEP (*(<span class="built_in">SORT</span>(.init_array.*)))</span><br><span class="line">    KEEP (*(.init_array*))</span><br><span class="line">    PROVIDE_HIDDEN (<span class="variable">__init_array_end</span> = .);</span><br><span class="line">  &#125; &gt;FLASH</span><br><span class="line">  .fini_array :</span><br><span class="line">  &#123;</span><br><span class="line">    PROVIDE_HIDDEN (<span class="variable">__fini_array_start</span> = .);</span><br><span class="line">    KEEP (*(<span class="built_in">SORT</span>(.fini_array.*)))</span><br><span class="line">    KEEP (*(.fini_array*))</span><br><span class="line">    PROVIDE_HIDDEN (<span class="variable">__fini_array_end</span> = .);</span><br><span class="line">  &#125; &gt;FLASH</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* used by the startup to initialize data */</span></span><br><span class="line">  <span class="variable">_sidata</span> = LOADADDR(.data);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Initialized data sections goes into RAM, load LMA copy after code */</span></span><br><span class="line">  .data : </span><br><span class="line">  &#123;</span><br><span class="line">    . = ALIGN(<span class="number">4</span>);</span><br><span class="line">    <span class="variable">_sdata</span> = .;        <span class="comment">/* create a global symbol at data start */</span></span><br><span class="line">    *(.data)           <span class="comment">/* .data sections */</span></span><br><span class="line">    *(.data*)          <span class="comment">/* .data* sections */</span></span><br><span class="line"></span><br><span class="line">    . = ALIGN(<span class="number">4</span>);</span><br><span class="line">    <span class="variable">_edata</span> = .;        <span class="comment">/* define a global symbol at data end */</span></span><br><span class="line">  &#125; &gt;RAM AT&gt; FLASH</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line">  <span class="comment">/* Uninitialized data section */</span></span><br><span class="line">  . = ALIGN(<span class="number">4</span>);</span><br><span class="line">  .bss :</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">/* This is used by the startup in order to initialize the .bss secion */</span></span><br><span class="line">    <span class="variable">_sbss</span> = .;         <span class="comment">/* define a global symbol at bss start */</span></span><br><span class="line">    <span class="variable">__bss_start__</span> = <span class="variable">_sbss</span>;</span><br><span class="line">    *(.bss)</span><br><span class="line">    *(.bss*)</span><br><span class="line">    *(COMMON)</span><br><span class="line"></span><br><span class="line">    . = ALIGN(<span class="number">4</span>);</span><br><span class="line">    <span class="variable">_ebss</span> = .;         <span class="comment">/* define a global symbol at bss end */</span></span><br><span class="line">    <span class="variable">__bss_end__</span> = <span class="variable">_ebss</span>;</span><br><span class="line">  &#125; &gt;RAM</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* User_heap_stack section, used to check that there is enough RAM left */</span></span><br><span class="line">  .<span class="variable">_user_heap_stack</span> :</span><br><span class="line">  &#123;</span><br><span class="line">    . = ALIGN(<span class="number">8</span>);</span><br><span class="line">    PROVIDE ( end = . );</span><br><span class="line">    PROVIDE ( <span class="variable">_end</span> = . );</span><br><span class="line">    . = . + <span class="variable">_Min_Heap_Size</span>;</span><br><span class="line">    . = . + <span class="variable">_Min_Stack_Size</span>;</span><br><span class="line">    . = ALIGN(<span class="number">8</span>);</span><br><span class="line">  &#125; &gt;RAM</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Remove information from the standard libraries */</span></span><br><span class="line">  /DISCARD/ :</span><br><span class="line">  &#123;</span><br><span class="line">    libc.a ( * )</span><br><span class="line">    libm.a ( * )</span><br><span class="line">    libgcc.a ( * )</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  .ARM.attributes <span class="number">0</span> : &#123; *(.ARM.attributes) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们简单看一下，最开始有个<code>ENTRY</code>指令，里面参数是<code>Reset_Handler</code>，显然它指向了一个所谓的复位句柄，那么这个句柄是在哪里呢？对，就是在我们前面说的startup汇编文件中，也就是说我们的入口程序实际上就是针对的这个句柄，然后后面通过这个句柄开始的程序进行逐渐执行，初始化硬件向量表这些，再然后才是开始运行我们的main程序，如果你需要写一些什么Bootloader之类的东西，其实也就是在这里看和改。</p>
+<p>之后我们再继续查看后面的东西，可以发现我们还标注了RAM的大小、堆栈大小、地址等信息，这些信息都会最终被编译到我们的程序中，并且配合我们的烧录器或仿真器被烧录的芯片中的指定位置。</p>
+<p>再之后就是每个区段section了，这些是对你的程序存储的划分，一般情况下我们是不需要对这些东西进行修改的，因为大部分芯片程序的运行存储理念都是差不多的，所以普通情况下我们需要修改的东西基本上就是前面的那些（当然，如果你换了其它芯片的架构，那可能还是要好好研究一下的）。</p>
+<h3 id="LIBS-LIBDIR"><a href="#LIBS-LIBDIR" class="headerlink" title="LIBS,LIBDIR"></a>LIBS,LIBDIR</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">LIBS = -lc -lm -lnosys</span><br><span class="line">LIBDIR =</span><br></pre></td></tr></table></figure>
+<p>LIBS里面的这几个东西，代表的链接库，其实就是C语言的标准库，比如说这个-lm就代表了链接了标准数学库，不过具体这几个库链接的都是哪几个，我就不是很清楚了，具体可能要参考GCC的手册，但是我感觉没啥必要，毕竟都是标准库，链接了就链接了呗。除非你需要自己添加引用一些其他的链接库或者你需要缩减代码体积的时候，到时候再去研究哪个有用哪个没用就是了。</p>
+<p>而对于LIBDIR，很明显也是一个库地址的意思，如果你使用的是非标准库需要从外面引用的话，就需要在这里添加东西了，添加的方法和前面添加c和汇编库的方法类似。</p>
+<h3 id="LDFLAGS"><a href="#LDFLAGS" class="headerlink" title="LDFLAGS"></a>LDFLAGS</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LDFLAGS = <span class="variable">$(MCU)</span> -specs=nano.specs -T<span class="variable">$(LDSCRIPT)</span> <span class="variable">$(LIBDIR)</span> <span class="variable">$(LIBS)</span> -Wl,-Map=<span class="variable">$(BUILD_DIR)</span>/<span class="variable">$(TARGET)</span>.map,--cref -Wl,--gc-sections</span><br></pre></td></tr></table></figure>
+<p>这个就是链接的参数。</p>
+<p><code>-specs=nano.specs</code>替换精简c库以缩小代码大小。</p>
+<p><code>-T</code>使用脚本文件xxx作为链接器脚本，此脚本替换ld的默认链接脚本（而非加进去），因此命令文件必须给出所有输出文件所需的东西，这里的链接脚本我们在前面已经说过了。</p>
+<p><code>-Wl</code>如果链接器不是直接被使用的，而是被编译器使用（如gcc），则所有的链接命令前面必须加上-Wl参数（或其他特殊编译器对应的参数）。</p>
+<p><code>-MAP</code>打印一个链接表到map文件中。</p>
+<p><code>--cref</code>输出一个交叉引用表。如果一个链接映射文件正在被生成，交叉参照表将会被输出到映射文件中。否则，将会被输出到标准输出。</p>
+<p><code>--gc-sections</code>允许对未使用的段使用垃圾收集。在不支持这个选项的目标上将被自动忽略。默认的行为可用’–no-gc-sections’恢复。</p>
+<p>关于这部分的内容可以参考《<a target="_blank" rel="noopener" href="https://blog.csdn.net/yyww322/article/details/50827683">LD说明文档—2.LD命令行命令翻译</a>》</p>
+<h3 id="all"><a href="#all" class="headerlink" title="all"></a>all</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">all: <span class="variable">$(BUILD_DIR)</span>/<span class="variable">$(TARGET)</span>.elf <span class="variable">$(BUILD_DIR)</span>/<span class="variable">$(TARGET)</span>.hex <span class="variable">$(BUILD_DIR)</span>/<span class="variable">$(TARGET)</span>.bin</span></span><br></pre></td></tr></table></figure>
+<p>默认执行全部编译，生成elf、hex和bin文件，文件地址和文件名在前面已经说过了。</p>
+<h3 id="OBJECTS"><a href="#OBJECTS" class="headerlink" title="OBJECTS"></a>OBJECTS</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">OBJECTS = <span class="variable">$(<span class="built_in">addprefix</span> <span class="variable">$(BUILD_DIR)</span>/,$(<span class="built_in">notdir</span> $(C_SOURCES:.c=.o)</span>))</span><br><span class="line"><span class="keyword">vpath</span> %.c <span class="variable">$(<span class="built_in">sort</span> $(<span class="built_in">dir</span> <span class="variable">$(C_SOURCES)</span>)</span>)</span><br><span class="line">OBJECTS += <span class="variable">$(<span class="built_in">addprefix</span> <span class="variable">$(BUILD_DIR)</span>/,$(<span class="built_in">notdir</span> $(ASM_SOURCES:.s=.o)</span>))</span><br><span class="line"><span class="keyword">vpath</span> %.s <span class="variable">$(<span class="built_in">sort</span> $(<span class="built_in">dir</span> <span class="variable">$(ASM_SOURCES)</span>)</span>)</span><br></pre></td></tr></table></figure>
+<p>这一大段都是makefile的语法，本质上代表了文件替换和名称命名等功能，一般而言我们修改芯片工程或其它什么时候，都不需要修改这个地方。该部分内容较多，另有博客对这一部分进行了比较详细的解释《<a target="_blank" rel="noopener" href="https://blog.csdn.net/qwe5959798/article/details/112367495">(GCC)STM32CubeMX生成的Makefile详解</a>》。</p>
+<h3 id="BUILD"><a href="#BUILD" class="headerlink" title="BUILD"></a>BUILD</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(BUILD_DIR)</span>/%.o: %.c Makefile | <span class="variable">$(BUILD_DIR)</span> </span><br><span class="line">	<span class="variable">$(CC)</span> -c <span class="variable">$(CFLAGS)</span> -Wa,-a,-ad,-alms=<span class="variable">$(BUILD_DIR)</span>/<span class="variable">$(<span class="built_in">notdir</span> $(&lt;:.c=.lst)</span>) <span class="variable">$&lt;</span> -o <span class="variable">$@</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$(BUILD_DIR)</span>/%.o: %.s Makefile | <span class="variable">$(BUILD_DIR)</span></span><br><span class="line">	<span class="variable">$(AS)</span> -c <span class="variable">$(CFLAGS)</span> <span class="variable">$&lt;</span> -o <span class="variable">$@</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$(BUILD_DIR)</span>/<span class="variable">$(TARGET)</span>.elf: <span class="variable">$(OBJECTS)</span> Makefile</span><br><span class="line">	<span class="variable">$(CC)</span> <span class="variable">$(OBJECTS)</span> <span class="variable">$(LDFLAGS)</span> -o <span class="variable">$@</span></span><br><span class="line">	<span class="variable">$(SZ)</span> <span class="variable">$@</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$(BUILD_DIR)</span>/%.hex: <span class="variable">$(BUILD_DIR)</span>/%.elf | <span class="variable">$(BUILD_DIR)</span></span><br><span class="line">	<span class="variable">$(HEX)</span> <span class="variable">$&lt;</span> <span class="variable">$@</span></span><br><span class="line">	</span><br><span class="line"><span class="variable">$(BUILD_DIR)</span>/%.bin: <span class="variable">$(BUILD_DIR)</span>/%.elf | <span class="variable">$(BUILD_DIR)</span></span><br><span class="line">	<span class="variable">$(BIN)</span> <span class="variable">$&lt;</span> <span class="variable">$@</span>	</span><br><span class="line">	</span><br><span class="line"><span class="variable">$(BUILD_DIR)</span>:</span><br><span class="line">	mkdir <span class="variable">$@</span></span><br></pre></td></tr></table></figure>
+<p>这一部分实际上前面那个博客也介绍得差不多了，但是他没有讲到里面的几个参数的功能。</p>
+<p>其中-c和-o这两个gcc最基础的参数就不说了，重点是第一部分中出现的<code>-Wa,-a,-ad,-alms</code>几个参数是什么意思。说实话，我最开始也没找到，翻了gcc的手册但是只找到关于Wa的一点描述，而且还不咋看得懂。但是解铃还须系铃人，我们想要知道这几个意思其实最好的办法就是去问一下STM32，然后我就去STM32的官方论坛问了一下，对方给出了答复，说明这几个参数其实就是针对GCC的汇编器的，主要功能是生成一些信息还有引用一些库之类的，一般情况下我们对其可以不做更改。关于这里的问答，可以<a target="_blank" rel="noopener" href="https://community.st.com/s/feed/0D53W00001PXCcxSAH">跳转到论坛界面进行查看</a>。</p>
+<h3 id="clean"><a href="#clean" class="headerlink" title="clean"></a>clean</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm -fR <span class="variable">$(BUILD_DIR)</span></span><br></pre></td></tr></table></figure>
+<p>这个东西没啥好说的，就是清除编译出来的那一大堆文件，一般情况下写makefile都需要这个东西防止生成东西太多影响空间，使用方法就是<code>make clean</code>。</p>
+<h3 id="flash"><a href="#flash" class="headerlink" title="flash"></a>flash</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">flash:</span></span><br><span class="line">	openocd -f interface/cmsis-dap.cfg -f target/stm32f4x.cfg -c <span class="string">&quot;program <span class="variable">$(BUILD_DIR)</span>/<span class="variable">$(TARGET)</span>.elf reset exit&quot;</span></span><br></pre></td></tr></table></figure>
+<p>烧录程序，这个东西是我自己添加的，需要使用openocd并且配置环境变量，如果没有配置环境变量需要修改一下openocd命令的路径，而如果没有下载openocd的就无法使用这个功能了，这个功能不是必须的，如果需要可以直接使用stm32官方提供的烧录工具。</p>
+<h3 id="dependencies"><a href="#dependencies" class="headerlink" title="dependencies"></a>dependencies</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-include</span> <span class="variable">$(<span class="built_in">wildcard</span> <span class="variable">$(BUILD_DIR)</span>/*.d)</span></span><br></pre></td></tr></table></figure>
+<p>依赖引用，这里引用就是前面我们生成的关联文件，这些东西有什么用呢，其实目的就是为了生成我们的o文件。如果你看不懂这个东西什么意思，那么我们随便打开一个d文件其实你应该就懂了（如果你看过一点makefile基础）：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">build/gpio.o: Core/Src/gpio.c Core/Inc/gpio.h Core/Inc/main.h \</span></span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \</span><br><span class="line"> Core/Inc/stm32f4xx_hal_conf.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h \</span><br><span class="line"> Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h \</span><br><span class="line"> Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f411xe.h \</span><br><span class="line"> Drivers/CMSIS/Include/core_cm4.h Drivers/CMSIS/Include/cmsis_version.h \</span><br><span class="line"> Drivers/CMSIS/Include/cmsis_compiler.h Drivers/CMSIS/Include/cmsis_gcc.h \</span><br><span class="line"> Drivers/CMSIS/Include/mpu_armv7.h \</span><br><span class="line"> Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \</span><br><span class="line"> Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h</span><br><span class="line"><span class="section">Core/Inc/gpio.h:</span></span><br><span class="line"><span class="section">Core/Inc/main.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:</span></span><br><span class="line"><span class="section">Core/Inc/stm32f4xx_hal_conf.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h:</span></span><br><span class="line"><span class="section">Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h:</span></span><br><span class="line"><span class="section">Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f411xe.h:</span></span><br><span class="line"><span class="section">Drivers/CMSIS/Include/core_cm4.h:</span></span><br><span class="line"><span class="section">Drivers/CMSIS/Include/cmsis_version.h:</span></span><br><span class="line"><span class="section">Drivers/CMSIS/Include/cmsis_compiler.h:</span></span><br><span class="line"><span class="section">Drivers/CMSIS/Include/cmsis_gcc.h:</span></span><br><span class="line"><span class="section">Drivers/CMSIS/Include/mpu_armv7.h:</span></span><br><span class="line"><span class="section">Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h:</span></span><br><span class="line"><span class="section">Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>这个是gpio.d，看着是不是很熟悉，感觉和前面那个《<a target="_blank" rel="noopener" href="https://blog.csdn.net/qwe5959798/article/details/112367495">(GCC)STM32CubeMX生成的Makefile详解</a>》说的把生成指令展开后C_INCLUDES、C_SOURCES生成的那一套很像？像就对了，这东西就是为了生成.d文件最顶部那个目标文件而存在的，而这里的gpio.d文件中所指的其实就是gpio.o，其余同理。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>好了，看到这你应该基本上理解了这个Makefile内部的功能和作用了，配合我找的这些资料以及官方文档，相信你可以学到更多。</p>
+<p>本文的存在更多是类似一个学习笔记，而且本人本身才疏学浅，里面内容不免可能会存在一些矛盾错误或疏漏的地方，如果发现欢迎指出。</p>
+
+    </div>
+
+    
+    
+    
+      
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>yunwuhai
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://yunwuhai.github.io/blog/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/STM32CubeMX%20GCC%E5%B7%A5%E7%A8%8BMakefile%E5%86%85%E5%AE%B9%E8%AF%A6%E8%A7%A3/" title="STM32CubeMX GCC工程Makefile内容详解">https://yunwuhai.github.io/blog/开发工具/STM32CubeMX GCC工程Makefile内容详解/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/STM32/" rel="tag"># STM32</a>
+              <a href="/tags/Makefile/" rel="tag"># Makefile</a>
+              <a href="/tags/gcc/" rel="tag"># gcc</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3VSCode%20Arduino%E7%9A%84%E7%BA%A2%E8%89%B2%E6%B3%A2%E6%B5%AA%E7%BA%BF%E6%8A%A5%E9%94%99/" rel="prev" title="如何解决VSCode Arduino的红色波浪线报错">
+      <i class="fa fa-chevron-left"></i> 如何解决VSCode Arduino的红色波浪线报错
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/%E7%AE%97%E6%B3%95%E7%BC%96%E7%A8%8B/%E7%AE%97%E6%B3%95%EF%BC%9A%E6%9C%80%E5%A4%A7%E5%AD%90%E5%88%97%E5%92%8C%E9%97%AE%E9%A2%98/" rel="next" title="算法：最大子列和问题">
+      算法：最大子列和问题 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E4%BB%8B%E7%BB%8D"><span class="nav-text">基础介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F"><span class="nav-text">注意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Makefile"><span class="nav-text">Makefile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TARGET"><span class="nav-text">TARGET</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DEBUG"><span class="nav-text">DEBUG</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OPT"><span class="nav-text">OPT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BUILD-DIR"><span class="nav-text">BUILD_DIR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-SOURCES"><span class="nav-text">C_SOURCES</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ASM-SOURCES"><span class="nav-text">ASM_SOURCES</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PREFIX"><span class="nav-text">PREFIX</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CC-AS-CP-SZ"><span class="nav-text">CC,AS,CP,SZ</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HEX-BIN"><span class="nav-text">HEX,BIN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU"><span class="nav-text">CPU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FPU"><span class="nav-text">FPU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FLOAT-ABI"><span class="nav-text">FLOAT-ABI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MCU"><span class="nav-text">MCU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AD-DEFS-C-DEFS"><span class="nav-text">AD_DEFS,C_DEFS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AS-INCLUDES-C-INCLUDES"><span class="nav-text">AS_INCLUDES,C_INCLUDES</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ASFLAGS-CFLAGS"><span class="nav-text">ASFLAGS,CFLAGS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ifeq-DEBUG-1"><span class="nav-text">ifeq ($(DEBUG), 1)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CFLAGS"><span class="nav-text">CFLAGS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LDSCRIPTS"><span class="nav-text">LDSCRIPTS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LIBS-LIBDIR"><span class="nav-text">LIBS,LIBDIR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LDFLAGS"><span class="nav-text">LDFLAGS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#all"><span class="nav-text">all</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OBJECTS"><span class="nav-text">OBJECTS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BUILD"><span class="nav-text">BUILD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#clean"><span class="nav-text">clean</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flash"><span class="nav-text">flash</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dependencies"><span class="nav-text">dependencies</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AF%AD"><span class="nav-text">结语</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">yunwuhai</p>
+  <div class="site-description" itemprop="description">正在学习中</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yunwuhai</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
