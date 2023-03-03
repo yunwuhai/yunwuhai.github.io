@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yunwuhai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="注意，这只是询问ChatGPT的答案，尚未进行检验，并不代表是正确的，仅作为参考尝试 我希望使用DAP-Link在vscode上开发NRF52832，请告诉我应该怎么做 要在 VSCode 上使用 DAP-Link 开发 NRF52832，您需要完成以下步骤：  安装 VSCode 您可以从 VSCode 的官方网站上下载并安装最新版本的 VSCode。 安装 C&#x2F;C++ 扩展 在 VSCode">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ChatGPT：使用vscode开发nrf52832">
+<meta property="og:url" content="https://yunwuhai.github.io/blog/ChatGPT%E9%97%AE%E7%AD%94/ChatGPT%EF%BC%9A%E4%BD%BF%E7%94%A8vscode%E5%BC%80%E5%8F%91nrf52832/index.html">
+<meta property="og:site_name" content="云雾海的博客">
+<meta property="og:description" content="注意，这只是询问ChatGPT的答案，尚未进行检验，并不代表是正确的，仅作为参考尝试 我希望使用DAP-Link在vscode上开发NRF52832，请告诉我应该怎么做 要在 VSCode 上使用 DAP-Link 开发 NRF52832，您需要完成以下步骤：  安装 VSCode 您可以从 VSCode 的官方网站上下载并安装最新版本的 VSCode。 安装 C&#x2F;C++ 扩展 在 VSCode">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-03-03T17:52:20.170Z">
+<meta property="article:modified_time" content="2023-03-03T17:59:51.889Z">
+<meta property="article:author" content="yunwuhai">
+<meta property="article:tag" content="ChatGPT">
+<meta property="article:tag" content="嵌入式">
+<meta property="article:tag" content="环境搭建">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://yunwuhai.github.io/blog/ChatGPT%E9%97%AE%E7%AD%94/ChatGPT%EF%BC%9A%E4%BD%BF%E7%94%A8vscode%E5%BC%80%E5%8F%91nrf52832/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ChatGPT：使用vscode开发nrf52832 | 云雾海的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">云雾海的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习和生活</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/home/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">17</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">3</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">15</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/yunwuhai" class="github-corner" title="我的GitHub" aria-label="我的GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://yunwuhai.github.io/blog/ChatGPT%E9%97%AE%E7%AD%94/ChatGPT%EF%BC%9A%E4%BD%BF%E7%94%A8vscode%E5%BC%80%E5%8F%91nrf52832/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="yunwuhai">
+      <meta itemprop="description" content="正在学习中">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="云雾海的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ChatGPT：使用vscode开发nrf52832
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-03-04 01:52:20 / 修改时间：01:59:51" itemprop="dateCreated datePublished" datetime="2023-03-04T01:52:20+08:00">2023-03-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ChatGPT%E9%97%AE%E7%AD%94/" itemprop="url" rel="index"><span itemprop="name">ChatGPT问答</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><strong>注意，这只是询问ChatGPT的答案，尚未进行检验，并不代表是正确的，仅作为参考尝试</strong></p>
+<p>我希望使用DAP-Link在vscode上开发NRF52832，请告诉我应该怎么做</p>
+<p>要在 VSCode 上使用 DAP-Link 开发 NRF52832，您需要完成以下步骤：</p>
+<ol>
+<li>安装 VSCode 您可以从 VSCode 的官方网站上下载并安装最新版本的 VSCode。</li>
+<li>安装 C/C++ 扩展 在 VSCode 中安装 C/C++ 扩展，以便能够编写 C/C++ 代码。您可以通过在 VSCode 中按下 Ctrl + Shift + X 来打开扩展面板，然后搜索 “C/C++” 扩展并进行安装。</li>
+<li>安装 Cortex-Debug 扩展 在 VSCode 中安装 Cortex-Debug 扩展，以便能够使用 DAP-Link 进行调试。您可以通过在 VSCode 中按下 Ctrl + Shift + X 来打开扩展面板，然后搜索 “Cortex-Debug” 扩展并进行安装。</li>
+<li>安装 GNU ARM 工具链 您需要安装 GNU ARM 工具链以编译和构建您的代码。您可以从 ARM 的官方网站上下载并安装最新版本的 GNU ARM 工具链。</li>
+<li>配置 launch.json 在 VSCode 中配置 launch.json 文件以连接到 DAP-Link 并启动调试。您可以按下 F5 键打开调试面板，然后选择 “Cortex Debug” 并按照提示进行配置。</li>
+<li>编写和调试代码 在 VSCode 中编写代码并使用 DAP-Link 进行调试。您可以按下 F5 键启动调试会话，然后使用调试工具窗口中的调试功能进行单步执行、观察变量值等。</li>
+</ol>
+<p>希望这些步骤可以帮助您在 VSCode 上使用 DAP-Link 开发 NRF52832。</p>
+<p>请详细介绍配置步骤</p>
+<p>好的，以下是详细的配置步骤：</p>
+<ol>
+<li>安装 VSCode</li>
+</ol>
+<p>您可以从 VSCode 的官方网站（<a target="_blank" rel="noopener" href="https://code.visualstudio.com/）上下载并安装最新版本的">https://code.visualstudio.com/）上下载并安装最新版本的</a> VSCode。</p>
+<ol>
+<li>安装 C/C++ 扩展</li>
+</ol>
+<p>在 VSCode 中安装 C/C++ 扩展，以便能够编写 C/C++ 代码。您可以通过在 VSCode 中按下 Ctrl + Shift + X 来打开扩展面板，然后搜索 “C/C++” 扩展并进行安装。</p>
+<ol>
+<li>安装 Cortex-Debug 扩展</li>
+</ol>
+<p>在 VSCode 中安装 Cortex-Debug 扩展，以便能够使用 DAP-Link 进行调试。您可以通过在 VSCode 中按下 Ctrl + Shift + X 来打开扩展面板，然后搜索 “Cortex-Debug” 扩展并进行安装。</p>
+<ol>
+<li>安装 GNU ARM 工具链</li>
+</ol>
+<p>您需要安装 GNU ARM 工具链以编译和构建您的代码。您可以从 ARM 的官方网站（<a target="_blank" rel="noopener" href="https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads）上下载并安装最新版本的">https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads）上下载并安装最新版本的</a> GNU ARM 工具链。</p>
+<ol>
+<li>配置 launch.json</li>
+</ol>
+<p>在 VSCode 中配置 launch.json 文件以连接到 DAP-Link 并启动调试。</p>
+<p>a. 打开 VSCode 并创建一个新的工作区或打开您的项目。</p>
+<p>b. 在 VSCode 中打开调试面板。您可以按下 F5 键或通过菜单栏中的 “调试” -&gt; “启动调试” 打开调试面板。</p>
+<p>c. 在调试面板中，点击齿轮图标打开 “launch.json” 配置文件。</p>
+<p>d. 如果您已经安装了 Cortex-Debug 扩展，那么您应该可以在 “环境” 列表中看到 “cortex-debug” 选项。如果没有，请确保您已正确安装 Cortex-Debug 扩展。</p>
+<p>e. 在 “launch.json” 文件中添加以下代码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">jsonCopy code&#123;</span><br><span class="line">  <span class="string">&quot;version&quot;</span>: <span class="string">&quot;0.2.0&quot;</span>,</span><br><span class="line">  <span class="string">&quot;configurations&quot;</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;type&quot;</span>: <span class="string">&quot;cortex-debug&quot;</span>,</span><br><span class="line">      <span class="string">&quot;request&quot;</span>: <span class="string">&quot;launch&quot;</span>,</span><br><span class="line">      <span class="string">&quot;name&quot;</span>: <span class="string">&quot;Debug with DAP-Link&quot;</span>,</span><br><span class="line">      <span class="string">&quot;cwd&quot;</span>: <span class="string">&quot;<span class="variable">$&#123;workspaceFolder&#125;</span>&quot;</span>,</span><br><span class="line">      <span class="string">&quot;executable&quot;</span>: <span class="string">&quot;<span class="variable">$&#123;workspaceFolder&#125;</span>/build/output.elf&quot;</span>,</span><br><span class="line">      <span class="string">&quot;servertype&quot;</span>: <span class="string">&quot;daplink&quot;</span>,</span><br><span class="line">      <span class="string">&quot;device&quot;</span>: <span class="string">&quot;nrf52&quot;</span>,</span><br><span class="line">      <span class="string">&quot;interface&quot;</span>: <span class="string">&quot;swd&quot;</span>,</span><br><span class="line">      <span class="string">&quot;runToMain&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="string">&quot;preLaunchTask&quot;</span>: <span class="string">&quot;build&quot;</span>,</span><br><span class="line">      <span class="string">&quot;svdFile&quot;</span>: <span class="string">&quot;<span class="variable">$&#123;workspaceFolder&#125;</span>/nrf52.svd&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>&quot;type&quot;: &quot;cortex-debug&quot;</code>：使用 Cortex-Debug 扩展。</li>
+<li><code>&quot;request&quot;: &quot;launch&quot;</code>：启动一个调试会话。</li>
+<li><code>&quot;name&quot;: &quot;Debug with DAP-Link&quot;</code>：会话的名称。</li>
+<li><code>&quot;cwd&quot;: &quot;$&#123;workspaceFolder&#125;&quot;</code>：指定工作目录为当前的工作区。</li>
+<li><code>&quot;executable&quot;: &quot;$&#123;workspaceFolder&#125;/build/output.elf&quot;</code>：指定编译后的可执行文件的路径。</li>
+<li><code>&quot;servertype&quot;: &quot;daplink&quot;</code>：指定使用 DAP-Link 进</li>
+</ul>
+<p>继续</p>
+<p>行调试。</p>
+<ul>
+<li><code>&quot;device&quot;: &quot;nrf52&quot;</code>：指定您的目标设备型号。</li>
+<li><code>&quot;interface&quot;: &quot;swd&quot;</code>：指定使用 SWD 接口连接到目标设备。</li>
+<li><code>&quot;runToMain&quot;: true</code>：在启动会话后，在运行程序之前将停在 main 函数处。</li>
+<li><code>&quot;preLaunchTask&quot;: &quot;build&quot;</code>：指定在启动调试会话之前执行的任务。</li>
+<li><code>&quot;svdFile&quot;: &quot;$&#123;workspaceFolder&#125;/nrf52.svd&quot;</code>：指定 SVD 文件的路径，用于提供目标设备的寄存器描述信息。</li>
+</ul>
+<p>f. 保存并关闭 “launch.json” 文件。</p>
+<ol>
+<li>配置 tasks.json</li>
+</ol>
+<p>在 VSCode 中配置 tasks.json 文件以构建您的代码。</p>
+<p>a. 在 VSCode 中打开 “任务” 面板。您可以按下 Ctrl + Shift + B 键或通过菜单栏中的 “终端” -&gt; “运行生成任务” 打开 “任务” 面板。</p>
+<p>b. 在 “任务” 面板中，选择 “配置生成任务” 并选择 “C/C++: gcc.exe build active file”。</p>
+<p>c. 在 tasks.json 文件中添加以下代码：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">jsonCopy code&#123;</span><br><span class="line">  <span class="string">&quot;tasks&quot;</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;type&quot;</span>: <span class="string">&quot;shell&quot;</span>,</span><br><span class="line">      <span class="string">&quot;label&quot;</span>: <span class="string">&quot;build&quot;</span>,</span><br><span class="line">      <span class="string">&quot;command&quot;</span>: <span class="string">&quot;make&quot;</span>,</span><br><span class="line">      <span class="string">&quot;group&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;kind&quot;</span>: <span class="string">&quot;build&quot;</span>,</span><br><span class="line">        <span class="string">&quot;isDefault&quot;</span>: <span class="literal">true</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="string">&quot;problemMatcher&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;owner&quot;</span>: <span class="string">&quot;cpp&quot;</span>,</span><br><span class="line">        <span class="string">&quot;fileLocation&quot;</span>: <span class="string">&quot;absolute&quot;</span>,</span><br><span class="line">        <span class="string">&quot;pattern&quot;</span>: &#123;</span><br><span class="line">          <span class="string">&quot;regexp&quot;</span>: <span class="string">&quot;^(.*):(<span class="subst">\\</span>d+):(<span class="subst">\\</span>d+):<span class="subst">\\</span>s+(warning|error):<span class="subst">\\</span>s+(.*)$&quot;</span>,</span><br><span class="line">          <span class="string">&quot;file&quot;</span>: <span class="number">1</span>,</span><br><span class="line">          <span class="string">&quot;line&quot;</span>: <span class="number">2</span>,</span><br><span class="line">          <span class="string">&quot;column&quot;</span>: <span class="number">3</span>,</span><br><span class="line">          <span class="string">&quot;severity&quot;</span>: <span class="number">4</span>,</span><br><span class="line">          <span class="string">&quot;message&quot;</span>: <span class="number">5</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  <span class="string">&quot;version&quot;</span>: <span class="string">&quot;2.0.0&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>&quot;type&quot;: &quot;shell&quot;</code>：指定使用 shell 命令来执行任务。</li>
+<li><code>&quot;label&quot;: &quot;build&quot;</code>：任务的标签。</li>
+<li><code>&quot;command&quot;: &quot;make&quot;</code>：指定要运行的命令。</li>
+<li><code>&quot;group&quot;: &#123; &quot;kind&quot;: &quot;build&quot;, &quot;isDefault&quot;: true &#125;</code>：将该任务设置为默认生成任务。</li>
+<li><code>&quot;problemMatcher&quot;</code>：定义如何匹配任务的输出以及如何提取和解释错误和警告。</li>
+</ul>
+<p>d. 保存并关闭 “tasks.json” 文件。</p>
+<ol>
+<li>配置 launch.json 和 tasks.json 中的路径</li>
+</ol>
+<p>请确保您在 launch.json 和 tasks.json 中设置了正确的路径，以便找到您的源代码和可执行文件。如果您的项目结构不同，请相应地更新路径。</p>
+<ol>
+<li>连接 DAP-Link 并启动调试</li>
+</ol>
+<p>a. 将 DAP-Link 连接到您的开发板。</p>
+<p>b. 打开您的代码项目。</p>
+<p>c. 按下 F5 键，或通过菜单栏中的 “调试” -&gt; “启动调试” 启动调试会话。</p>
+<p>d. 如果一切正常，您应该可以在调试器视图中看到变量、堆栈和寄存器等信息，以及断点处的源代码。</p>
+<p>希望这些步</p>
+<p>继续</p>
+<p>希望这些步骤可以帮助您成功地在 VSCode 中使用 DAP-Link 开发 NRF52832。如果您遇到任何问题，请随时在 Stack Overflow 或其他技术论坛上搜索或发布问题，也可以在这里继续咨询我。祝您成功！</p>
+
+    </div>
+
+    
+    
+    
+      
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>yunwuhai
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://yunwuhai.github.io/blog/ChatGPT%E9%97%AE%E7%AD%94/ChatGPT%EF%BC%9A%E4%BD%BF%E7%94%A8vscode%E5%BC%80%E5%8F%91nrf52832/" title="ChatGPT：使用vscode开发nrf52832">https://yunwuhai.github.io/blog/ChatGPT问答/ChatGPT：使用vscode开发nrf52832/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ChatGPT/" rel="tag"># ChatGPT</a>
+              <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" rel="tag"># 嵌入式</a>
+              <a href="/tags/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" rel="tag"># 环境搭建</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/AMD%E5%92%8C%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2Stable%20Diffusion/" rel="prev" title="AMD和云端部署Stable Diffusion">
+      <i class="fa fa-chevron-left"></i> AMD和云端部署Stable Diffusion
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">yunwuhai</p>
+  <div class="site-description" itemprop="description">正在学习中</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yunwuhai</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

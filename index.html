@@ -121,17 +121,17 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">14</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">17</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">2</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">3</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">14</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">15</span></a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -187,6 +187,161 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://yunwuhai.github.io/blog/ChatGPT%E9%97%AE%E7%AD%94/ChatGPT%EF%BC%9A%E4%BD%BF%E7%94%A8vscode%E5%BC%80%E5%8F%91nrf52832/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="yunwuhai">
+      <meta itemprop="description" content="正在学习中">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="云雾海的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/blog/ChatGPT%E9%97%AE%E7%AD%94/ChatGPT%EF%BC%9A%E4%BD%BF%E7%94%A8vscode%E5%BC%80%E5%8F%91nrf52832/" class="post-title-link" itemprop="url">ChatGPT：使用vscode开发nrf52832</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-03-04 01:52:20 / 修改时间：01:59:51" itemprop="dateCreated datePublished" datetime="2023-03-04T01:52:20+08:00">2023-03-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ChatGPT%E9%97%AE%E7%AD%94/" itemprop="url" rel="index"><span itemprop="name">ChatGPT问答</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><strong>注意，这只是询问ChatGPT的答案，尚未进行检验，并不代表是正确的，仅作为参考尝试</strong></p>
+<p>我希望使用DAP-Link在vscode上开发NRF52832，请告诉我应该怎么做</p>
+<p>要在 VSCode 上使用 DAP-Link 开发 NRF52832，您需要完成以下步骤：</p>
+<ol>
+<li>安装 VSCode 您可以从 VSCode 的官方网站上下载并安装最新版本的 VSCode。</li>
+<li>安装 C/C++ 扩展 在 VSCode 中安装 C/C++ 扩展，以便能够编写 C/C++ 代码。您可以通过在 VSCode 中按下 Ctrl + Shift + X 来打开扩展面板，然后搜索 “C/C++” 扩展并进行安装。</li>
+<li>安装 Cortex-Debug 扩展 在 VSCode 中安装 Cortex-Debug 扩展，以便能够使用 DAP-Link 进行调试。您可以通过在 VSCode 中按下 Ctrl + Shift + X 来打开扩展面板，然后搜索 “Cortex-Debug” 扩展并进行安装。</li>
+<li>安装 GNU ARM 工具链 您需要安装 GNU ARM 工具链以编译和构建您的代码。您可以从 ARM 的官方网站上下载并安装最新版本的 GNU ARM 工具链。</li>
+<li>配置 launch.json 在 VSCode 中配置 launch.json 文件以连接到 DAP-Link 并启动调试。您可以按下 F5 键打开调试面板，然后选择 “Cortex Debug” 并按照提示进行配置。</li>
+<li>编写和调试代码 在 VSCode 中编写代码并使用 DAP-Link 进行调试。您可以按下 F5 键启动调试会话，然后使用调试工具窗口中的调试功能进行单步执行、观察变量值等。</li>
+</ol>
+<p>希望这些步骤可以帮助您在 VSCode 上使用 DAP-Link 开发 NRF52832。</p>
+<p>请详细介绍配置步骤</p>
+<p>好的，以下是详细的配置步骤：</p>
+<ol>
+<li>安装 VSCode</li>
+</ol>
+<p>您可以从 VSCode 的官方网站（<a target="_blank" rel="noopener" href="https://code.visualstudio.com/）上下载并安装最新版本的">https://code.visualstudio.com/）上下载并安装最新版本的</a> VSCode。</p>
+<ol>
+<li>安装 C/C++ 扩展</li>
+</ol>
+<p>在 VSCode 中安装 C/C++ 扩展，以便能够编写 C/C++ 代码。您可以通过在 VSCode 中按下 Ctrl + Shift + X 来打开扩展面板，然后搜索 “C/C++” 扩展并进行安装。</p>
+<ol>
+<li>安装 Cortex-Debug 扩展</li>
+</ol>
+<p>在 VSCode 中安装 Cortex-Debug 扩展，以便能够使用 DAP-Link 进行调试。您可以通过在 VSCode 中按下 Ctrl + Shift + X 来打开扩展面板，然后搜索 “Cortex-Debug” 扩展并进行安装。</p>
+<ol>
+<li>安装 GNU ARM 工具链</li>
+</ol>
+<p>您需要安装 GNU ARM 工具链以编译和构建您的代码。您可以从 ARM 的官方网站（<a target="_blank" rel="noopener" href="https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads）上下载并安装最新版本的">https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads）上下载并安装最新版本的</a> GNU ARM 工具链。</p>
+<ol>
+<li>配置 launch.json</li>
+</ol>
+<p>在 VSCode 中配置 launch.json 文件以连接到 DAP-Link 并启动调试。</p>
+<p>a. 打开 VSCode 并创建一个新的工作区或打开您的项目。</p>
+<p>b. 在 VSCode 中打开调试面板。您可以按下 F5 键或通过菜单栏中的 “调试” -&gt; “启动调试” 打开调试面板。</p>
+<p>c. 在调试面板中，点击齿轮图标打开 “launch.json” 配置文件。</p>
+<p>d. 如果您已经安装了 Cortex-Debug 扩展，那么您应该可以在 “环境” 列表中看到 “cortex-debug” 选项。如果没有，请确保您已正确安装 Cortex-Debug 扩展。</p>
+<p>e. 在 “launch.json” 文件中添加以下代码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">jsonCopy code&#123;</span><br><span class="line">  <span class="string">&quot;version&quot;</span>: <span class="string">&quot;0.2.0&quot;</span>,</span><br><span class="line">  <span class="string">&quot;configurations&quot;</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;type&quot;</span>: <span class="string">&quot;cortex-debug&quot;</span>,</span><br><span class="line">      <span class="string">&quot;request&quot;</span>: <span class="string">&quot;launch&quot;</span>,</span><br><span class="line">      <span class="string">&quot;name&quot;</span>: <span class="string">&quot;Debug with DAP-Link&quot;</span>,</span><br><span class="line">      <span class="string">&quot;cwd&quot;</span>: <span class="string">&quot;<span class="variable">$&#123;workspaceFolder&#125;</span>&quot;</span>,</span><br><span class="line">      <span class="string">&quot;executable&quot;</span>: <span class="string">&quot;<span class="variable">$&#123;workspaceFolder&#125;</span>/build/output.elf&quot;</span>,</span><br><span class="line">      <span class="string">&quot;servertype&quot;</span>: <span class="string">&quot;daplink&quot;</span>,</span><br><span class="line">      <span class="string">&quot;device&quot;</span>: <span class="string">&quot;nrf52&quot;</span>,</span><br><span class="line">      <span class="string">&quot;interface&quot;</span>: <span class="string">&quot;swd&quot;</span>,</span><br><span class="line">      <span class="string">&quot;runToMain&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="string">&quot;preLaunchTask&quot;</span>: <span class="string">&quot;build&quot;</span>,</span><br><span class="line">      <span class="string">&quot;svdFile&quot;</span>: <span class="string">&quot;<span class="variable">$&#123;workspaceFolder&#125;</span>/nrf52.svd&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>&quot;type&quot;: &quot;cortex-debug&quot;</code>：使用 Cortex-Debug 扩展。</li>
+<li><code>&quot;request&quot;: &quot;launch&quot;</code>：启动一个调试会话。</li>
+<li><code>&quot;name&quot;: &quot;Debug with DAP-Link&quot;</code>：会话的名称。</li>
+<li><code>&quot;cwd&quot;: &quot;$&#123;workspaceFolder&#125;&quot;</code>：指定工作目录为当前的工作区。</li>
+<li><code>&quot;executable&quot;: &quot;$&#123;workspaceFolder&#125;/build/output.elf&quot;</code>：指定编译后的可执行文件的路径。</li>
+<li><code>&quot;servertype&quot;: &quot;daplink&quot;</code>：指定使用 DAP-Link 进</li>
+</ul>
+<p>继续</p>
+<p>行调试。</p>
+<ul>
+<li><code>&quot;device&quot;: &quot;nrf52&quot;</code>：指定您的目标设备型号。</li>
+<li><code>&quot;interface&quot;: &quot;swd&quot;</code>：指定使用 SWD 接口连接到目标设备。</li>
+<li><code>&quot;runToMain&quot;: true</code>：在启动会话后，在运行程序之前将停在 main 函数处。</li>
+<li><code>&quot;preLaunchTask&quot;: &quot;build&quot;</code>：指定在启动调试会话之前执行的任务。</li>
+<li><code>&quot;svdFile&quot;: &quot;$&#123;workspaceFolder&#125;/nrf52.svd&quot;</code>：指定 SVD 文件的路径，用于提供目标设备的寄存器描述信息。</li>
+</ul>
+<p>f. 保存并关闭 “launch.json” 文件。</p>
+<ol>
+<li>配置 tasks.json</li>
+</ol>
+<p>在 VSCode 中配置 tasks.json 文件以构建您的代码。</p>
+<p>a. 在 VSCode 中打开 “任务” 面板。您可以按下 Ctrl + Shift + B 键或通过菜单栏中的 “终端” -&gt; “运行生成任务” 打开 “任务” 面板。</p>
+<p>b. 在 “任务” 面板中，选择 “配置生成任务” 并选择 “C/C++: gcc.exe build active file”。</p>
+<p>c. 在 tasks.json 文件中添加以下代码：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">jsonCopy code&#123;</span><br><span class="line">  <span class="string">&quot;tasks&quot;</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;type&quot;</span>: <span class="string">&quot;shell&quot;</span>,</span><br><span class="line">      <span class="string">&quot;label&quot;</span>: <span class="string">&quot;build&quot;</span>,</span><br><span class="line">      <span class="string">&quot;command&quot;</span>: <span class="string">&quot;make&quot;</span>,</span><br><span class="line">      <span class="string">&quot;group&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;kind&quot;</span>: <span class="string">&quot;build&quot;</span>,</span><br><span class="line">        <span class="string">&quot;isDefault&quot;</span>: <span class="literal">true</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="string">&quot;problemMatcher&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;owner&quot;</span>: <span class="string">&quot;cpp&quot;</span>,</span><br><span class="line">        <span class="string">&quot;fileLocation&quot;</span>: <span class="string">&quot;absolute&quot;</span>,</span><br><span class="line">        <span class="string">&quot;pattern&quot;</span>: &#123;</span><br><span class="line">          <span class="string">&quot;regexp&quot;</span>: <span class="string">&quot;^(.*):(<span class="subst">\\</span>d+):(<span class="subst">\\</span>d+):<span class="subst">\\</span>s+(warning|error):<span class="subst">\\</span>s+(.*)$&quot;</span>,</span><br><span class="line">          <span class="string">&quot;file&quot;</span>: <span class="number">1</span>,</span><br><span class="line">          <span class="string">&quot;line&quot;</span>: <span class="number">2</span>,</span><br><span class="line">          <span class="string">&quot;column&quot;</span>: <span class="number">3</span>,</span><br><span class="line">          <span class="string">&quot;severity&quot;</span>: <span class="number">4</span>,</span><br><span class="line">          <span class="string">&quot;message&quot;</span>: <span class="number">5</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  <span class="string">&quot;version&quot;</span>: <span class="string">&quot;2.0.0&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>&quot;type&quot;: &quot;shell&quot;</code>：指定使用 shell 命令来执行任务。</li>
+<li><code>&quot;label&quot;: &quot;build&quot;</code>：任务的标签。</li>
+<li><code>&quot;command&quot;: &quot;make&quot;</code>：指定要运行的命令。</li>
+<li><code>&quot;group&quot;: &#123; &quot;kind&quot;: &quot;build&quot;, &quot;isDefault&quot;: true &#125;</code>：将该任务设置为默认生成任务。</li>
+<li><code>&quot;problemMatcher&quot;</code>：定义如何匹配任务的输出以及如何提取和解释错误和警告。</li>
+</ul>
+<p>d. 保存并关闭 “tasks.json” 文件。</p>
+<ol>
+<li>配置 launch.json 和 tasks.json 中的路径</li>
+</ol>
+<p>请确保您在 launch.json 和 tasks.json 中设置了正确的路径，以便找到您的源代码和可执行文件。如果您的项目结构不同，请相应地更新路径。</p>
+<ol>
+<li>连接 DAP-Link 并启动调试</li>
+</ol>
+<p>a. 将 DAP-Link 连接到您的开发板。</p>
+<p>b. 打开您的代码项目。</p>
+<p>c. 按下 F5 键，或通过菜单栏中的 “调试” -&gt; “启动调试” 启动调试会话。</p>
+<p>d. 如果一切正常，您应该可以在调试器视图中看到变量、堆栈和寄存器等信息，以及断点处的源代码。</p>
+<p>希望这些步</p>
+<p>继续</p>
+<p>希望这些步骤可以帮助您成功地在 VSCode 中使用 DAP-Link 开发 NRF52832。如果您遇到任何问题，请随时在 Stack Overflow 或其他技术论坛上搜索或发布问题，也可以在这里继续咨询我。祝您成功！</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -894,78 +1049,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://yunwuhai.github.io/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3VSCode%20Arduino%E7%9A%84%E7%BA%A2%E8%89%B2%E6%B3%A2%E6%B5%AA%E7%BA%BF%E6%8A%A5%E9%94%99/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="yunwuhai">
-      <meta itemprop="description" content="正在学习中">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="云雾海的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3VSCode%20Arduino%E7%9A%84%E7%BA%A2%E8%89%B2%E6%B3%A2%E6%B5%AA%E7%BA%BF%E6%8A%A5%E9%94%99/" class="post-title-link" itemprop="url">如何解决VSCode Arduino的红色波浪线报错</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-01-29 13:47:41" itemprop="dateCreated datePublished" datetime="2022-01-29T13:47:41+08:00">2022-01-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-02-28 16:13:20" itemprop="dateModified" datetime="2023-02-28T16:13:20+08:00">2023-02-28</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><em>之前我在B站上发了一系列教学视频，里面有一期<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1QP4y1b7JA?spm_id_from=333.999.0.0"># [云雾海]嵌入式培训(10)——VSCode_Arduino配置</a>是关于VSCode Arduino安装配置的，里面存在一些问题这里进行一定补正。因为本文是在评论区被阴阳人阴阳怪气后发的，所以内容可能有点暴躁。</em></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3VSCode%20Arduino%E7%9A%84%E7%BA%A2%E8%89%B2%E6%B3%A2%E6%B5%AA%E7%BA%BF%E6%8A%A5%E9%94%99/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1035,20 +1118,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
