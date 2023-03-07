@@ -4,6 +4,7 @@
     <title>ChatGPT：使用vscode开发nrf52832</title>
     <url>/blog/ChatGPT%E9%97%AE%E7%AD%94/ChatGPT%EF%BC%9A%E4%BD%BF%E7%94%A8vscode%E5%BC%80%E5%8F%91nrf52832/</url>
     <content><![CDATA[<p><strong>注意，这只是询问ChatGPT的答案，尚未进行检验，并不代表是正确的，仅作为参考尝试</strong></p>
+<span id="more"></span>
 <p>我希望使用DAP-Link在vscode上开发NRF52832，请告诉我应该怎么做</p>
 <p>要在 VSCode 上使用 DAP-Link 开发 NRF52832，您需要完成以下步骤：</p>
 <ol>
@@ -278,185 +279,6 @@
       </tags>
   </entry>
   <entry>
-    <title>算法：两数之和（哈希算法）</title>
-    <url>/blog/%E7%AE%97%E6%B3%95%E7%BC%96%E7%A8%8B/%E7%AE%97%E6%B3%95%EF%BC%9A%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C%EF%BC%88%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="题目来源"><a href="#题目来源" class="headerlink" title="题目来源"></a>题目来源</h2><p>LeetCode：<a href="https://leetcode-cn.com/problems/two-sum">https://leetcode-cn.com/problems/two-sum</a></p>
-<span id="more"></span>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>具体思想可以参考这个题解的演示：<a href="https://leetcode-cn.com/problems/two-sum/solution/tu-jie-guan-fang-tui-jian-ti-jie-liang-s-02xs/，LeetCode中使用的哈希算法是通过`uthash.h`这个文件实现的，该文件本来是个开源项目，目前已整合到gcc中，关于其使用请参考uthash的文档：https://troydhanson.github.io/uthash/userguide.html。">https://leetcode-cn.com/problems/two-sum/solution/tu-jie-guan-fang-tui-jian-ti-jie-liang-s-02xs/，LeetCode中使用的哈希算法是通过`uthash.h`这个文件实现的，该文件本来是个开源项目，目前已整合到gcc中，关于其使用请参考uthash的文档：https://troydhanson.github.io/uthash/userguide.html。</a></p>
-<h2 id="我的程序"><a href="#我的程序" class="headerlink" title="我的程序"></a>我的程序</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">numsHash</span>&#123;</span></span><br><span class="line">    <span class="type">int</span> key;	<span class="comment">// 键值</span></span><br><span class="line">    <span class="type">int</span> val;	<span class="comment">// 数据</span></span><br><span class="line">    UT_hash_handle hh;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">numsHash</span>* <span class="title">pNumsHashHead</span> =</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> numsHash* <span class="title function_">Find_NumsHash</span><span class="params">(<span class="type">int</span> targetKey)</span>	<span class="comment">// 定义查询函数</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">numsHash</span> *<span class="title">pReturn</span>;</span></span><br><span class="line">    HASH_FIND_INT(pNumsHashHead, &amp;targetKey, pReturn);</span><br><span class="line">    <span class="keyword">return</span> pReturn;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">Add_NumsHash</span><span class="params">(<span class="type">int</span> addKey, <span class="type">int</span> addVal)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">numsHash</span>* <span class="title">pTarget</span> =</span> Find_NumsHash(addKey);</span><br><span class="line">    <span class="keyword">if</span>(pTarget == <span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">numsHash</span>* <span class="title">pTempHash</span> =</span> <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> numsHash));</span><br><span class="line">        pTempHash-&gt;key = addKey;</span><br><span class="line">        pTempHash-&gt;val = addVal;</span><br><span class="line">        HASH_ADD_INT(pNumsHashHead, key, pTempHash);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span>* <span class="title function_">twoSum</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> numsSize, <span class="type">int</span> target, <span class="type">int</span>* returnSize)</span> &#123;</span><br><span class="line">    pNumsHashHead = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; numsSize; i++)&#123;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">numsHash</span>* <span class="title">pTempHash</span> =</span> Find_NumsHash(target - nums[i]);</span><br><span class="line">        <span class="keyword">if</span>(pTempHash != <span class="literal">NULL</span>)&#123;</span><br><span class="line">            <span class="type">int</span>* ret = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>) * <span class="number">2</span>);</span><br><span class="line">            ret[<span class="number">0</span>] = pTempHash-&gt;val;</span><br><span class="line">            ret[<span class="number">1</span>] = i;</span><br><span class="line">            *returnSize = <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">return</span> ret;</span><br><span class="line">        &#125;</span><br><span class="line">        Add_NumsHash(nums[i], i);</span><br><span class="line">    &#125;</span><br><span class="line">    *returnSize = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h2><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>执行用时</th>
-<th>内存消耗</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>4ms</td>
-<td>7.6MB</td>
-</tr>
-</tbody>
-</table>
-</div>
-]]></content>
-      <categories>
-        <category>算法笔记</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>算法：Maximum Subsequence Sum</title>
-    <url>/blog/%E7%AE%97%E6%B3%95%E7%BC%96%E7%A8%8B/%E7%AE%97%E6%B3%95%EF%BC%9AMaximum%20Subsequence%20Sum/</url>
-    <content><![CDATA[<h2 id="题目来源"><a href="#题目来源" class="headerlink" title="题目来源"></a>题目来源</h2><p>浙大数据结构MOOC-PTA的课后题</p>
-<span id="more"></span>
-<h2 id="题目内容"><a href="#题目内容" class="headerlink" title="题目内容"></a>题目内容</h2><p><img src="https://s2.loli.net/2022/04/02/2z6p8tKPZljTE4s.png" alt></p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>这一题时最大子列和问题的变形，需要输出最大子列和的子列首项与末项，且在数列全为负的情况下，最大子列和为0，且需要输出首尾。而且如果出现了前后有相同都是最大子列的情况，选择前面的那一个。</p>
-<p>我继续沿用了最大子列和问题中的在线处理算法，但是加上了对子列首尾的处理。</p>
-<p>说实话这题有点难，我的做法也稍微有点取巧，使用专门的标志来处理非正有0的情况，不过总体来说结果是过了。</p>
-<h2 id="我的程序"><a href="#我的程序" class="headerlink" title="我的程序"></a>我的程序</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 获取数据</span></span><br><span class="line">    <span class="type">int</span> size;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;size);</span><br><span class="line">    <span class="type">int</span> num[size];</span><br><span class="line">    <span class="type">int</span> max = <span class="number">0</span>, this = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 记录首尾位置</span></span><br><span class="line">    <span class="type">int</span> start = <span class="number">0</span>, end = <span class="number">0</span>, temp = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 记录负数和正数的个数</span></span><br><span class="line">    <span class="type">int</span> negFlag = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> posFlag = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 在线处理，寻找最大子列和同时记录该子列和首尾位置</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, num + i);</span><br><span class="line">        <span class="comment">// 记录正数和负数的个数，等会有用</span></span><br><span class="line">        <span class="keyword">if</span>(num[i] &lt; <span class="number">0</span>)negFlag++;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(num[i] &gt; <span class="number">0</span>)posFlag++;</span><br><span class="line">        <span class="comment">// 计算子列和</span></span><br><span class="line">        this += num[i];</span><br><span class="line">        <span class="keyword">if</span>(this &gt; max)</span><br><span class="line">        &#123;</span><br><span class="line">            max = this;</span><br><span class="line">            <span class="comment">// 当最大子列和发生了变化，记录其末尾，并将之前缓存的首部放入start</span></span><br><span class="line">            end = i;</span><br><span class="line">            start = temp;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(this &lt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            this = <span class="number">0</span>;</span><br><span class="line">            <span class="comment">// 当在线处理发现了子列和为负数的情况，需要丢弃前面的子列和，此时使用temp记录此次更新，因为它可能成为最大子列和的首项</span></span><br><span class="line">            temp = i + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(negFlag == size)<span class="built_in">printf</span>(<span class="string">&quot;%d %d %d&quot;</span>, <span class="number">0</span>, num[<span class="number">0</span>], num[size - <span class="number">1</span>]);	<span class="comment">// 全是负数，输出最大值0和首尾项</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(posFlag &gt; <span class="number">0</span>)<span class="built_in">printf</span>(<span class="string">&quot;%d %d %d&quot;</span>, max, num[start], num[end]);	<span class="comment">// 如果有正数，则必然存在非零最大子列</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(posFlag == <span class="number">0</span>)<span class="built_in">printf</span>(<span class="string">&quot;0 0 0&quot;</span>);	<span class="comment">// 如果没有正数，又不全是负数，则最大子列和是0，且子列内容也全是0，直接输出0</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h2><p><img src="https://mooc-image.nosdn.127.net/d976597f33b0454692b3a79c67e41799.png" alt></p>
-]]></content>
-      <categories>
-        <category>算法笔记</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>算法：两数之和（暴力枚举）</title>
-    <url>/blog/%E7%AE%97%E6%B3%95%E7%BC%96%E7%A8%8B/%E7%AE%97%E6%B3%95%EF%BC%9A%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C%EF%BC%88%E6%9A%B4%E5%8A%9B%E6%9E%9A%E4%B8%BE%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="题目来源"><a href="#题目来源" class="headerlink" title="题目来源"></a>题目来源</h2><p>LeetCode：<a href="https://leetcode-cn.com/problems/two-sum">https://leetcode-cn.com/problems/two-sum</a></p>
-<span id="more"></span>
-<h2 id="我的程序"><a href="#我的程序" class="headerlink" title="我的程序"></a>我的程序</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Note: The returned array must be malloced, assume caller calls free().</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span>* <span class="title function_">twoSum</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> numsSize, <span class="type">int</span> target, <span class="type">int</span>* returnSize)</span>&#123;</span><br><span class="line">    <span class="type">int</span>* ret = <span class="literal">NULL</span>;</span><br><span class="line">    *returnSize = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> temp = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; numsSize; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = i + <span class="number">1</span>; j &lt; numsSize; ++j)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[i] + nums[j] == target)</span><br><span class="line">            &#123;</span><br><span class="line">                *returnSize += <span class="number">2</span>;</span><br><span class="line">                ret = <span class="built_in">realloc</span>(ret, <span class="keyword">sizeof</span>(<span class="type">int</span>) * (*returnSize));</span><br><span class="line">                ret[temp++] = i;</span><br><span class="line">                ret[temp++] = j;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>执行用时</th>
-<th>内存消耗</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>152ms</td>
-<td>6.1MB</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="官方答案"><a href="#官方答案" class="headerlink" title="官方答案"></a>官方答案</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span>* <span class="title function_">twoSum</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> numsSize, <span class="type">int</span> target, <span class="type">int</span>* returnSize)</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; numsSize; ++i) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = i + <span class="number">1</span>; j &lt; numsSize; ++j) &#123;</span><br><span class="line">            <span class="keyword">if</span> (nums[i] + nums[j] == target) &#123;</span><br><span class="line">                <span class="type">int</span>* ret = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>) * <span class="number">2</span>);</span><br><span class="line">                ret[<span class="number">0</span>] = i, ret[<span class="number">1</span>] = j;</span><br><span class="line">                *returnSize = <span class="number">2</span>;</span><br><span class="line">                <span class="keyword">return</span> ret;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    *returnSize = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="结果-1"><a href="#结果-1" class="headerlink" title="结果"></a>结果</h2><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>执行用时</th>
-<th>内存消耗</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>92ms</td>
-<td>6.3MB</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>我的程序是整个完全遍历完了找出所有解，而官方是找到后直接跳出。相对于这道题来说官方的答案很显然更加贴近题意，但是我的程序更加具有普遍性（因为适合满足多组解的情况）。</p>
-]]></content>
-      <categories>
-        <category>算法笔记</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>算法：二分查找</title>
-    <url>/blog/%E7%AE%97%E6%B3%95%E7%BC%96%E7%A8%8B/%E7%AE%97%E6%B3%95%EF%BC%9A%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</url>
-    <content><![CDATA[<h2 id="题目来源"><a href="#题目来源" class="headerlink" title="题目来源"></a>题目来源</h2><p>浙大数据结构MOOC-PTA的课后题</p>
-<span id="more"></span>
-<h2 id="题目内容"><a href="#题目内容" class="headerlink" title="题目内容"></a>题目内容</h2><p><img src="https://s2.loli.net/2022/04/02/oWiVFUXaIfDvkQj.png" alt></p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>就是个普通的二分查找，没啥好分析的。</p>
-<h2 id="我的程序"><a href="#我的程序" class="headerlink" title="我的程序"></a>我的程序</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">Position <span class="title function_">BinarySearch</span><span class="params">( List L, ElementType X )</span></span><br><span class="line">&#123;</span><br><span class="line">    Position left, right;</span><br><span class="line">    left = <span class="number">1</span>;</span><br><span class="line">    right = L-&gt;Last;</span><br><span class="line">    <span class="keyword">while</span>(left &lt;= right)</span><br><span class="line">    &#123;</span><br><span class="line">        Position middle = (left + right) / <span class="number">2</span>;    <span class="comment">// 记录中间位置</span></span><br><span class="line">        <span class="keyword">if</span>(L-&gt;Data[middle] == X)<span class="keyword">return</span> middle;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(L-&gt;Data[middle] &lt; X)left = middle +<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(L-&gt;Data[middle] &gt; X)right = middle - <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> NotFound;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h2><p><img src="https://s2.loli.net/2022/04/02/7wgC4vDJbFxrIph.png" alt></p>
-]]></content>
-      <categories>
-        <category>算法笔记</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>算法：最大子列和问题</title>
-    <url>/blog/%E7%AE%97%E6%B3%95%E7%BC%96%E7%A8%8B/%E7%AE%97%E6%B3%95%EF%BC%9A%E6%9C%80%E5%A4%A7%E5%AD%90%E5%88%97%E5%92%8C%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h2 id="题目来源"><a href="#题目来源" class="headerlink" title="题目来源"></a>题目来源</h2><p>浙大数据结构MOOC-PTA的课后题</p>
-<span id="more"></span>
-<h2 id="题目内容"><a href="#题目内容" class="headerlink" title="题目内容"></a>题目内容</h2><p><img src="https://s2.loli.net/2022/04/02/VL8rfTWXjHEAOoB.png" alt></p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>这个程序在课程里讲过，一共有四种方法，其中两种是同一种方法，只是进行了优化，这道题没有什么好分析的，直接写就行了。</p>
-<h2 id="我的程序"><a href="#我的程序" class="headerlink" title="我的程序"></a>我的程序</h2><ol>
-<li><p>暴力穷举：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 获取数据</span></span><br><span class="line">    <span class="type">int</span> size;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;size);</span><br><span class="line">    <span class="type">int</span> num[size];</span><br><span class="line">    <span class="type">int</span> max = <span class="number">0</span>, this = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, num + i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 穷举所有子列并找出最大和</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; size; i++)	<span class="comment">// 分别以每个项作为子列起点，然后计算这个起点所有子列和</span></span><br><span class="line">    &#123;</span><br><span class="line">        this = <span class="number">0</span>;	<span class="comment">// 每次计算完子列，都需要清空</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = i; j &lt; size; j++)	<span class="comment">// 计算当前所在起点的所有子列和</span></span><br><span class="line">        &#123;</span><br><span class="line">            this += num[j];</span><br><span class="line">            <span class="keyword">if</span>(this &gt; max)max = this;	<span class="comment">// 当出现了更大的子列和时，将其存入max</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, max);	<span class="comment">// 打印出来</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这种解法的时间复杂度为O(N^2^)，虽然能用但是还差点意思。</p>
-</li>
-<li><p>分而治之：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">getMaxSequenceSum</span><span class="params">(<span class="type">int</span>* num, <span class="type">int</span> size)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> size;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;size);</span><br><span class="line">    <span class="type">int</span> num[size];</span><br><span class="line">    <span class="type">int</span> max = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, num + i);</span><br><span class="line">    &#125;</span><br><span class="line">    max = getMaxSequenceSum(num, size);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, max);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">getMaxSequenceSum</span><span class="params">(<span class="type">int</span>* num, <span class="type">int</span> size)</span> <span class="comment">// 分而治之，左右分并分别计算最大子列和，然后从中间向两边延申计算最大子列和，比较三者，最终得到最大子列和</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(size == <span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> num[<span class="number">0</span>]&gt;<span class="number">0</span>?num[<span class="number">0</span>]:<span class="number">0</span>;  <span class="comment">// 不可再分时，最大子列和就是本身或0（小于0的情况）</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> left = getMaxSequenceSum(num, size / <span class="number">2</span>);</span><br><span class="line">    <span class="type">int</span> right = getMaxSequenceSum(num + size / <span class="number">2</span>, size - size / <span class="number">2</span>);</span><br><span class="line">    <span class="type">int</span> mid_l = <span class="number">0</span>, mid_r = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> max = <span class="number">0</span>, this = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= size / <span class="number">2</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        this += num[size / <span class="number">2</span> - i];</span><br><span class="line">        <span class="keyword">if</span>(mid_l &lt; this)mid_l = this;</span><br><span class="line">    &#125;</span><br><span class="line">    this = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; size / <span class="number">2</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        this += num[size / <span class="number">2</span> + i];</span><br><span class="line">        <span class="keyword">if</span>(mid_r &lt; this)mid_r = this;</span><br><span class="line">    &#125;</span><br><span class="line">    max = mid_l + mid_r &gt; left?mid_l + mid_r:left;</span><br><span class="line">    <span class="keyword">return</span> max &gt; right?max:right;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这种解法的时间复杂度为O(NlogN)，已经是一种非常优秀的解法了。</p>
-</li>
-<li><p>在线处理：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 获取数据</span></span><br><span class="line">    <span class="type">int</span> size;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;size);</span><br><span class="line">    <span class="type">int</span> num[size];</span><br><span class="line">    <span class="type">int</span> max = <span class="number">0</span>, this = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, num + i);</span><br><span class="line">        this += num[i];</span><br><span class="line">        <span class="keyword">if</span>(this &gt; max)max = this;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(this &lt; <span class="number">0</span>)this = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, max);	<span class="comment">// 打印出来</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在线处理的时间复杂度是O(N)，时间复杂度是线性的算法，是该问题的最优解。</p>
-</li>
-</ol>
-<h2 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h2><p><em>下面的配图是我在MOOC中提交的图，里面代码没有优化，所以结果可能和预期有一点差别，不过整体大差没差。</em></p>
-<p>1.暴力穷举</p>
-<p><img src="https://mooc-image.nosdn.127.net/d61bf61634f04dd1abcf8db59db3b1d2.png" alt></p>
-<p>2.分而治之</p>
-<p><img src="https://mooc-image.nosdn.127.net/fad469ccf3ea40079fe61ca7e157f23f.png" alt></p>
-<p>3.在线处理</p>
-<p><img src="https://mooc-image.nosdn.127.net/f3eac9b97ff749068e2e000cca20dc6e.png" alt></p>
-]]></content>
-      <categories>
-        <category>算法笔记</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>如何解决VSCode Arduino的红色波浪线报错</title>
-    <url>/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3VSCode%20Arduino%E7%9A%84%E7%BA%A2%E8%89%B2%E6%B3%A2%E6%B5%AA%E7%BA%BF%E6%8A%A5%E9%94%99/</url>
-    <content><![CDATA[<p><em>之前我在B站上发了一系列教学视频，里面有一期<a href="https://www.bilibili.com/video/BV1QP4y1b7JA?spm_id_from=333.999.0.0"># [云雾海]嵌入式培训(10)——VSCode_Arduino配置</a>是关于VSCode Arduino安装配置的，里面存在一些问题这里进行一定补正。因为本文是在评论区被阴阳人阴阳怪气后发的，所以内容可能有点暴躁。</em></p>
-<span id="more"></span>
-<h2 id="一些牢骚"><a href="#一些牢骚" class="headerlink" title="一些牢骚"></a>一些牢骚</h2><p><em>本文为该视频下评论（已删）——”自己都不懂还在这做培训“所著，感谢这位让我明白了什么叫好心当成驴肝肺。</em></p>
-<p><em>首先我只是个学生又不是什么培训机构的老师，我上传到网上也没有收费。这个培训本身就很随意且只是针对我的队员而不幸被你这种人看到了而已。况且这个培训主要目的也不是教怎么安装环境的，只是当时想到了临时加了上去罢了；</em></p>
-<p><em>其次，我的整个操作本身是不存在问题的，如果按照正常C++编程这些问题是可以解决的，只是vscode_arduino这个插件在设计的时候没有完全遵照i这个流程罢了，详情可以看github上的<a href="https://github.com/microsoft/vscode-arduino/issues/438">issue</a>，这个问题早就老生常谈了，你在百度上面找到的所有方法百分之八十都是错的或者不严谨的；</em></p>
-<p><em>最后，最后这块安装部分本身你真的可以爱看不看，如果你觉得我后面是废话那就说明你看到了后面并且认为前面是有用的，那么它就可以称之为一场教学，如果你觉得通篇废话什么也没学到，那你还看这么久我不清楚你的脑袋怎么想的，被驴踢了吗还是门夹了？</em></p>
-<p><strong>你可以说出你的疑问或者指出我视频存在的具体问题，比如说你认为我的Intellisence配置部分讲得云里雾里什么的，然后怼着这个说这都没问题，但没必要用这样高高在上的语气说什么“自己都没搞懂就做培训”，啊对对对，就你懂。我只是想做个技术分享，你却希望我像收了费的老师一样给你什么都讲好了？我翻车了一下就不配做培训教学了（甚至还是免费的）？如果觉得我这培训没用自己去买课看或者去花几个月看人家原子野火之类的正经教程，跑评论区来找什么存在感？</strong></p>
-<h2 id="正题"><a href="#正题" class="headerlink" title="正题"></a>正题</h2><p>现在回到正题，我会在这里告诉你为什么我会在视频里做那些事并且说明具体目的，同时也会告诉你们解决方法。</p>
-<h3 id="正确方法"><a href="#正确方法" class="headerlink" title="正确方法"></a>正确方法</h3><p>首先说明一下正确方法，无论是上面我提到的百度搜索的结果或者issue里面提出的解决方案，现在都是错误的，事实上不知道是什么时候更新的还是之前修复的，你只需要像我前面一样配置，同时为vscode_arduino插件添加上arduino路径后，现在你只需要放一个示例工程在你的工作空间里面，然后verify一下，arduino就会自动帮你填充出一个完整正确的c_cpp_properties，具体流程如下：</p>
-<p><img src="https://s2.loli.net/2022/01/29/34JM2o9SmpCgLau.png" alt="Snipaste_2022-01-29_14-36-48.png"></p>
-<p><img src="https://s2.loli.net/2022/01/29/4oMWBPtJrQUL3Cl.png" alt="Snipaste_2022-01-29_14-38-25.png"></p>
-<p><img src="https://s2.loli.net/2022/01/29/UuTEfkLmg97BJVA.png" alt="Snipaste_2022-01-29_14-39-54.png"></p>
-<p><img src="https://s2.loli.net/2022/01/29/w6fZpxWIYV5Gy2m.png" alt="Snipaste_2022-01-29_14-41-35.png"></p>
-<p><img src="https://s2.loli.net/2022/01/29/pEUjbtmWZcTDFIQ.png" alt="Snipaste_2022-01-29_14-43-26.png"></p>
-<p><img src="https://s2.loli.net/2022/01/29/Cwc3e2rQgf1W6Ls.png" alt="Snipaste_2022-01-29_14-45-19.png"></p>
-<p>可以看到在arduino自动生成的properties中修改了编译器，添加了引用路径，添加了编译参数同时还添加了一大堆define，这些东西都会影响到我们的intellicense结果导致出错，而arduino不会主动帮你添加这些且在相当一段长时间里我们都是需要手动添加，尤其是define的部分很多很麻烦，所以网上经常有教你怎么解决这些红色波浪线报错的时候教你直接关闭语法检查，这种做法不是很好因为他会让你的工作变得有点麻烦，但是实际上你关不关报不报错都没有问题，只要你按照标准C++语言规范来写东西，这个东西也不会影响到最后的编译。</p>
-<p>而如果在一般C或C++编程中，我们只需要添加include path即可，因为一般我们在基础编程的时候不需要给编译器选那么麻烦的参数或添加一些define来满足编译需求，同时vscode就会主动给我们使用clang作为intellicense工具，一般在Windows编程中这些工具是正确够用的，而且在类似arm之类的单片机编程中也不会有太大问题。但是arduino因为使用的是内部工具，所以我们此时不能完全按照C++的标准来，而要顺应他的方式进行添加。所幸现在插件已经升级更新了，所以我们不再需要辛苦地添加那么多麻烦的配置。</p>
-<p>好的，现在你看到这应该明白为什么我在视频里我看见红线报错会那么麻烦地在那添加include path，说白了就是为了应付intellicense而已，不改其实也能编译（因为调用的是arduino内部的api）只是编程的时候可能看上去不好看，同时如果不添加include path，最大的问题在于你将无法实现工作空间外的ctrl+鼠标左键跳转函数和数据定义，这也是今后如果你使用vscode在进行C或C++编程时需要经常考虑的问题。</p>
-<p>此外我们还可以看到那个issue中被称为解决方案的内容是在.vscode文件中添加settings.json配置文件，然后在其中添加配置:”C_Cpp.intelliSenseEngine”: “Tag Parser”，这个部分说白了就是给你的intellicense添加模糊感知，这会让intellicense引擎更加智能，但是同样因为是模糊感知所以也容易在你乱写东西的时候检查不出来（绝大多数情况下是没问题的），它是一个很好的辅助，但是我建议你在自己写非Arduino程序的时候不要用这东西，毕竟代替intellicense的最好方法就是你好好写程序别乱来，按照规范写总不会错。而且现在在arduino这个插件已经更新的情况下，你可以不再需要用这个东西了，所以也没有必要专门再去添加一个这个文件和配置。</p>
-<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>所以懂了吗？这些东西非常简单但是大家一般都只是懒得找资料或者找到一些错误的资料罢了，光靠安装个插件就可以看出一个人不配做培训，这种人我只能说不配学这些东西。</p>
-]]></content>
-      <tags>
-        <tag>vscode</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>AMD和云端部署Stable Diffusion</title>
     <url>/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/AMD%E5%92%8C%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2Stable%20Diffusion/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><h3 id="怎么样？"><a href="#怎么样？" class="headerlink" title="怎么样？"></a>怎么样？</h3><p>目前AI绘画很火，很多朋友想要尝试，但试着试着发现自己的电脑好像不大行。</p>
@@ -717,6 +539,185 @@
       </tags>
   </entry>
   <entry>
+    <title>如何解决VSCode Arduino的红色波浪线报错</title>
+    <url>/blog/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3VSCode%20Arduino%E7%9A%84%E7%BA%A2%E8%89%B2%E6%B3%A2%E6%B5%AA%E7%BA%BF%E6%8A%A5%E9%94%99/</url>
+    <content><![CDATA[<p><em>之前我在B站上发了一系列教学视频，里面有一期<a href="https://www.bilibili.com/video/BV1QP4y1b7JA?spm_id_from=333.999.0.0"># [云雾海]嵌入式培训(10)——VSCode_Arduino配置</a>是关于VSCode Arduino安装配置的，里面存在一些问题这里进行一定补正。因为本文是在评论区被阴阳人阴阳怪气后发的，所以内容可能有点暴躁。</em></p>
+<span id="more"></span>
+<h2 id="一些牢骚"><a href="#一些牢骚" class="headerlink" title="一些牢骚"></a>一些牢骚</h2><p><em>本文为该视频下评论（已删）——”自己都不懂还在这做培训“所著，感谢这位让我明白了什么叫好心当成驴肝肺。</em></p>
+<p><em>首先我只是个学生又不是什么培训机构的老师，我上传到网上也没有收费。这个培训本身就很随意且只是针对我的队员而不幸被你这种人看到了而已。况且这个培训主要目的也不是教怎么安装环境的，只是当时想到了临时加了上去罢了；</em></p>
+<p><em>其次，我的整个操作本身是不存在问题的，如果按照正常C++编程这些问题是可以解决的，只是vscode_arduino这个插件在设计的时候没有完全遵照i这个流程罢了，详情可以看github上的<a href="https://github.com/microsoft/vscode-arduino/issues/438">issue</a>，这个问题早就老生常谈了，你在百度上面找到的所有方法百分之八十都是错的或者不严谨的；</em></p>
+<p><em>最后，最后这块安装部分本身你真的可以爱看不看，如果你觉得我后面是废话那就说明你看到了后面并且认为前面是有用的，那么它就可以称之为一场教学，如果你觉得通篇废话什么也没学到，那你还看这么久我不清楚你的脑袋怎么想的，被驴踢了吗还是门夹了？</em></p>
+<p><strong>你可以说出你的疑问或者指出我视频存在的具体问题，比如说你认为我的Intellisence配置部分讲得云里雾里什么的，然后怼着这个说这都没问题，但没必要用这样高高在上的语气说什么“自己都没搞懂就做培训”，啊对对对，就你懂。我只是想做个技术分享，你却希望我像收了费的老师一样给你什么都讲好了？我翻车了一下就不配做培训教学了（甚至还是免费的）？如果觉得我这培训没用自己去买课看或者去花几个月看人家原子野火之类的正经教程，跑评论区来找什么存在感？</strong></p>
+<h2 id="正题"><a href="#正题" class="headerlink" title="正题"></a>正题</h2><p>现在回到正题，我会在这里告诉你为什么我会在视频里做那些事并且说明具体目的，同时也会告诉你们解决方法。</p>
+<h3 id="正确方法"><a href="#正确方法" class="headerlink" title="正确方法"></a>正确方法</h3><p>首先说明一下正确方法，无论是上面我提到的百度搜索的结果或者issue里面提出的解决方案，现在都是错误的，事实上不知道是什么时候更新的还是之前修复的，你只需要像我前面一样配置，同时为vscode_arduino插件添加上arduino路径后，现在你只需要放一个示例工程在你的工作空间里面，然后verify一下，arduino就会自动帮你填充出一个完整正确的c_cpp_properties，具体流程如下：</p>
+<p><img src="https://s2.loli.net/2022/01/29/34JM2o9SmpCgLau.png" alt="Snipaste_2022-01-29_14-36-48.png"></p>
+<p><img src="https://s2.loli.net/2022/01/29/4oMWBPtJrQUL3Cl.png" alt="Snipaste_2022-01-29_14-38-25.png"></p>
+<p><img src="https://s2.loli.net/2022/01/29/UuTEfkLmg97BJVA.png" alt="Snipaste_2022-01-29_14-39-54.png"></p>
+<p><img src="https://s2.loli.net/2022/01/29/w6fZpxWIYV5Gy2m.png" alt="Snipaste_2022-01-29_14-41-35.png"></p>
+<p><img src="https://s2.loli.net/2022/01/29/pEUjbtmWZcTDFIQ.png" alt="Snipaste_2022-01-29_14-43-26.png"></p>
+<p><img src="https://s2.loli.net/2022/01/29/Cwc3e2rQgf1W6Ls.png" alt="Snipaste_2022-01-29_14-45-19.png"></p>
+<p>可以看到在arduino自动生成的properties中修改了编译器，添加了引用路径，添加了编译参数同时还添加了一大堆define，这些东西都会影响到我们的intellicense结果导致出错，而arduino不会主动帮你添加这些且在相当一段长时间里我们都是需要手动添加，尤其是define的部分很多很麻烦，所以网上经常有教你怎么解决这些红色波浪线报错的时候教你直接关闭语法检查，这种做法不是很好因为他会让你的工作变得有点麻烦，但是实际上你关不关报不报错都没有问题，只要你按照标准C++语言规范来写东西，这个东西也不会影响到最后的编译。</p>
+<p>而如果在一般C或C++编程中，我们只需要添加include path即可，因为一般我们在基础编程的时候不需要给编译器选那么麻烦的参数或添加一些define来满足编译需求，同时vscode就会主动给我们使用clang作为intellicense工具，一般在Windows编程中这些工具是正确够用的，而且在类似arm之类的单片机编程中也不会有太大问题。但是arduino因为使用的是内部工具，所以我们此时不能完全按照C++的标准来，而要顺应他的方式进行添加。所幸现在插件已经升级更新了，所以我们不再需要辛苦地添加那么多麻烦的配置。</p>
+<p>好的，现在你看到这应该明白为什么我在视频里我看见红线报错会那么麻烦地在那添加include path，说白了就是为了应付intellicense而已，不改其实也能编译（因为调用的是arduino内部的api）只是编程的时候可能看上去不好看，同时如果不添加include path，最大的问题在于你将无法实现工作空间外的ctrl+鼠标左键跳转函数和数据定义，这也是今后如果你使用vscode在进行C或C++编程时需要经常考虑的问题。</p>
+<p>此外我们还可以看到那个issue中被称为解决方案的内容是在.vscode文件中添加settings.json配置文件，然后在其中添加配置:”C_Cpp.intelliSenseEngine”: “Tag Parser”，这个部分说白了就是给你的intellicense添加模糊感知，这会让intellicense引擎更加智能，但是同样因为是模糊感知所以也容易在你乱写东西的时候检查不出来（绝大多数情况下是没问题的），它是一个很好的辅助，但是我建议你在自己写非Arduino程序的时候不要用这东西，毕竟代替intellicense的最好方法就是你好好写程序别乱来，按照规范写总不会错。而且现在在arduino这个插件已经更新的情况下，你可以不再需要用这个东西了，所以也没有必要专门再去添加一个这个文件和配置。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>所以懂了吗？这些东西非常简单但是大家一般都只是懒得找资料或者找到一些错误的资料罢了，光靠安装个插件就可以看出一个人不配做培训，这种人我只能说不配学这些东西。</p>
+]]></content>
+      <tags>
+        <tag>vscode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>算法：Maximum Subsequence Sum</title>
+    <url>/blog/%E7%AE%97%E6%B3%95%E7%BC%96%E7%A8%8B/%E7%AE%97%E6%B3%95%EF%BC%9AMaximum%20Subsequence%20Sum/</url>
+    <content><![CDATA[<h2 id="题目来源"><a href="#题目来源" class="headerlink" title="题目来源"></a>题目来源</h2><p>浙大数据结构MOOC-PTA的课后题</p>
+<span id="more"></span>
+<h2 id="题目内容"><a href="#题目内容" class="headerlink" title="题目内容"></a>题目内容</h2><p><img src="https://s2.loli.net/2022/04/02/2z6p8tKPZljTE4s.png" alt></p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>这一题时最大子列和问题的变形，需要输出最大子列和的子列首项与末项，且在数列全为负的情况下，最大子列和为0，且需要输出首尾。而且如果出现了前后有相同都是最大子列的情况，选择前面的那一个。</p>
+<p>我继续沿用了最大子列和问题中的在线处理算法，但是加上了对子列首尾的处理。</p>
+<p>说实话这题有点难，我的做法也稍微有点取巧，使用专门的标志来处理非正有0的情况，不过总体来说结果是过了。</p>
+<h2 id="我的程序"><a href="#我的程序" class="headerlink" title="我的程序"></a>我的程序</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 获取数据</span></span><br><span class="line">    <span class="type">int</span> size;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;size);</span><br><span class="line">    <span class="type">int</span> num[size];</span><br><span class="line">    <span class="type">int</span> max = <span class="number">0</span>, this = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 记录首尾位置</span></span><br><span class="line">    <span class="type">int</span> start = <span class="number">0</span>, end = <span class="number">0</span>, temp = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 记录负数和正数的个数</span></span><br><span class="line">    <span class="type">int</span> negFlag = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> posFlag = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 在线处理，寻找最大子列和同时记录该子列和首尾位置</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, num + i);</span><br><span class="line">        <span class="comment">// 记录正数和负数的个数，等会有用</span></span><br><span class="line">        <span class="keyword">if</span>(num[i] &lt; <span class="number">0</span>)negFlag++;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(num[i] &gt; <span class="number">0</span>)posFlag++;</span><br><span class="line">        <span class="comment">// 计算子列和</span></span><br><span class="line">        this += num[i];</span><br><span class="line">        <span class="keyword">if</span>(this &gt; max)</span><br><span class="line">        &#123;</span><br><span class="line">            max = this;</span><br><span class="line">            <span class="comment">// 当最大子列和发生了变化，记录其末尾，并将之前缓存的首部放入start</span></span><br><span class="line">            end = i;</span><br><span class="line">            start = temp;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(this &lt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            this = <span class="number">0</span>;</span><br><span class="line">            <span class="comment">// 当在线处理发现了子列和为负数的情况，需要丢弃前面的子列和，此时使用temp记录此次更新，因为它可能成为最大子列和的首项</span></span><br><span class="line">            temp = i + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(negFlag == size)<span class="built_in">printf</span>(<span class="string">&quot;%d %d %d&quot;</span>, <span class="number">0</span>, num[<span class="number">0</span>], num[size - <span class="number">1</span>]);	<span class="comment">// 全是负数，输出最大值0和首尾项</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(posFlag &gt; <span class="number">0</span>)<span class="built_in">printf</span>(<span class="string">&quot;%d %d %d&quot;</span>, max, num[start], num[end]);	<span class="comment">// 如果有正数，则必然存在非零最大子列</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(posFlag == <span class="number">0</span>)<span class="built_in">printf</span>(<span class="string">&quot;0 0 0&quot;</span>);	<span class="comment">// 如果没有正数，又不全是负数，则最大子列和是0，且子列内容也全是0，直接输出0</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h2><p><img src="https://mooc-image.nosdn.127.net/d976597f33b0454692b3a79c67e41799.png" alt></p>
+]]></content>
+      <categories>
+        <category>算法笔记</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>算法：两数之和（哈希算法）</title>
+    <url>/blog/%E7%AE%97%E6%B3%95%E7%BC%96%E7%A8%8B/%E7%AE%97%E6%B3%95%EF%BC%9A%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C%EF%BC%88%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="题目来源"><a href="#题目来源" class="headerlink" title="题目来源"></a>题目来源</h2><p>LeetCode：<a href="https://leetcode-cn.com/problems/two-sum">https://leetcode-cn.com/problems/two-sum</a></p>
+<span id="more"></span>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>具体思想可以参考这个题解的演示：<a href="https://leetcode-cn.com/problems/two-sum/solution/tu-jie-guan-fang-tui-jian-ti-jie-liang-s-02xs/，LeetCode中使用的哈希算法是通过`uthash.h`这个文件实现的，该文件本来是个开源项目，目前已整合到gcc中，关于其使用请参考uthash的文档：https://troydhanson.github.io/uthash/userguide.html。">https://leetcode-cn.com/problems/two-sum/solution/tu-jie-guan-fang-tui-jian-ti-jie-liang-s-02xs/，LeetCode中使用的哈希算法是通过`uthash.h`这个文件实现的，该文件本来是个开源项目，目前已整合到gcc中，关于其使用请参考uthash的文档：https://troydhanson.github.io/uthash/userguide.html。</a></p>
+<h2 id="我的程序"><a href="#我的程序" class="headerlink" title="我的程序"></a>我的程序</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">numsHash</span>&#123;</span></span><br><span class="line">    <span class="type">int</span> key;	<span class="comment">// 键值</span></span><br><span class="line">    <span class="type">int</span> val;	<span class="comment">// 数据</span></span><br><span class="line">    UT_hash_handle hh;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">numsHash</span>* <span class="title">pNumsHashHead</span> =</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> numsHash* <span class="title function_">Find_NumsHash</span><span class="params">(<span class="type">int</span> targetKey)</span>	<span class="comment">// 定义查询函数</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">numsHash</span> *<span class="title">pReturn</span>;</span></span><br><span class="line">    HASH_FIND_INT(pNumsHashHead, &amp;targetKey, pReturn);</span><br><span class="line">    <span class="keyword">return</span> pReturn;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">Add_NumsHash</span><span class="params">(<span class="type">int</span> addKey, <span class="type">int</span> addVal)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">numsHash</span>* <span class="title">pTarget</span> =</span> Find_NumsHash(addKey);</span><br><span class="line">    <span class="keyword">if</span>(pTarget == <span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">numsHash</span>* <span class="title">pTempHash</span> =</span> <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> numsHash));</span><br><span class="line">        pTempHash-&gt;key = addKey;</span><br><span class="line">        pTempHash-&gt;val = addVal;</span><br><span class="line">        HASH_ADD_INT(pNumsHashHead, key, pTempHash);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span>* <span class="title function_">twoSum</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> numsSize, <span class="type">int</span> target, <span class="type">int</span>* returnSize)</span> &#123;</span><br><span class="line">    pNumsHashHead = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; numsSize; i++)&#123;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">numsHash</span>* <span class="title">pTempHash</span> =</span> Find_NumsHash(target - nums[i]);</span><br><span class="line">        <span class="keyword">if</span>(pTempHash != <span class="literal">NULL</span>)&#123;</span><br><span class="line">            <span class="type">int</span>* ret = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>) * <span class="number">2</span>);</span><br><span class="line">            ret[<span class="number">0</span>] = pTempHash-&gt;val;</span><br><span class="line">            ret[<span class="number">1</span>] = i;</span><br><span class="line">            *returnSize = <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">return</span> ret;</span><br><span class="line">        &#125;</span><br><span class="line">        Add_NumsHash(nums[i], i);</span><br><span class="line">    &#125;</span><br><span class="line">    *returnSize = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>执行用时</th>
+<th>内存消耗</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4ms</td>
+<td>7.6MB</td>
+</tr>
+</tbody>
+</table>
+</div>
+]]></content>
+      <categories>
+        <category>算法笔记</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>算法：二分查找</title>
+    <url>/blog/%E7%AE%97%E6%B3%95%E7%BC%96%E7%A8%8B/%E7%AE%97%E6%B3%95%EF%BC%9A%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</url>
+    <content><![CDATA[<h2 id="题目来源"><a href="#题目来源" class="headerlink" title="题目来源"></a>题目来源</h2><p>浙大数据结构MOOC-PTA的课后题</p>
+<span id="more"></span>
+<h2 id="题目内容"><a href="#题目内容" class="headerlink" title="题目内容"></a>题目内容</h2><p><img src="https://s2.loli.net/2022/04/02/oWiVFUXaIfDvkQj.png" alt></p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>就是个普通的二分查找，没啥好分析的。</p>
+<h2 id="我的程序"><a href="#我的程序" class="headerlink" title="我的程序"></a>我的程序</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">Position <span class="title function_">BinarySearch</span><span class="params">( List L, ElementType X )</span></span><br><span class="line">&#123;</span><br><span class="line">    Position left, right;</span><br><span class="line">    left = <span class="number">1</span>;</span><br><span class="line">    right = L-&gt;Last;</span><br><span class="line">    <span class="keyword">while</span>(left &lt;= right)</span><br><span class="line">    &#123;</span><br><span class="line">        Position middle = (left + right) / <span class="number">2</span>;    <span class="comment">// 记录中间位置</span></span><br><span class="line">        <span class="keyword">if</span>(L-&gt;Data[middle] == X)<span class="keyword">return</span> middle;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(L-&gt;Data[middle] &lt; X)left = middle +<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(L-&gt;Data[middle] &gt; X)right = middle - <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> NotFound;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h2><p><img src="https://s2.loli.net/2022/04/02/7wgC4vDJbFxrIph.png" alt></p>
+]]></content>
+      <categories>
+        <category>算法笔记</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>算法：两数之和（暴力枚举）</title>
+    <url>/blog/%E7%AE%97%E6%B3%95%E7%BC%96%E7%A8%8B/%E7%AE%97%E6%B3%95%EF%BC%9A%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C%EF%BC%88%E6%9A%B4%E5%8A%9B%E6%9E%9A%E4%B8%BE%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="题目来源"><a href="#题目来源" class="headerlink" title="题目来源"></a>题目来源</h2><p>LeetCode：<a href="https://leetcode-cn.com/problems/two-sum">https://leetcode-cn.com/problems/two-sum</a></p>
+<span id="more"></span>
+<h2 id="我的程序"><a href="#我的程序" class="headerlink" title="我的程序"></a>我的程序</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Note: The returned array must be malloced, assume caller calls free().</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span>* <span class="title function_">twoSum</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> numsSize, <span class="type">int</span> target, <span class="type">int</span>* returnSize)</span>&#123;</span><br><span class="line">    <span class="type">int</span>* ret = <span class="literal">NULL</span>;</span><br><span class="line">    *returnSize = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> temp = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; numsSize; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = i + <span class="number">1</span>; j &lt; numsSize; ++j)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[i] + nums[j] == target)</span><br><span class="line">            &#123;</span><br><span class="line">                *returnSize += <span class="number">2</span>;</span><br><span class="line">                ret = <span class="built_in">realloc</span>(ret, <span class="keyword">sizeof</span>(<span class="type">int</span>) * (*returnSize));</span><br><span class="line">                ret[temp++] = i;</span><br><span class="line">                ret[temp++] = j;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>执行用时</th>
+<th>内存消耗</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>152ms</td>
+<td>6.1MB</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="官方答案"><a href="#官方答案" class="headerlink" title="官方答案"></a>官方答案</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span>* <span class="title function_">twoSum</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> numsSize, <span class="type">int</span> target, <span class="type">int</span>* returnSize)</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; numsSize; ++i) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = i + <span class="number">1</span>; j &lt; numsSize; ++j) &#123;</span><br><span class="line">            <span class="keyword">if</span> (nums[i] + nums[j] == target) &#123;</span><br><span class="line">                <span class="type">int</span>* ret = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>) * <span class="number">2</span>);</span><br><span class="line">                ret[<span class="number">0</span>] = i, ret[<span class="number">1</span>] = j;</span><br><span class="line">                *returnSize = <span class="number">2</span>;</span><br><span class="line">                <span class="keyword">return</span> ret;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    *returnSize = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="结果-1"><a href="#结果-1" class="headerlink" title="结果"></a>结果</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>执行用时</th>
+<th>内存消耗</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>92ms</td>
+<td>6.3MB</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>我的程序是整个完全遍历完了找出所有解，而官方是找到后直接跳出。相对于这道题来说官方的答案很显然更加贴近题意，但是我的程序更加具有普遍性（因为适合满足多组解的情况）。</p>
+]]></content>
+      <categories>
+        <category>算法笔记</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>算法：最大子列和问题</title>
+    <url>/blog/%E7%AE%97%E6%B3%95%E7%BC%96%E7%A8%8B/%E7%AE%97%E6%B3%95%EF%BC%9A%E6%9C%80%E5%A4%A7%E5%AD%90%E5%88%97%E5%92%8C%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h2 id="题目来源"><a href="#题目来源" class="headerlink" title="题目来源"></a>题目来源</h2><p>浙大数据结构MOOC-PTA的课后题</p>
+<span id="more"></span>
+<h2 id="题目内容"><a href="#题目内容" class="headerlink" title="题目内容"></a>题目内容</h2><p><img src="https://s2.loli.net/2022/04/02/VL8rfTWXjHEAOoB.png" alt></p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>这个程序在课程里讲过，一共有四种方法，其中两种是同一种方法，只是进行了优化，这道题没有什么好分析的，直接写就行了。</p>
+<h2 id="我的程序"><a href="#我的程序" class="headerlink" title="我的程序"></a>我的程序</h2><ol>
+<li><p>暴力穷举：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 获取数据</span></span><br><span class="line">    <span class="type">int</span> size;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;size);</span><br><span class="line">    <span class="type">int</span> num[size];</span><br><span class="line">    <span class="type">int</span> max = <span class="number">0</span>, this = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, num + i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 穷举所有子列并找出最大和</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; size; i++)	<span class="comment">// 分别以每个项作为子列起点，然后计算这个起点所有子列和</span></span><br><span class="line">    &#123;</span><br><span class="line">        this = <span class="number">0</span>;	<span class="comment">// 每次计算完子列，都需要清空</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = i; j &lt; size; j++)	<span class="comment">// 计算当前所在起点的所有子列和</span></span><br><span class="line">        &#123;</span><br><span class="line">            this += num[j];</span><br><span class="line">            <span class="keyword">if</span>(this &gt; max)max = this;	<span class="comment">// 当出现了更大的子列和时，将其存入max</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, max);	<span class="comment">// 打印出来</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种解法的时间复杂度为O(N^2^)，虽然能用但是还差点意思。</p>
+</li>
+<li><p>分而治之：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">getMaxSequenceSum</span><span class="params">(<span class="type">int</span>* num, <span class="type">int</span> size)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> size;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;size);</span><br><span class="line">    <span class="type">int</span> num[size];</span><br><span class="line">    <span class="type">int</span> max = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, num + i);</span><br><span class="line">    &#125;</span><br><span class="line">    max = getMaxSequenceSum(num, size);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, max);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">getMaxSequenceSum</span><span class="params">(<span class="type">int</span>* num, <span class="type">int</span> size)</span> <span class="comment">// 分而治之，左右分并分别计算最大子列和，然后从中间向两边延申计算最大子列和，比较三者，最终得到最大子列和</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(size == <span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> num[<span class="number">0</span>]&gt;<span class="number">0</span>?num[<span class="number">0</span>]:<span class="number">0</span>;  <span class="comment">// 不可再分时，最大子列和就是本身或0（小于0的情况）</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> left = getMaxSequenceSum(num, size / <span class="number">2</span>);</span><br><span class="line">    <span class="type">int</span> right = getMaxSequenceSum(num + size / <span class="number">2</span>, size - size / <span class="number">2</span>);</span><br><span class="line">    <span class="type">int</span> mid_l = <span class="number">0</span>, mid_r = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> max = <span class="number">0</span>, this = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= size / <span class="number">2</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        this += num[size / <span class="number">2</span> - i];</span><br><span class="line">        <span class="keyword">if</span>(mid_l &lt; this)mid_l = this;</span><br><span class="line">    &#125;</span><br><span class="line">    this = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; size / <span class="number">2</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        this += num[size / <span class="number">2</span> + i];</span><br><span class="line">        <span class="keyword">if</span>(mid_r &lt; this)mid_r = this;</span><br><span class="line">    &#125;</span><br><span class="line">    max = mid_l + mid_r &gt; left?mid_l + mid_r:left;</span><br><span class="line">    <span class="keyword">return</span> max &gt; right?max:right;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种解法的时间复杂度为O(NlogN)，已经是一种非常优秀的解法了。</p>
+</li>
+<li><p>在线处理：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 获取数据</span></span><br><span class="line">    <span class="type">int</span> size;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;size);</span><br><span class="line">    <span class="type">int</span> num[size];</span><br><span class="line">    <span class="type">int</span> max = <span class="number">0</span>, this = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, num + i);</span><br><span class="line">        this += num[i];</span><br><span class="line">        <span class="keyword">if</span>(this &gt; max)max = this;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(this &lt; <span class="number">0</span>)this = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, max);	<span class="comment">// 打印出来</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在线处理的时间复杂度是O(N)，时间复杂度是线性的算法，是该问题的最优解。</p>
+</li>
+</ol>
+<h2 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h2><p><em>下面的配图是我在MOOC中提交的图，里面代码没有优化，所以结果可能和预期有一点差别，不过整体大差没差。</em></p>
+<p>1.暴力穷举</p>
+<p><img src="https://mooc-image.nosdn.127.net/d61bf61634f04dd1abcf8db59db3b1d2.png" alt></p>
+<p>2.分而治之</p>
+<p><img src="https://mooc-image.nosdn.127.net/fad469ccf3ea40079fe61ca7e157f23f.png" alt></p>
+<p>3.在线处理</p>
+<p><img src="https://mooc-image.nosdn.127.net/f3eac9b97ff749068e2e000cca20dc6e.png" alt></p>
+]]></content>
+      <categories>
+        <category>算法笔记</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C语言可以使用变量定义数组</title>
     <url>/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/C_C++/C%E8%AF%AD%E8%A8%80%E5%8F%AF%E4%BB%A5%E4%BD%BF%E7%94%A8%E5%8F%98%E9%87%8F%E5%AE%9A%E4%B9%89%E6%95%B0%E7%BB%84/</url>
     <content><![CDATA[<p>这是在一次研讨会中发现的我知识上的纰漏，在此进行记录。</p>
@@ -809,6 +810,52 @@
       <tags>
         <tag>C</tag>
         <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>跟着ChatGPT和Rust圣经学Rust_1</title>
+    <url>/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80ChatGPT%E5%92%8CRust%E5%9C%A3%E7%BB%8F%E5%AD%A6Rust_1/</url>
+    <content><![CDATA[<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>这个系列将会是一个学习笔记，而非一个教程。</p>
+<p>我使用了《<a href="https://course.rs/about-book.html">Rust语言圣经(Rust Course)</a>》作为我的学习教程，你可以通过点击这个链接进入。</p>
+<p>但同时，我发现这本书在一定程度上有点太跳跃了，可能是作者希望内容更加有趣，但是一些在教程后面才会出现的知识点代码，却会在前面的章节出现，这着实让我有点难受，最终我决定搭配ChatGPT来了结合使用。</p>
+<p>ChatGPT将作为我的随身老师，如果我有什么疑问，都会问他，我会将整个询问过程截图记录下来并保存在这个笔记中。</p>
+<p><strong>这个笔记中的内容并不一定准确，首先是ChatGPT有可能会给我不懂装懂，其次是我这个是笔记而不是教程，我会根据教程中的东西进行自己的理解，但是这个理解可能不一定是正确的，可能在未来的学习中被我推翻，但是你可以跟着这个思路一起和我思考。</strong></p>
+<span id="more"></span>
+<h2 id="前置准备"><a href="#前置准备" class="headerlink" title="前置准备"></a>前置准备</h2><p>在写下这个笔记的时候，我已经完成了教程语言基础学习的第一小节，也就是简介和安装环境的过程，因为这一小节说白了就是直接跟着做就行，没什么好说的，又不会有人天天装环境。</p>
+<p>同时，我创建了一个工程<code>rust_try</code>，如果没有什么特别需要，学习中的那些实验代码我都会在这里面测试。</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80ChatGPT%E5%92%8CRust%E5%9C%A3%E7%BB%8F%E5%AD%A6Rust_1/image-20230308023102895.png" alt="image-20230308023102895"></p>
+<p>同时，我在VSCode中安装了ChatGPT中文版插件，你可以直接在扩展中搜索找到。</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80ChatGPT%E5%92%8CRust%E5%9C%A3%E7%BB%8F%E5%AD%A6Rust_1/image-20230308024655020.png" alt="image-20230308024655020"></p>
+<p><em>这个笔记并不会完全跟着教程一章一章走，而是根据我今天学习到哪就写到哪，不过放心，我会说明情况的。</em></p>
+<h2 id="学习内容"><a href="#学习内容" class="headerlink" title="学习内容"></a>学习内容</h2><h3 id="变量绑定"><a href="#变量绑定" class="headerlink" title="变量绑定"></a>变量绑定</h3><p>首先我是进入到了基础入门的变量绑定与解构的章节，也就是2.1章节。</p>
+<p>在这里，我知道了Rust使用<code>let</code>关键字将值和变量进行绑定，而这个所谓的绑定和传统的语言所谓的赋值有所区别，但是具体区别讲得不是很明白。我大致理解为，我们可以将这里的值看作一个对象，而绑定的意思是把这个对象的所有权交给一个变量。但上述内容具体是怎么回事，因为会涉及到一个所谓的所有权规则，教程说等到后面再说。</p>
+<p>不过为了保证我的理解没有出现太大的错误，我还是决定问问ChatGPT：</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80ChatGPT%E5%92%8CRust%E5%9C%A3%E7%BB%8F%E5%AD%A6Rust_1/image-20230308031052075.png" alt="image-20230308031052075"></p>
+<p>根据ChatGPT的回答，我感觉我的理解应该没有太大问题，不过为了保险起见我向他说明了一下我的理解：</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80ChatGPT%E5%92%8CRust%E5%9C%A3%E7%BB%8F%E5%AD%A6Rust_1/image-20230308031151900.png" alt="image-20230308031151900"></p>
+<p>看来差不多，虽然细节上有所差异，但这些细节补充里面的东西有很多我都还不认识，我们仍然需要继续往后面学。我并不打算找ChatGPT完全问完这些内容，因为看教程会更加准确一些，同时也能防止我遗漏一些东西。</p>
+<h3 id="变量可变性和常量"><a href="#变量可变性和常量" class="headerlink" title="变量可变性和常量"></a>变量可变性和常量</h3><p>根据教程，我又了解到Rust的另一个特性，也就是需要手动设置变量是可变的，设置方法为在<code>let</code>后面加上<code>mut</code>关键字，以告知编译器这个变量是可变的，只有这样我们才可以修改这个变量的值。但是Rust中没有设置<code>mut</code>的变量并不是常量，事实上在Rust中常量应该使用<code>const</code>。根据我对它的理解，我问了问ChatGPT：</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80ChatGPT%E5%92%8CRust%E5%9C%A3%E7%BB%8F%E5%AD%A6Rust_1/image-20230308032848670.png" alt="image-20230308032848670"></p>
+<p>嗯，确实差不多。</p>
+<h3 id="命名规范"><a href="#命名规范" class="headerlink" title="命名规范"></a>命名规范</h3><p>Rust目前的命名规范还没有完全设计好，但基本记忆方法就是抽象没有实体的东西使用大驼峰，不变的东西用全大写，其它的东西用全小写。当然具体怎么个命名规范，还是等用到的时候再看吧，等用多了一般也就习惯记住了。</p>
+<p>除此之外，我们在设计程序的时候可能会设计出一个没用的变量，这个变量之所以没用是因为你还在写程序或者设计程序中，它可能在未来有用，但是现在只是放在这里做一个记录。那么你可以在这个变量的开头加一个下划线<code>_</code>，如果不加，Rust的编译器将会给你个警告。当然这个你没记住也没关系，vscode的rust插件会提醒你的。</p>
+<h3 id="解构赋值"><a href="#解构赋值" class="headerlink" title="解构赋值"></a>解构赋值</h3><p>说实话，这里教程有点没说明白，至少我不是很理解，所以我直接问了ChatGPT，我感觉它的回答更加清晰一些：</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80ChatGPT%E5%92%8CRust%E5%9C%A3%E7%BB%8F%E5%AD%A6Rust_1/image-20230308034345064.png" alt="image-20230308034345064"></p>
+<h3 id="变量遮蔽"><a href="#变量遮蔽" class="headerlink" title="变量遮蔽"></a>变量遮蔽</h3><p>在Rust中，变量遮蔽是指定义新变量时，如果变量名与已有变量名相同，则新变量将覆盖（遮蔽）原有变量。变量遮蔽的主要作用是在特定作用域中使用不同的变量名来表示不同的含义，而不会影响到其他作用域或全局作用域中的变量。变量遮蔽可以用来：</p>
+<ol>
+<li>避免命名冲突</li>
+<li>增强代码可读性（治疗命名困难症）</li>
+<li>实现局部变量的修改而不对外部造成影响</li>
+</ol>
+<p>总体给我的感觉有点类似于C语言局部变量和形参的结合体。</p>
+<h3 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h3><p>现在进入2.2。</p>
+<p>Rust拥有基本类型和复合类型，基本类型和传统C系列语言的基本类型差不多，但多了一个单元类型，同时其字符类型是Unicode。</p>
+<p>此外Rust拥有自动推导语言类型的能力，这个推导是编译器完成的，事实上vscode的rust插件也会帮你完成这个任务。不过如果你有一些特殊需求，比如你不希望被推导成默认类型，就需要手动设置了，设置方法就是在变量后使用<code>: 类型token</code></p>
+<h2 id="今天结束"><a href="#今天结束" class="headerlink" title="今天结束"></a>今天结束</h2><p>好了，今天有点累了，先结束，下次继续。</p>
+]]></content>
+      <tags>
+        <tag>ChatGPT</tag>
+        <tag>Rust</tag>
       </tags>
   </entry>
   <entry>
