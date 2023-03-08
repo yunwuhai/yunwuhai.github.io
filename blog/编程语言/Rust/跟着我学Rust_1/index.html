@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yunwuhai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言本教程参考了《The Rust Programming Language》和《Rust by Example》，如果你希望一个更加官方严谨的教程，请参考这两本书。 严谨点来说，这个系列并不能称之为教程，毕竟我也只是一个初学者而已，还不够资格来独立写一个教程。 但是也正因为我是个初学者，我可能更加能理解初学者会有什么疑惑以及想要知道些什么。 所以我将根据上述的两本书的教学加上自己的理解，配合Ch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="跟着我学Rust_1">
+<meta property="og:url" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/index.html">
+<meta property="og:site_name" content="云雾海的博客">
+<meta property="og:description" content="前言本教程参考了《The Rust Programming Language》和《Rust by Example》，如果你希望一个更加官方严谨的教程，请参考这两本书。 严谨点来说，这个系列并不能称之为教程，毕竟我也只是一个初学者而已，还不够资格来独立写一个教程。 但是也正因为我是个初学者，我可能更加能理解初学者会有什么疑惑以及想要知道些什么。 所以我将根据上述的两本书的教学加上自己的理解，配合Ch">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308191448851.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308204723426.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308194502629.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308210047475.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308210354684.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308213212915.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308213820413.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308215531399.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308215637173.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308215953910.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308222829815.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308223030917.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308223251552.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308223527548.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308224039543.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308211321694.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308211352396.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308211407252.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308211604343.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308212625179.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308214146380.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308221233373.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308221336343.png">
+<meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308221640786.png">
+<meta property="article:published_time" content="2023-03-08T10:25:34.000Z">
+<meta property="article:modified_time" content="2023-03-08T14:42:30.878Z">
+<meta property="article:author" content="yunwuhai">
+<meta property="article:tag" content="ChatGPT">
+<meta property="article:tag" content="Rust">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308191448851.png">
+
+<link rel="canonical" href="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>跟着我学Rust_1 | 云雾海的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">云雾海的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习和生活</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/home/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">18</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">3</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">16</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/yunwuhai" class="github-corner" title="我的GitHub" aria-label="我的GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="yunwuhai">
+      <meta itemprop="description" content="正在学习中">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="云雾海的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          跟着我学Rust_1
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-03-08 18:25:34 / 修改时间：22:42:30" itemprop="dateCreated datePublished" datetime="2023-03-08T18:25:34+08:00">2023-03-08</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本教程参考了《<a target="_blank" rel="noopener" href="https://doc.rust-lang.org/book/title-page.html#the-rust-programming-language">The Rust Programming Language</a>》和《<a target="_blank" rel="noopener" href="https://doc.rust-lang.org/stable/rust-by-example/index.html#rust-by-example">Rust by Example</a>》，如果你希望一个更加官方严谨的教程，请参考这两本书。</p>
+<p>严谨点来说，这个系列并不能称之为教程，毕竟我也只是一个初学者而已，还不够资格来独立写一个教程。</p>
+<p>但是也正因为我是个初学者，我可能更加能理解初学者会有什么疑惑以及想要知道些什么。</p>
+<p>所以我将根据上述的两本书的教学加上自己的理解，配合ChatGPT给我实时解答，完成这个教程。</p>
+<span id="more"></span>
+<p>为了方便后面的阅读，我需要先在这里进行一下简单的说明：</p>
+<ol>
+<li>当我说《Rust Book》，我是在说《<a target="_blank" rel="noopener" href="https://doc.rust-lang.org/book/title-page.html#the-rust-programming-language">The Rust Programming Language</a>》。</li>
+<li>当我说《Rust Exp》，我是在说《<a target="_blank" rel="noopener" href="https://doc.rust-lang.org/stable/rust-by-example/index.html#rust-by-example">Rust by Example</a>》。</li>
+<li>如果我对学习的内容有想法，问了ChatGPT，并认为这个问答是正确有意义的，我会将其以截图的形式插入。</li>
+<li>在绝大多数情况下，你可以相信ChatGPT，但如果ChatGPT的阐述和《Rust Book》、《Rust Exp》或你在其它语言的教程中学到的知识发生了冲突，你可能更应该相信那些教程的知识内容。</li>
+<li>我会尽量以完全零基础的视角来写这个教程，对于一些编程小白来说可能无法理解的词语我会让ChatGPT进行解释并放在每个大章末尾的知识补充的地方，如果你在阅读的时候发现有什么不懂，可以勾选并按<code>Ctrl+F</code>来搜索我是否有在后面解释。但我并不能保证我会不会有所遗漏。如果真出现了你不明白的地方而我又没有解释，还劳烦百度谷歌一下，或者问问你的ChatGPT、New Bing，不过放心，我会让这种地方尽量少出现。</li>
+<li>在完成操作的时候，请先看完整个小章节后再行动，否则你可能会错过一些写在后面更好更便利的操作。</li>
+<li>一些内容如果其它教程或文档已有了，而且我认为不是很重要（比如说一些平常不会用到也不需要去记的内容），我会告诉你有这么个东西，然后具体细节就直接贴链接了。</li>
+</ol>
+<h2 id="前置准备"><a href="#前置准备" class="headerlink" title="前置准备"></a>前置准备</h2><h3 id="VSCode安装"><a href="#VSCode安装" class="headerlink" title="VSCode安装"></a>VSCode安装</h3><p>我并不打算在这里讲述Rust语言有多好或者它擅长用来做什么，毕竟当你打算学习Rust这门新语言的时候，你肯定已经知道这些东西了。所以我们直接开始环境的安装就好。</p>
+<p>首先，我们安装一个vscode（Visual Studio Code），它是一个免费的开源代码编辑器，事实上除了Rust，你几乎可以在这个编辑器上开发任何语言，而且在性能的表现上也非常好。vscode支持常见的Windows、macOS、Linux平台，你可以直接到vscode的<a target="_blank" rel="noopener" href="https://code.visualstudio.com/">官网</a>下载对应安装包然后安装，甚至你可以直接在微软商店（如果你是Windows用户的话）中下载安装。推荐勾选的内容如下图所示（以Windows为例，这种勾选方式主要是方便在各种地方以不同方式打开vscode，但并非强制）。</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308191448851.png" alt="vscode安装推荐选项"></p>
+<p>下载完成后，我们先不忙配置插件这些，而是安装一下Rust环境。</p>
+<h3 id="Rust安装"><a href="#Rust安装" class="headerlink" title="Rust安装"></a>Rust安装</h3><p>关于Rust的安装实际上也很简单，打开Rust的<a target="_blank" rel="noopener" href="https://www.rust-lang.org/zh-CN/">官网</a>，然后根据官网给出的提示下载就行。当然你实在想看教程，此处是《Rust Book》的<a target="_blank" rel="noopener" href="https://doc.rust-lang.org/book/ch01-01-installation.html#installation">安装教程</a>。</p>
+<p>完成安装步骤后，可以使用下面两个指令来测试是否安装成功：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rustc -V # 检查rustc是否安装成功</span><br><span class="line">cargo -V # 检查cargo是否安装成功</span><br></pre></td></tr></table></figure>
+<p>这是我在网上找的另一个安装教程讲的方法，和《Rust Book》不同，他还要检查<code>cargo</code>是否安装成功。</p>
+<p>我知道Rust是一门编译型语言，所以<code>rustc</code>听名字我猜测应该是Rust的编译器，但是<code>cargo</code>是什么东西？</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308204723426.png" alt="rustc和cargo的作用"></p>
+<h3 id="插件安装"><a href="#插件安装" class="headerlink" title="插件安装"></a>插件安装</h3><p>完成上述步骤后，我们就可以进行vscode的相关插件安装了，我目前开启使用的是这几个插件，我已经在这里标注好了它们的作用。</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308194502629.png" alt="vscode推荐插件"></p>
+<h3 id="Rust更新"><a href="#Rust更新" class="headerlink" title="Rust更新"></a>Rust更新</h3><p>如果你已经安装了Rust，但想更新到最新版本，可以使用以下指令来完成更新到最新版本：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rustc update</span><br></pre></td></tr></table></figure>
+<h3 id="Rust卸载"><a href="#Rust卸载" class="headerlink" title="Rust卸载"></a>Rust卸载</h3><p>如果你不想用Rust了，可以使用如下指令卸载它：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rustup self uninstall</span><br></pre></td></tr></table></figure>
+<h3 id="Rust本地文档"><a href="#Rust本地文档" class="headerlink" title="Rust本地文档"></a>Rust本地文档</h3><p>如果你希望查看Rust官方提供的离线文档，可以使用如下指令查看：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rustup doc</span><br></pre></td></tr></table></figure>
+<h2 id="工具测试"><a href="#工具测试" class="headerlink" title="工具测试"></a>工具测试</h2><h3 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h3><p>虽然经过刚才的安装，我们好像已经安装好Rust了，但是一般来说我们在安装完一个语言的开发环境后，还是应该先写一个<code>Hello World</code>，来测试一下这些工具能不能用。</p>
+<p>事实上，我们从刚才的Rust安装部分了解到，我们所安装的Rust环境，有两个非常重要的软件就是<code>rustc</code>和<code>cargo</code>。</p>
+<p>但是从刚才对<code>cargo</code>的介绍中我们了解到<code>cargo</code>拥有构建项目的能力，但这个能力一般来说是编译器所拥有的，而<code>rustc</code>才是编译器。</p>
+<p>那么究竟是怎么回事呢？我有一点猜测：</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308210047475.png" alt="cargo和rustc的区别"></p>
+<p>看样子<code>rustc</code>是被嵌入在了<code>cargo</code>里面了，那意思是我们平常可不可以只用<code>cargo</code>就行了？</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308210354684.png" alt="cargo还是rustc"></p>
+<p>看样子确实可以，不过这一次我还是打算两个都试试，毕竟我们是要检测我们的工具是不是好的。</p>
+<h3 id="rustc测试"><a href="#rustc测试" class="headerlink" title="rustc测试"></a>rustc测试</h3><p>现在，随便创建一个文件夹作为你的项目文件夹，并用你的vscode打开这个文件夹，同时新建一个文件<code>main.rs</code>，其中<code>main</code>是程序文件的名字，而<code>rs</code>作为扩展名则表示这是个Rust程序。</p>
+<p>然后新建一个vscode的终端（在界面左上角可以看到）。</p>
+<p>我们现在想要实现一个<code>Hello World</code>程序，而用Rust实现这个功能很简单，你只需要将如下内容粘贴到你的<code>main.rs</code>中：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;Hello, world!&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>关于这个程序是怎么回事，我们等会讲。</p>
+<p>接着保存文件，因为我们要开始编译了。</p>
+<p>在vscode的终端里输入：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rustc main.rs</span><br></pre></td></tr></table></figure>
+<p>这个命令的意思就是用rustc来编译main.rs。在执行完这个命令后可以发现，我们的项目文件夹里多出了一个<code>main.exe</code>程序（不同平台后缀不一样，总之就是可执行文件）。</p>
+<p>我们再在命令行输入:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./main</span><br></pre></td></tr></table></figure>
+<p>即可运行这个程序，同时这个程序将在命令行输出<code>Hello, world!</code>，效果如下图：</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308213212915.png" alt="rustc编译输出"></p>
+<p>很好，看来我们的rustc是正常的。</p>
+<h3 id="cargo测试"><a href="#cargo测试" class="headerlink" title="cargo测试"></a>cargo测试</h3><p>现在，让我们试试<code>cargo</code>如何。</p>
+<p>使用<code>cargo</code>来管理项目会比<code>rustc</code>更加方便，比如我们创建项目的时候不用手动创建文件夹和程序，你只需要在命令行输入：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cargo new hello_world</span><br></pre></td></tr></table></figure>
+<p>然后，<code>cargo</code>就会帮你生成一个完整的工程项目，整个项目大概是长这样的，我在<code>Rust</code>文件夹下创建了一个<code>hello_world</code>项目，而这个项目下有<code>src</code>文件夹，里面放了个<code>main.rs</code>，外面还放了<code>.gitignore</code>文件和<code>Cargo.toml</code>，如果你不是在vscode界面，也许还能发现一个<code>.git</code>文件夹。</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308213820413.png" alt="项目解构"></p>
+<p>其中名字带<code>git</code>的文件都是git管理项目要用的，我们不用管，当然事实上你也可以用:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cargo new hello_world --vcs=none</span><br></pre></td></tr></table></figure>
+<p>来阻止生成git相关文件。</p>
+<p>而<code>Cargo.toml</code>文件是<code>cargo</code>包管理文件，暂时还不需要用，所以我们目前不需要太了解。</p>
+<p>现在回到<code>main.rs</code>中，你会发现里面已经写好了<code>Hello World</code>程序的代码，现在我们只需要直接编译运行就可以了。</p>
+<p>使用终端，通过<code>cd</code>命令进入项目文件夹，然后使用<code>cargo build</code>编译项目，此时你会发现你的项目里多了一个文件夹<code>target</code>，而<code>cargo</code>正是讲编译的输出结果放在了这里面，输入<code>./target/debug/hello_world</code>即可运行程序，完整流程如下图所示：</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308215531399.png" alt="cargo build"></p>
+<p>不过，这种方式就稍微有点慢了，我们有更快的方式，输入如下代码即可一键运行项目：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cargo run</span><br></pre></td></tr></table></figure>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308215637173.png" alt="cargo run"></p>
+<p>但你可能发现了，上面我们在使用<code>cargo</code>的时候总是需要完整编译出可执行程序才行，但是有时候我们可能仅仅是希望进行一次代码语法检查而不需要完整编译，因为编译一般会花费很长的时间（<code>Hello World</code>项目比较小你可能不觉得，但当程序多了后，编译器花费的时间将会猛增）。</p>
+<p>为此我们可以使用如下代码，它将只执行检查而不编译：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cargo check</span><br></pre></td></tr></table></figure>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308215953910.png" alt="cargo check"></p>
+<p>此外，你可能发现了，我们生成的二进制程序是在<code>debug</code>文件夹里，而debug代表着调试模式，程序运行起来会更加臃肿和缓慢，尽管在调试开发阶段调试模式很有用，但是我们希望在开发完成后能有发布realse模式，而这也很简单，在<code>build</code>后面加上<code>release</code>就好了：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cargo build --release</span><br></pre></td></tr></table></figure>
+<p>经过这些测试实验，我们也可以确定，我们的cargo也是正常的了。</p>
+<h2 id="程序分析"><a href="#程序分析" class="headerlink" title="程序分析"></a>程序分析</h2><h3 id="main函数"><a href="#main函数" class="headerlink" title="main函数"></a>main函数</h3><p>现在让我们回到我们刚才的<code>Hello World</code>程序，尽管我们将在未来解释具体的语法，但是看不懂这个程序始终还是让人感觉如鲠在喉，为此我们还是要稍微分析一下这个<code>Hello World</code>程序。</p>
+<p>如果你有过其它语言的开发经验，其实会感觉这个程序非常简单，几乎一眼就看得出来什么意思。</p>
+<p>首先是包裹在外面的<code>main</code>程序，或者称之为<code>main</code>函数，我们可以把它拆解出来：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>()&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以发现，这个函数以<code>fn</code>开头，后面紧跟着的是一个单词<code>main</code>和一个小括号<code>()</code>。其中<code>fn</code>很显然，是单词<code>function</code>的缩写，代表函数的意思。而这个函数的名字是什么呢？正是后面紧跟着的这个<code>main</code>。</p>
+<p>事实上<code>main</code>函数很重要，一般而言，很多语言都会将<code>main</code>函数作为它们程序运行的起点或者说接口。</p>
+<p>而紧跟在<code>main</code>函数的小括号，则是放参数列表的地方，里面是空的，说明Rust的<code>main</code>函数可以没有参数。</p>
+<p>至于后面的大括号，则包裹了这个函数内部的所有代码，Rust的函数实现应该在大括号里面进行。</p>
+<h3 id="println宏"><a href="#println宏" class="headerlink" title="println宏"></a>println宏</h3><p>我们看刚才被拆解出来的剩余代码：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;Hello, world!&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>表面上来看，从文字的角度不难得知是用这一段话让我们输出了<code>Hello, world!</code>，他似乎是一个函数的调用，但是奇怪的是中间出现了一个<code>!</code>。</p>
+<p>很显然，刚才我们的<code>main</code>函数的<code>main</code>和<code>()</code>中间并没有出现什么<code>!</code>，那么如果这也是个函数的话，为什么会有一个多余的<code>!</code>呢？（这是对完全零基础的同学的补充注释，一般而言，编程语言的函数或变量名称里是不会出现<code>!</code>这种符号的，而Rust也是如此）</p>
+<p>而事实上，<code>println!</code>确实不是一个函数，而是一个宏。</p>
+<p>可能一些学过C或C++的朋友知道宏这么一种概念，但是Rust的宏和C语言的宏是不一样的：</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308222829815.png" alt="rust的宏和C语言的宏区别"></p>
+<p>不过我们可能更想知道的是Rust的宏和函数之间的区别，因为他俩长得似乎好像：</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308223030917.png" alt="rust的宏和函数的区别"></p>
+<p>嗯，大概懂了，但是还是有点不太明白为什么要把<code>println!</code>写成宏，而不是用函数来实现：</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308223251552.png" alt="为什么println要弄成宏"></p>
+<p>嗯，有点感觉了，让我们深入一下：</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308223527548.png" alt="c语言简单实现println!"></p>
+<p>OK，基本上明白了，实际上<code>println!</code>应该在底层仍然是用了某种输出函数来进行工作，但是它还使用了一些判断、类型推导、格式化字符串转换等宏语句，来一起完成整个宏，而当我们把参数放到这个宏里面的时候，在编译期间，编译器会对里面的参数根据宏的具体实现进行处理展开，最后将其填充到一个底层函数中让它把所有数据发送出来。</p>
+<p>大致应该是这么个意思，我最后向ChatGPT确认了一下：</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308224039543.png" alt="我对println!的理解确认"></p>
+<p>OK，看来我们已经差不多明白这个<code>Hello World</code>程序做了些什么了。</p>
+<p>当然就算现在还不太明白也没关系，我们后面肯定还会继续遇到宏的，到时候学了应该就懂了。</p>
+<h2 id="知识补充"><a href="#知识补充" class="headerlink" title="知识补充"></a>知识补充</h2><h3 id="编译型语言和解释型语言"><a href="#编译型语言和解释型语言" class="headerlink" title="编译型语言和解释型语言"></a>编译型语言和解释型语言</h3><p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308211321694.png" alt="编译型语言和解释型语言"></p>
+<h3 id="编译和编译器"><a href="#编译和编译器" class="headerlink" title="编译和编译器"></a>编译和编译器</h3><p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308211352396.png" alt="编译"></p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308211407252.png" alt="编译器"></p>
+<h3 id="包管理器"><a href="#包管理器" class="headerlink" title="包管理器"></a>包管理器</h3><p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308211604343.png" alt="包管理器"></p>
+<h3 id="Hello-World程序"><a href="#Hello-World程序" class="headerlink" title="Hello World程序"></a>Hello World程序</h3><p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308212625179.png" alt="HelloWorld"></p>
+<h3 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h3><p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308214146380.png" alt="Git"></p>
+<h3 id="main函数-1"><a href="#main函数-1" class="headerlink" title="main函数"></a>main函数</h3><p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308221233373.png" alt="main"></p>
+<h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308221336343.png" alt="函数"></p>
+<h3 id="参数列表"><a href="#参数列表" class="headerlink" title="参数列表"></a>参数列表</h3><p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308221640786.png" alt="参数列表"></p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">猜你喜欢</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\blog\ChatGPT问答\ChatGPT：使用vscode开发nrf52832\" rel="bookmark">ChatGPT：使用vscode开发nrf52832</a></div>
+    </li>
+  </ul>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>yunwuhai
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/" title="跟着我学Rust_1">https://yunwuhai.github.io/blog/编程语言/Rust/跟着我学Rust_1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ChatGPT/" rel="tag"># ChatGPT</a>
+              <a href="/tags/Rust/" rel="tag"># Rust</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/ChatGPT%E9%97%AE%E7%AD%94/ChatGPT%EF%BC%9A%E4%BD%BF%E7%94%A8vscode%E5%BC%80%E5%8F%91nrf52832/" rel="prev" title="ChatGPT：使用vscode开发nrf52832">
+      <i class="fa fa-chevron-left"></i> ChatGPT：使用vscode开发nrf52832
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87"><span class="nav-text">前置准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#VSCode%E5%AE%89%E8%A3%85"><span class="nav-text">VSCode安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Rust%E5%AE%89%E8%A3%85"><span class="nav-text">Rust安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%92%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="nav-text">插件安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Rust%E6%9B%B4%E6%96%B0"><span class="nav-text">Rust更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Rust%E5%8D%B8%E8%BD%BD"><span class="nav-text">Rust卸载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Rust%E6%9C%AC%E5%9C%B0%E6%96%87%E6%A1%A3"><span class="nav-text">Rust本地文档</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7%E6%B5%8B%E8%AF%95"><span class="nav-text">工具测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-text">基础概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rustc%E6%B5%8B%E8%AF%95"><span class="nav-text">rustc测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cargo%E6%B5%8B%E8%AF%95"><span class="nav-text">cargo测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90"><span class="nav-text">程序分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#main%E5%87%BD%E6%95%B0"><span class="nav-text">main函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#println%E5%AE%8F"><span class="nav-text">println宏</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E8%A1%A5%E5%85%85"><span class="nav-text">知识补充</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%9E%8B%E8%AF%AD%E8%A8%80%E5%92%8C%E8%A7%A3%E9%87%8A%E5%9E%8B%E8%AF%AD%E8%A8%80"><span class="nav-text">编译型语言和解释型语言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%92%8C%E7%BC%96%E8%AF%91%E5%99%A8"><span class="nav-text">编译和编译器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%85%E7%AE%A1%E7%90%86%E5%99%A8"><span class="nav-text">包管理器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hello-World%E7%A8%8B%E5%BA%8F"><span class="nav-text">Hello World程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Git"><span class="nav-text">Git</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#main%E5%87%BD%E6%95%B0-1"><span class="nav-text">main函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0"><span class="nav-text">函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E5%88%97%E8%A1%A8"><span class="nav-text">参数列表</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">yunwuhai</p>
+  <div class="site-description" itemprop="description">正在学习中</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yunwuhai</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

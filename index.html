@@ -131,7 +131,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">17</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">16</span></a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -191,7 +191,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80ChatGPT%E5%92%8CRust%E5%9C%A3%E7%BB%8F%E5%AD%A6Rust_2/">
+    <link itemprop="mainEntityOfPage" href="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -205,7 +205,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80ChatGPT%E5%92%8CRust%E5%9C%A3%E7%BB%8F%E5%AD%A6Rust_2/" class="post-title-link" itemprop="url">跟着ChatGPT和Rust圣经学Rust_2</a>
+            <a href="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/" class="post-title-link" itemprop="url">跟着我学Rust_1</a>
         </h2>
 
         <div class="post-meta">
@@ -216,7 +216,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2023-03-08 16:25:31 / 修改时间：18:22:54" itemprop="dateCreated datePublished" datetime="2023-03-08T16:25:31+08:00">2023-03-08</time>
+              <time title="创建时间：2023-03-08 18:25:34 / 修改时间：22:42:30" itemprop="dateCreated datePublished" datetime="2023-03-08T18:25:34+08:00">2023-03-08</time>
             </span>
 
           
@@ -230,80 +230,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="前篇"><a href="#前篇" class="headerlink" title="前篇"></a>前篇</h2><p>你应该已经看完了<a href="跟着ChatGPT和Rust圣经学Rust_1.md">前篇</a>。</p>
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本教程参考了《<a target="_blank" rel="noopener" href="https://doc.rust-lang.org/book/title-page.html#the-rust-programming-language">The Rust Programming Language</a>》和《<a target="_blank" rel="noopener" href="https://doc.rust-lang.org/stable/rust-by-example/index.html#rust-by-example">Rust by Example</a>》，如果你希望一个更加官方严谨的教程，请参考这两本书。</p>
+<p>严谨点来说，这个系列并不能称之为教程，毕竟我也只是一个初学者而已，还不够资格来独立写一个教程。</p>
+<p>但是也正因为我是个初学者，我可能更加能理解初学者会有什么疑惑以及想要知道些什么。</p>
+<p>所以我将根据上述的两本书的教学加上自己的理解，配合ChatGPT给我实时解答，完成这个教程。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80ChatGPT%E5%92%8CRust%E5%9C%A3%E7%BB%8F%E5%AD%A6Rust_2/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80ChatGPT%E5%92%8CRust%E5%9C%A3%E7%BB%8F%E5%AD%A6Rust_1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="yunwuhai">
-      <meta itemprop="description" content="正在学习中">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="云雾海的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80ChatGPT%E5%92%8CRust%E5%9C%A3%E7%BB%8F%E5%AD%A6Rust_1/" class="post-title-link" itemprop="url">跟着ChatGPT和Rust圣经学Rust_1</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-03-08 02:15:48 / 修改时间：16:35:26" itemprop="dateCreated datePublished" datetime="2023-03-08T02:15:48+08:00">2023-03-08</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>这个系列将会是一个学习笔记，而非一个教程。</p>
-<p>我使用了《<a target="_blank" rel="noopener" href="https://course.rs/about-book.html">Rust语言圣经(Rust Course)</a>》作为我的学习教程，你可以通过点击这个链接进入。</p>
-<p>但同时，我发现这本书在一定程度上有点太跳跃了，可能是作者希望内容更加有趣，但是一些在教程后面才会出现的知识点代码，却会在前面的章节出现，这着实让我有点难受，最终我决定搭配ChatGPT来了结合使用。</p>
-<p>ChatGPT将作为我的随身老师，如果我有什么疑问，都会问他，我会将整个询问过程截图记录下来并保存在这个笔记中。</p>
-<p><strong>这个笔记中的内容并不一定准确，首先是ChatGPT有可能会给我不懂装懂，其次是我这个是笔记而不是教程，我会根据教程中的东西进行自己的理解，但是这个理解可能不一定是正确的，可能在未来的学习中被我推翻，但是你可以跟着这个思路一起和我思考，同时这个笔记是默认我拥有C语言基础或者C++、C#之类的类C语言基础的（事实上我对非类C系列的语言并不是特别了解，只能说懂个大概的程度），所以一些在这些语言中太过基础的东西我不会记录，但一些如Javascript语言中很基础但C语言中不存在的概念我还是会记录。</strong></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80ChatGPT%E5%92%8CRust%E5%9C%A3%E7%BB%8F%E5%AD%A6Rust_1/#more" rel="contents">
+              <a class="btn" href="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -958,6 +891,87 @@
   
   
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://yunwuhai.github.io/blog/%E7%AE%97%E6%B3%95%E7%BC%96%E7%A8%8B/%E7%AE%97%E6%B3%95%EF%BC%9A%E6%9C%80%E5%A4%A7%E5%AD%90%E5%88%97%E5%92%8C%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="yunwuhai">
+      <meta itemprop="description" content="正在学习中">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="云雾海的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/blog/%E7%AE%97%E6%B3%95%E7%BC%96%E7%A8%8B/%E7%AE%97%E6%B3%95%EF%BC%9A%E6%9C%80%E5%A4%A7%E5%AD%90%E5%88%97%E5%92%8C%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">算法：最大子列和问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-04-02 18:11:03" itemprop="dateCreated datePublished" datetime="2022-04-02T18:11:03+08:00">2022-04-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-02-28 16:18:19" itemprop="dateModified" datetime="2023-02-28T16:18:19+08:00">2023-02-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">算法笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="题目来源"><a href="#题目来源" class="headerlink" title="题目来源"></a>题目来源</h2><p>浙大数据结构MOOC-PTA的课后题</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/blog/%E7%AE%97%E6%B3%95%E7%BC%96%E7%A8%8B/%E7%AE%97%E6%B3%95%EF%BC%9A%E6%9C%80%E5%A4%A7%E5%AD%90%E5%88%97%E5%92%8C%E9%97%AE%E9%A2%98/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
 
   
   <nav class="pagination">
@@ -1027,7 +1041,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-count">16</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
