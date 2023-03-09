@@ -23,7 +23,7 @@
 
   <meta name="description" content="前言本教程参考了《The Rust Programming Language》和《Rust by Example》，如果你希望一个更加官方严谨的教程，请参考这两本书。 严谨点来说，这个系列并不能称之为教程，毕竟我也只是一个初学者而已，还不够资格来独立写一个教程。 但是也正因为我是个初学者，我可能更加能理解初学者会有什么疑惑以及想要知道些什么。 所以我将根据上述的两本书的教学加上自己的理解，配合Ch">
 <meta property="og:type" content="article">
-<meta property="og:title" content="跟着我学Rust_1">
+<meta property="og:title" content="跟着我学Rust_1_创世篇">
 <meta property="og:url" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/index.html">
 <meta property="og:site_name" content="云雾海的博客">
 <meta property="og:description" content="前言本教程参考了《The Rust Programming Language》和《Rust by Example》，如果你希望一个更加官方严谨的教程，请参考这两本书。 严谨点来说，这个系列并不能称之为教程，毕竟我也只是一个初学者而已，还不够资格来独立写一个教程。 但是也正因为我是个初学者，我可能更加能理解初学者会有什么疑惑以及想要知道些什么。 所以我将根据上述的两本书的教学加上自己的理解，配合Ch">
@@ -53,7 +53,7 @@
 <meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308221336343.png">
 <meta property="og:image" content="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/image-20230308221640786.png">
 <meta property="article:published_time" content="2023-03-08T10:25:34.000Z">
-<meta property="article:modified_time" content="2023-03-08T14:42:30.878Z">
+<meta property="article:modified_time" content="2023-03-09T05:00:10.005Z">
 <meta property="article:author" content="yunwuhai">
 <meta property="article:tag" content="ChatGPT">
 <meta property="article:tag" content="Rust">
@@ -73,7 +73,7 @@
   };
 </script>
 
-  <title>跟着我学Rust_1 | 云雾海的博客</title>
+  <title>跟着我学Rust_1_创世篇 | 云雾海的博客</title>
   
 
 
@@ -159,7 +159,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">16</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">17</span></a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -233,7 +233,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          跟着我学Rust_1
+          跟着我学Rust_1_创世篇
         </h1>
 
         <div class="post-meta">
@@ -242,10 +242,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2023-03-08 18:25:34 / 修改时间：22:42:30" itemprop="dateCreated datePublished" datetime="2023-03-08T18:25:34+08:00">2023-03-08</time>
+              <time title="创建时间：2023-03-08 18:25:34" itemprop="dateCreated datePublished" datetime="2023-03-08T18:25:34+08:00">2023-03-08</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-09 13:00:10" itemprop="dateModified" datetime="2023-03-09T13:00:10+08:00">2023-03-09</time>
+              </span>
 
           
 
@@ -262,6 +268,7 @@
 <p>严谨点来说，这个系列并不能称之为教程，毕竟我也只是一个初学者而已，还不够资格来独立写一个教程。</p>
 <p>但是也正因为我是个初学者，我可能更加能理解初学者会有什么疑惑以及想要知道些什么。</p>
 <p>所以我将根据上述的两本书的教学加上自己的理解，配合ChatGPT给我实时解答，完成这个教程。</p>
+<p>作为创世篇，在这一章中，我们将安装一遍Rust的环境，并使用<code>Hello World</code>测试整个工具链。</p>
 <span id="more"></span>
 <p>为了方便后面的阅读，我需要先在这里进行一下简单的说明：</p>
 <ol>
@@ -380,6 +387,9 @@
   <div class="popular-posts-header">猜你喜欢</div>
   <ul class="popular-posts">
     <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\blog\编程语言\Rust\跟着我学Rust_2\" rel="bookmark">跟着我学Rust_2_筑基篇</a></div>
+    </li>
+    <li class="popular-posts-item">
       <div class="popular-posts-title"><a href="\blog\ChatGPT问答\ChatGPT：使用vscode开发nrf52832\" rel="bookmark">ChatGPT：使用vscode开发nrf52832</a></div>
     </li>
   </ul>
@@ -393,7 +403,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/" title="跟着我学Rust_1">https://yunwuhai.github.io/blog/编程语言/Rust/跟着我学Rust_1/</a>
+    <a href="https://yunwuhai.github.io/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/" title="跟着我学Rust_1_创世篇">https://yunwuhai.github.io/blog/编程语言/Rust/跟着我学Rust_1/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -417,7 +427,10 @@
     <a href="/blog/ChatGPT%E9%97%AE%E7%AD%94/ChatGPT%EF%BC%9A%E4%BD%BF%E7%94%A8vscode%E5%BC%80%E5%8F%91nrf52832/" rel="prev" title="ChatGPT：使用vscode开发nrf52832">
       <i class="fa fa-chevron-left"></i> ChatGPT：使用vscode开发nrf52832
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_2/" rel="next" title="跟着我学Rust_2_筑基篇">
+      跟着我学Rust_2_筑基篇 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -490,7 +503,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-count">17</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

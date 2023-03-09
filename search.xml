@@ -813,12 +813,13 @@
       </tags>
   </entry>
   <entry>
-    <title>跟着我学Rust_1</title>
+    <title>跟着我学Rust_1_创世篇</title>
     <url>/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_1/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本教程参考了《<a href="https://doc.rust-lang.org/book/title-page.html#the-rust-programming-language">The Rust Programming Language</a>》和《<a href="https://doc.rust-lang.org/stable/rust-by-example/index.html#rust-by-example">Rust by Example</a>》，如果你希望一个更加官方严谨的教程，请参考这两本书。</p>
 <p>严谨点来说，这个系列并不能称之为教程，毕竟我也只是一个初学者而已，还不够资格来独立写一个教程。</p>
 <p>但是也正因为我是个初学者，我可能更加能理解初学者会有什么疑惑以及想要知道些什么。</p>
 <p>所以我将根据上述的两本书的教学加上自己的理解，配合ChatGPT给我实时解答，完成这个教程。</p>
+<p>作为创世篇，在这一章中，我们将安装一遍Rust的环境，并使用<code>Hello World</code>测试整个工具链。</p>
 <span id="more"></span>
 <p>为了方便后面的阅读，我需要先在这里进行一下简单的说明：</p>
 <ol>
@@ -1007,6 +1008,93 @@
       </categories>
       <tags>
         <tag>编程教程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>跟着我学Rust_2_筑基篇</title>
+    <url>/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_2/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>经过了上一章的学习，我们已经安装好了Rust环境，甚至使用<code>Hello World</code>程序测试了一遍我们的环境，还大致分析了一下这个程序的构成。</p>
+<p>不过，这一章开始，我们才正式进入开胃菜。</p>
+<p>我将这一章命名为筑基篇，是因为在这一章中，我们将学习一些基本的编程概念（当然也会有一些Rust的语法，但很基础很简单），这些概念是放之四海而皆准的，除了Rust，你也可以在其它语言中使用它。</p>
+<span id="more"></span>
+<h2 id="计组基础"><a href="#计组基础" class="headerlink" title="计组基础"></a>计组基础</h2><p>首先，我们来学习一下计组，也就是计算机组成原理的一些常规基本知识，这有助于你理解程序的运作。</p>
+<p>对于现代电脑而言，其设计思想都源自于<strong>冯诺依曼结构</strong>（冯诺依曼被誉为现代计算机之父，想了解他的生平介绍可以参考这篇<a href="https://zhuanlan.zhihu.com/p/41719949">文章</a>）。</p>
+<p>冯诺依曼结构的核心是确定了计算机结构中的五大部件：</p>
+<ul>
+<li>运算器：负责算术运算和逻辑运算</li>
+<li>控制器：负责控制整个计算机单元的工作</li>
+<li>存储器：负责存储程序和各种数据</li>
+<li>输入设备：负责人到计算机的数据传输，例如鼠标、键盘</li>
+<li>输出设备：负责计算机到人的数据传输，例如屏幕、打印机</li>
+</ul>
+<p>事实上，因为现代半导体行业的发展，运算器和控制器已然一起集成到了CPU中（甚至小部分存储器也集成到了里面），而存储器则分化成了内部存储器（内存）和外部存储器（外存）。</p>
+<p>控制器是整个计算机的核心，其它四种部件都受到控制器的控制。通常而言，计算机的运行过程就是控制器从内存中读取指令（CPU只能直接读取内存中的数据，外存的数据需要先放到内存中才能被读取），然后分析指令并读取相应个数的参数（指令和数据是一起线性传输的，而每个指令能读取多少参数是硬件生产的时候就决定好了的），然后根据这些指令和参数，控制器将会给其它设备发出指令，让他们做相应的操作，最后不断循环这个过程。这个思想同样可以参考图灵机，只不过要将它想象到冯诺依曼结构中。</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_2/image-20230309142217000.png" alt="图灵机"></p>
+<p>好了，我们有上面大概的计组基础就行了，当然如果你还想了解更多，可以去看一看相关的网课，例如《<a href="https://www.bilibili.com/video/BV1cD4y1D7uR">CSAPP-深入理解计算机系统</a>》。</p>
+<h2 id="数据"><a href="#数据" class="headerlink" title="数据"></a>数据</h2><h3 id="操作也是数据"><a href="#操作也是数据" class="headerlink" title="操作也是数据"></a>操作也是数据</h3><p>OK，现在让我们回到编程上。</p>
+<p>通常而言，我们可以把任何一个程序当作一个操作和数据的集合，操作告诉了计算机硬件应该做什么，而数据则告诉了计算机硬件怎么做。以上一章的<code>Hello World</code>为例，<code>println!</code>就是一个操作，而其中的<code>&quot;Hello, world!&quot;</code>则是一段数据， 操作告诉计算机需要在命令行中输出一行文字，而数据告诉计算机这行文字具体的内容是什么。</p>
+<p>从这种角度来看，操作似乎对应了指令的概念，而数据则对应了参数的概念，数据提供了操作指令所需的参数。但是这种说法比较好理解但其实不太准确，因为我们将指令从数据中剥离开了，但事实上指令也是数据的一种，它也是一种参数，只是它对应的是计算机硬件电路，而硬件电路会在接收到指令转化的参数电信号后执行对应的操作。</p>
+<p>而且从存储方式上来说，编程语言的操作和数据都可以最终被解析成二进制数据，然后存储在一个文件里，甚至可以交叉线性存储，至少你如果打开一个二进制程序，没有工具的情况下是很难判断哪些是操作，哪些是数据。</p>
+<p>因此，我们不难得出结论，操作其实也是一种数据。</p>
+<p>这也是为什么我打算先讲数据，然后再讲操作。</p>
+<h3 id="变量和常量"><a href="#变量和常量" class="headerlink" title="变量和常量"></a>变量和常量</h3><h4 id="其他语言中的变量和常量"><a href="#其他语言中的变量和常量" class="headerlink" title="其他语言中的变量和常量"></a>其他语言中的变量和常量</h4><p>变量和常量，这个在计算机中非常常见的名词，从名字上你应该就能大致明白它们的意思。</p>
+<p>变量，也就是可以变化的量；而常量，则是保持常态不变的量。如果你学过其它语言，例如C，你可能可以看懂这样的语句：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> a = <span class="number">5</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> b = <span class="number">5</span>;</span><br></pre></td></tr></table></figure>
+<p>这是两条数据定义语句，分别定义了一个变量a和一个常量b，a被赋值为5，b也被赋值为5。语句前面的<code>int</code>，是指的常量类型，也就是数据类型的概念，这将在下文讲到。</p>
+<p>现在我希望改变它们的值，使二者不相等，这个时候我似乎可以有两种选择，改变a或者改变b，但是注意，我们在定义b的时候在它的前面加上了<code>const</code>，这在C语言中代表你在一开始就告诉了编译器，b是常量。</p>
+<p>编译器会牢牢记住这一点，它明白b是常量，永远都不能改变它的值，所以如果你尝试修改b的值时，编译器就会报错。</p>
+<p>但是如果你尝试改变a，编译器就不会报错了，因为你在最开始就说明了，这是一个变量，它的值是可以改变的。</p>
+<p>所以你其实可以理解为当我们在C语言中为一个变量定义语句前加上一个const，其实就是给这个变量加上了一个只读不写的锁，而编译器将会为你看管好这个锁。</p>
+<p>除此之外，C语言还可以使用<code>#define</code>语句来定义常量，如：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> PI 3.1415926</span></span><br></pre></td></tr></table></figure>
+<p>这句话也是定义了一个常量，但是和前面的定义方法不同，这个常量是交给预处理器解决的，预处理器在读取到这句话后就明白了你在当前文件中把<code>PI</code>这样的一个单词宏定义成了<code>3.1415926</code>。那么，当预处理器在下面发现你写了<code>PI</code>这个单词后，就会用<code>3.1415926</code>在字符上替换它。</p>
+<p>比如你在下面写了这样一个程序：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> r = <span class="number">2</span>;</span><br><span class="line"><span class="type">double</span> s = PI * r * r;</span><br></pre></td></tr></table></figure>
+<p>在经过预处理器处理后，就会变成：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> r = <span class="number">2</span>;</span><br><span class="line"><span class="type">double</span> s = <span class="number">3.1415926</span> * r * r;</span><br></pre></td></tr></table></figure>
+<p>接着，这个程序才会被编译器进行解析处理。</p>
+<p>宏定义的好处是它不会占用多余的内存，但是缺点是它只是一个字符替换，无法做到类型检测等高级检查。</p>
+<h4 id="Rust的变量"><a href="#Rust的变量" class="headerlink" title="Rust的变量"></a>Rust的变量</h4><p>与之相对的，Rust做出了一些创新和优化。</p>
+<p>一个简单的Rust的变量定义是这样的：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">a</span> = <span class="number">5</span>;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">b</span> = <span class="number">5</span>;</span><br></pre></td></tr></table></figure>
+<p>这里定义了两个变量，其中a是可变的变量，b是不可变的变量。</p>
+<p>你可能稍微有点疑惑，什么叫不可变的变量，变量不应该都是可变的吗，这和刚才C语言的const常量有什么区别？</p>
+<p>事实上，Rust的不可变变量和C语言的const常量基本上是一样的，不过Rust在检查的时候更加严格一些。</p>
+<p>在C语言中，<code>const</code>是一种宽松的约定，你告诉编译器这是个常量，并且保证你不会用到它，而编译器会帮你上锁，在你尝试改变它的时候报错。但事实上，这个检查是非常简陋的，通过直接修改赋值的正门走编译器可能会报错，但是如果你可以使用像是指针等方式翻窗来改变里面的值，而C语言编译器并没有能力检查出这些。</p>
+<p>但是如果你在Rust中尝试这种骚操作，那Rust的编译器会一拳头给你打过来（好吧实际上它只是会给你一个非常醒目的报错）。可以这样理解，在Rust中使用变量时你大可以不必记忆其可变性（当然能记住更好），因为Rust编译器会保证你不可能不小心地改变它的值。</p>
+<p>注意，Rust 中的变量默认是不可变的，如果需要定义可变变量，需要在变量名前加上 <code>mut</code> 关键字。例如上面的例子中，变量 <code>a</code> 是可变的，需要加上 <code>mut</code> 关键字，而<code>b</code>没有加，则表明其时不可变的。</p>
+<h5 id="语法规则"><a href="#语法规则" class="headerlink" title="语法规则"></a>语法规则</h5><p>如果你希望在Rust中定义一个变量，你应该这样写：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">var_name</span>: <span class="keyword">type</span> = value;</span><br></pre></td></tr></table></figure>
+<p>其中：</p>
+<ul>
+<li><code>var_name</code>：变量名，用于标识变量。</li>
+<li><code>type</code>：变量的类型，可以根据需要省略类型标注，让编译器自动推导类型。</li>
+<li><code>value</code>：变量的初始值，可以省略，此时变量会默认被赋值为该类型的默认值。</li>
+</ul>
+<p>注意，Rust 中的变量默认是不可变的，如果需要定义可变变量，需要在变量名前加上 <code>mut</code> 关键字。变量应该通过小写字母和下划线分隔组合的方式进行命名。</p>
+<h4 id="Rust的常量"><a href="#Rust的常量" class="headerlink" title="Rust的常量"></a>Rust的常量</h4><p>既然上面说的可变和不可变都是变量，那么很显然Rust应该还有专门的常量定义，比如：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> PI: <span class="type">f64</span> = <span class="number">3.1415926</span>;</span><br></pre></td></tr></table></figure>
+<p>是的，你应该能想到，Rust的常量和C语言的宏定义常量非常相似。而事实上Rust的常量定义相当于一个被嵌入在了编译器而非预处理器中的高级版本宏定义。</p>
+<p>在Rust的常量中，你可以在定义的时候进行一些简单的计算，比如：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> THREE_HOURS_IN_SECONDS: <span class="type">u32</span> = <span class="number">60</span> * <span class="number">60</span> * <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+<p>如果在C语言中定义这样的语句，预处理器会直接把<code>60 * 60 * 3</code>的替换进去，但是Rust则是编译器直接计算这个式子，然后把结果10800当作字面量进行编译，这样做的好处是既保证了运行速度（不需要在运行的时候再计算）同时又保证了可读性（因为上面这一段实际上表示了三个小时有多少秒，通过这样计算的写法就更加简单清晰明了）。</p>
+<h5 id="语法规则-1"><a href="#语法规则-1" class="headerlink" title="语法规则"></a>语法规则</h5><p>如果你希望在Rust中定义一个常量，你应该这样写：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> NAME: <span class="keyword">type</span> = value;</span><br></pre></td></tr></table></figure>
+<p>其中：</p>
+<ul>
+<li><code>NAME</code>：常量名，用于标识常量。</li>
+<li><code>type</code>：常量的类型，必须显式指定类型。</li>
+<li><code>value</code>：常量的值，必须在定义时初始化，不能改变。</li>
+</ul>
+<p>注意，Rust 中的常量必须显式指定类型，一旦定义后，其值不能改变。常量应该通过大写字母和下划线分隔组合的方式进行命名。</p>
+<h4 id="隐藏遮蔽"><a href="#隐藏遮蔽" class="headerlink" title="隐藏遮蔽"></a>隐藏遮蔽</h4><h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><h4 id="标量类型"><a href="#标量类型" class="headerlink" title="标量类型"></a>标量类型</h4><h4 id="复合类型"><a href="#复合类型" class="headerlink" title="复合类型"></a>复合类型</h4><h2 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h2><h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><h3 id="控制流"><a href="#控制流" class="headerlink" title="控制流"></a>控制流</h3><h2 id="规范"><a href="#规范" class="headerlink" title="规范"></a>规范</h2><h3 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h3><h3 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h3><p><a href="https://doc.rust-lang.org/book/appendix-01-keywords.html">《Rust Book》</a>中关于关键字的章节，但是不建议你去背去记，用多了自然就知道了哪些是关键字，而就算没记住你不小心把名字用到了这些关键字上，编译器也会提醒你。</p>
+<h3 id="命名规范"><a href="#命名规范" class="headerlink" title="命名规范"></a>命名规范</h3><p>你可以参考《Rust语言圣经》的<a href="https://course.rs/practice/naming.html#命名规范">命名规范</a>章节和<a href="https://github.com/rust-lang/rfcs/blob/master/text/0430-finalizing-naming-conventions.md">Rust RFC 430</a>，但事实上我认为你不需要去专门记这玩意，因为<code>rustc</code>内嵌了命名风格检查，而如果你安装了我说的那一堆工具链，你可以在vscode上很清楚地根据警告知道自己的命名是否符合规范。</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_2/image-20230309163423202.png" alt="命名规范警告示例"></p>
+<h2 id="知识补充"><a href="#知识补充" class="headerlink" title="知识补充"></a>知识补充</h2><h3 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h3><p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_2/image-20230309161636968.png" alt="作用域"></p>
+]]></content>
+      <tags>
+        <tag>ChatGPT</tag>
+        <tag>Rust</tag>
       </tags>
   </entry>
 </search>
