@@ -824,7 +824,6 @@
 <p>为了方便后面的阅读，我需要先在这里进行一下简单的说明：</p>
 <ol>
 <li>当我说《Rust Book》，我是在说《<a href="https://doc.rust-lang.org/book/title-page.html#the-rust-programming-language">The Rust Programming Language</a>》。</li>
-<li>当我说《Rust Exp》，我是在说《<a href="https://doc.rust-lang.org/stable/rust-by-example/index.html#rust-by-example">Rust by Example</a>》。</li>
 <li>如果我对学习的内容有想法，问了ChatGPT，并认为这个问答是正确有意义的，我会将其以截图的形式插入。</li>
 <li>在绝大多数情况下，你可以相信ChatGPT，但如果ChatGPT的阐述和《Rust Book》、《Rust Exp》或你在其它语言的教程中学到的知识发生了冲突，你可能更应该相信那些教程的知识内容。</li>
 <li>我会尽量以完全零基础的视角来写这个教程，对于一些编程小白来说可能无法理解的词语我会让ChatGPT进行解释并放在每个大章末尾的知识补充的地方，如果你在阅读的时候发现有什么不懂，可以勾选并按<code>Ctrl+F</code>来搜索我是否有在后面解释。但我并不能保证我会不会有所遗漏。如果真出现了你不明白的地方而我又没有解释，还劳烦百度谷歌一下，或者问问你的ChatGPT、New Bing，不过放心，我会让这种地方尽量少出现。</li>
@@ -1035,8 +1034,7 @@
 <p>通常而言，我们可以把任何一个程序当作一个操作和数据的集合，操作告诉了计算机硬件应该做什么，而数据则告诉了计算机硬件怎么做。以上一章的<code>Hello World</code>为例，<code>println!</code>就是一个操作，而其中的<code>&quot;Hello, world!&quot;</code>则是一段数据， 操作告诉计算机需要在命令行中输出一行文字，而数据告诉计算机这行文字具体的内容是什么。</p>
 <p>从这种角度来看，操作似乎对应了指令的概念，而数据则对应了参数的概念，数据提供了操作指令所需的参数。但是这种说法比较好理解但其实不太准确，因为我们将指令从数据中剥离开了，但事实上指令也是数据的一种，它也是一种参数，只是它对应的是计算机硬件电路，而硬件电路会在接收到指令转化的参数电信号后执行对应的操作。</p>
 <p>而且从存储方式上来说，编程语言的操作和数据都可以最终被解析成二进制数据，然后存储在一个文件里，甚至可以交叉线性存储，至少你如果打开一个二进制程序，没有工具的情况下是很难判断哪些是操作，哪些是数据。</p>
-<p>因此，我们不难得出结论，操作其实也是一种数据。</p>
-<p>这也是为什么我打算先讲数据，然后再讲操作。</p>
+<p>因此，我们不难得出结论，操作其实也是一种数据，这有助于你理解编译器的工作和程序运行的方式。</p>
 <h3 id="变量和常量"><a href="#变量和常量" class="headerlink" title="变量和常量"></a>变量和常量</h3><h4 id="其他语言中的变量和常量"><a href="#其他语言中的变量和常量" class="headerlink" title="其他语言中的变量和常量"></a>其他语言中的变量和常量</h4><p>变量和常量，这个在计算机中非常常见的名词，从名字上你应该就能大致明白它们的意思。</p>
 <p>变量，也就是可以变化的量；而常量，则是保持常态不变的量。如果你学过其它语言，例如C，你可能可以看懂这样的语句：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> a = <span class="number">5</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> b = <span class="number">5</span>;</span><br></pre></td></tr></table></figure>
@@ -1087,10 +1085,212 @@
 <li><code>value</code>：常量的值，必须在定义时初始化，不能改变。</li>
 </ul>
 <p>注意，Rust 中的常量必须显式指定类型，一旦定义后，其值不能改变。常量应该通过大写字母和下划线分隔组合的方式进行命名。</p>
-<h4 id="隐藏遮蔽"><a href="#隐藏遮蔽" class="headerlink" title="隐藏遮蔽"></a>隐藏遮蔽</h4><h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><h4 id="标量类型"><a href="#标量类型" class="headerlink" title="标量类型"></a>标量类型</h4><h4 id="复合类型"><a href="#复合类型" class="headerlink" title="复合类型"></a>复合类型</h4><h2 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h2><h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><h3 id="控制流"><a href="#控制流" class="headerlink" title="控制流"></a>控制流</h3><h2 id="规范"><a href="#规范" class="headerlink" title="规范"></a>规范</h2><h3 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h3><h3 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h3><p><a href="https://doc.rust-lang.org/book/appendix-01-keywords.html">《Rust Book》</a>中关于关键字的章节，但是不建议你去背去记，用多了自然就知道了哪些是关键字，而就算没记住你不小心把名字用到了这些关键字上，编译器也会提醒你。</p>
+<h4 id="隐藏遮蔽"><a href="#隐藏遮蔽" class="headerlink" title="隐藏遮蔽"></a>隐藏遮蔽</h4><p>Rust中提供了一种非常有意思的特性，叫做隐藏或者遮蔽（两者的区别仅仅在于主语不同，英语其实就是shadow和overshadow，当我们说A被B隐藏了，实际上也可以说B遮蔽了A）。</p>
+<p>这个特性有什么用呢？简单点讲，其实就是已有的变量可以被新出现的同名变量隐藏，当调用这个变量的时候我们实际上就是在调用新的变量。</p>
+<p>例如：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>()&#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">x</span> = <span class="number">5</span>;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">x</span> = x + <span class="number">1</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;x is &#123;x&#125;&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个程序中，我们先让<code>x</code>的值为5，然后再次使用<code>let</code>重新绑定了一遍<code>x</code>让它的值等于原本的值加<code>1</code>，接着打印出当前的<code>x</code>的值。</p>
+<p>需要注意，隐藏是有作用域的，局部的隐藏仅仅在局部有效，例如我们稍微修改一下上面的代码：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>()&#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">x</span> = <span class="number">5</span>;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">x</span> = x + <span class="number">1</span>;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">let</span> <span class="variable">x</span> = x + <span class="number">4</span>;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;inner x is &#123;x&#125;&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;x is &#123;x&#125;&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这一段代码中，我们定义了一个局部的作用域，在这个作用域中，<code>x</code>被由刚刚进入时的<code>6</code>加了<code>4</code>，变成了<code>10</code>，但是当我们离开这个作用域后，<code>x</code>又会变回<code>6</code>，你可以自己尝试一下。</p>
+<p>同时也要注意，隐藏并不等于<code>mut</code>的重新赋值，因为用于隐藏的这个变量实际上是一个新的变量，位于新的内存，它和被隐藏的变量之间的关系仅仅在于它们拥有相同的名字而已，只要你想，你甚至可以更换类型。而<code>mut</code>则无法做到这些。</p>
+<p>例如我们可以把上面的代码再改一下，变成这样：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>()&#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">x</span> = <span class="number">5</span>;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;first x is &#123;x&#125;&quot;</span>);</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">x</span> = <span class="string">&quot;Hello World!&quot;</span>;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;second x is &#123;x&#125;&quot;</span>);</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">let</span> <span class="variable">x</span> = x.<span class="title function_ invoke__">len</span>();</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;third x is &#123;x&#125;&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;second x is still &#123;x&#125;&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它的输出为：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">first x is 5</span><br><span class="line">second x is Hello World!</span><br><span class="line">third x is 12</span><br><span class="line">second x is still Hello World!</span><br></pre></td></tr></table></figure>
+<h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><h4 id="vscode的辅助类型显示"><a href="#vscode的辅助类型显示" class="headerlink" title="vscode的辅助类型显示"></a>vscode的辅助类型显示</h4><p>当你在使用我之前给出的代码的时候，可能会发现当你把这些东西粘贴到你的vscode后，你的vscode会冒出来一些莫名其妙的东西，例如刚才我们给出的代码，在vscode中会显示：</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_2/image-20230309215555641.png" alt="vscode显示变化"></p>
+<p>其中哪些背景高亮的文字，就是本来我们没有写，但是突然冒出来的文字。</p>
+<p>事实上，这是插件<code>rust-analyzer</code>（这个插件是Rust官方提供的，功能非常强大）提供的类型显示功能，当你在可以显示标出数据类型的时候，如果没有标出，那么<code>rust-analyzer</code>会辅助以只读的方式帮你显示出这个变量的类型，以方便阅读调试。事实上你也可以手动显示添加这些东西。</p>
+<p>任何数据都是有类型的，这不但体现在Rust中，事实上任何的编程语言都有这样的特性，甚至包括那些几乎从来都不用手动标明类型的语言（如Python）。说实话写程序的时候不用标类型是非常爽的，但是当遇到Bug或者维护的时候就会想骂娘了，所以一般情况下我是推荐大家坚持显示添加类型的（只是推荐并非强制，如果你确定你的代码始终会被拥有如<code>rust-analyzer</code>这种辅助显示数据类型的插件的编辑器编辑，其实也无所谓）。</p>
+<h4 id="标量类型"><a href="#标量类型" class="headerlink" title="标量类型"></a>标量类型</h4><p>标量类型代表只包含一个值的类型。</p>
+<p>在Rust中，四种基本的标量类型为：整型、浮点型、布尔型和字符型。</p>
+<p>它们分别表示：整数、小数、逻辑、Unicode。</p>
+<h5 id="整型"><a href="#整型" class="headerlink" title="整型"></a>整型</h5><p>整型的命名规则为：<code>u</code>（无符号整型）或<code>i</code>（有符号整型）加上其对应的比特长度。</p>
+<p>例如<code>u8</code>代表的就是一个长度为8比特的无符号数。</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_2/image-20230309222222252.png" alt="8比特无符号数是什么意思"></p>
+<p>Rust中所有的整型如下表所示：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>长度</th>
+<th>有符号</th>
+<th>无符号</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8-bit</td>
+<td><code>i8</code></td>
+<td><code>u8</code></td>
+</tr>
+<tr>
+<td>16-bit</td>
+<td><code>i16</code></td>
+<td><code>u16</code></td>
+</tr>
+<tr>
+<td>32-bit</td>
+<td><code>i32</code></td>
+<td><code>u32</code></td>
+</tr>
+<tr>
+<td>64-bit</td>
+<td><code>i64</code></td>
+<td><code>u64</code></td>
+</tr>
+<tr>
+<td>128-bit</td>
+<td><code>i128</code></td>
+<td><code>u128</code></td>
+</tr>
+<tr>
+<td>arch</td>
+<td><code>isize</code></td>
+<td><code>usize</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>其中arch是程序指运行的计算机架构，如果是64位计算机那么就是64位，32位计算机就是32位。对于整型，默认类型是<code>i32</code>。</p>
+<p>此外，我们需要对这些整型进行赋值的时候，需要使用整数字面值（也就是整数数字），Rust整数字面值的写法如下图所示：</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_2/image-20230309222901714.png" alt="整数字面值"></p>
+<p>此外你还可以添加下划线分隔符来提高可读性：</p>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_2/image-20230309222932633.png" alt="下划线分隔符"></p>
+<p>有时候我们可能还想要使用ASCII码来参与计算，你可以向一个<code>u8</code>变量进行如<code>b&#39;A&#39;</code>的赋值，这样可以把<code>‘A’</code>的ASCII编码绑定在对应变量上。</p>
+<h5 id="浮点型"><a href="#浮点型" class="headerlink" title="浮点型"></a>浮点型</h5><p>Rust提供两种原生浮点型——<code>f32</code>和<code>f64</code>，它们的比特长度分别为32和64。一般而言，除非你非常需要节省空间、CPU很老旧且程序对精度要求不高，否则一般情况都推荐使用<code>f64</code>，这也是默认值。Rust的浮点型遵从IEEE-754标准。</p>
+<p>浮点数的字面值就是普通的小数写法。</p>
+<h5 id="布尔型"><a href="#布尔型" class="headerlink" title="布尔型"></a>布尔型</h5><p>布尔型代表的是逻辑值，类型为<code>bool</code>。其字面值只有真（<code>true</code>）和假（<code>false</code>），一般常用于控制流中。</p>
+<h5 id="字符型"><a href="#字符型" class="headerlink" title="字符型"></a>字符型</h5><p>字符型代表的是Unicode码，一个Unicode码占4个字节（32bit），其类型为<code>char</code>（感觉和其它语言<code>char</code>只代表ASCII码且长度为8bit相比有点反直觉），但总之记住<code>char</code>类型对应的是Unicode码就好。</p>
+<h4 id="复合类型"><a href="#复合类型" class="headerlink" title="复合类型"></a>复合类型</h4><p>一般来说，我们可以把多个值共同组合成一个类型，此时它就成为了复合类型。Rust原生支持两种复合类型：元组和数组。</p>
+<h5 id="元组"><a href="#元组" class="headerlink" title="元组"></a>元组</h5><p>元组可以将多种不同类型的值组合进同一个复合类型。</p>
+<p>需要注意的是，元组的长度一旦声明，就不能再增减。</p>
+<p>在Rust中，可以使用小括号<code>()</code>来创建元组，例如：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">my_tup</span> = (<span class="number">1</span>, <span class="string">&quot;Hello&quot;</span>, <span class="literal">true</span>, <span class="number">3.14</span>);</span><br></pre></td></tr></table></figure>
+<p>这种方式只能使用默认的标量类型，但是我们可能希望节省一下空间，就可以添加修改类型，写成这样：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">my_tup</span>: (<span class="type">i8</span>, &amp;<span class="type">str</span>, <span class="type">bool</span>, <span class="type">f32</span>) = (<span class="number">1</span>, <span class="string">&quot;Hello&quot;</span>, <span class="literal">true</span>, <span class="number">3.14</span>);</span><br></pre></td></tr></table></figure>
+<p>当想要访问上面的元组数据的时候，可以用索引来访问，注意索引从0开始算起：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">first</span> = my_tuple.<span class="number">0</span>;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">second</span> = my_tuple.<span class="number">1</span>;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">forth</span> = my_tuple.<span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+<p>此外，我们也可以用解构语法来访问：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> (a, b, c, d) = my_tuple;</span><br></pre></td></tr></table></figure>
+<p>使用解构语法的时候，左边括号内的四个变量会一一对应获得<code>my_tup</code>元组中的四个元素。</p>
+<h5 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h5><p>数组可以将同种相同类型的值组合进同一个复合类型。</p>
+<p>需要注意的是，Rust中的数组和其它语言的数组不同，其长度一旦声明将无法再增减。</p>
+<p>在Rust中，可以用中括号<code>[]</code>来创建数组，例如：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">my_arr</span> = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</span><br></pre></td></tr></table></figure>
+<p>如果你希望指定数组中的类型和长度，还可以使用如下方式：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">my_arr</span>: [<span class="type">i8</span>; <span class="number">5</span>] = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</span><br></pre></td></tr></table></figure>
+<p>在这个例子中，我们限制了这个数组元素的类型和元素的个数。</p>
+<p>除此之外，如果你希望创建一个全都是相同值的数组，可以这样写：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">my_arr</span> = [”Haaa<span class="string">&quot;; 5];</span></span><br></pre></td></tr></table></figure>
+<p>在这里，我们创建了一个包含5个元素但全部都是<code>Haaa</code>的数组。</p>
+<p>当想要访问上面的数组的时候，我们可以通过索引来访问：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">first</span> = my_arr[<span class="number">0</span>];</span><br><span class="line"><span class="keyword">let</span> <span class="variable">second</span> = my_arr[<span class="number">1</span>];</span><br></pre></td></tr></table></figure>
+<p>注意，使用索引的时候不要访问不存在的元素，无论是元组还是数组，否则编译器会报错或程序运行会崩溃。</p>
+<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><p>你可能发现了，前面讲的这些类型似乎很受限制，比如复合类型的数组和元组居然都不准改变长度，那么遇到需要改变长度的地方该怎么办？还有我们的字符串对应的那个<code>&amp;str</code>类型也没有讲到。</p>
+<p>不要惊慌，这一篇是筑基篇，我们在后面要学的还长着呢，这些疑问我们将在后面逐渐学习了解到。</p>
+<p>（如果你对<code>&amp;str</code>或<code>字符串</code>感觉很陌生）实际上你可以直接把<code>&amp;str</code>当作一个复合类型，只不过这个复合类型里面放的是一串<code>char</code>。因为<code>char</code>叫字符类型，所以一串<code>char</code>的<code>&amp;str</code>我们也可以称它为<code>字符串</code></p>
+<h2 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h2><h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><p>我们在创世篇就讲过函数的定义了，当然当时只是通过<code>main</code>函数简单分析了一下语法。</p>
+<p>通过关键字<code>fn</code>就可以声明新的函数，语法形如：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">func_name</span>(param1: <span class="type">i32</span>, param2: <span class="type">u32</span>)&#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;param1 is &#123;&#125;, param2 is &#123;&#125;&quot;</span>, param1, param2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中<code>func_name</code>是函数名，<code>param1</code>和<code>param2</code>是两个形参的名字，而后面对应的是它们的类型。事实上函数可以有不定量个形参，且参数类型也是不一定的，每个形参之间用逗号<code>,</code>分隔。注意，在Rust中定义函数的时候必须要注明形参的类型，</p>
+<p>而大括号<code>&#123;&#125;</code>里面则可以填写函数的具体实现。</p>
+<p>调用这样的函数也很简单，例如调用上面的函数，完整的程序就可以写为：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>()&#123;</span><br><span class="line">    <span class="title function_ invoke__">func_name</span>(<span class="number">2</span>, <span class="number">3</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">func_name</span>(param1: <span class="type">i32</span>, param2: <span class="type">i32</span>)&#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;param1 is &#123;&#125;, param2 is &#123;&#125;&quot;</span>, param1, param2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中我在<code>main</code>函数中调用了<code>func_name</code>函数，通过<code>函数名(实参表)</code>的方式，你就可以完成参数填写，上面这个例子就是将两个字面量<code>2</code>和<code>3</code>分别作为<code>param1</code>和<code>param2</code>在<code>func_name</code>函数中执行。</p>
+<p>不懂实参和形参可以参考后面的知识补充，用不太准确的说法来形容形参和实参，你可以理解为形参是写了这样一段句子（以上面这个程序为例）：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">param1</span>: <span class="type">i32</span> = ?<span class="number">1</span>;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">param2</span>: <span class="type">i32</span> = ?<span class="number">2</span>;</span><br></pre></td></tr></table></figure>
+<p>其中<code>?1</code>和<code>?2</code>相当于两个空白，因为存在空白所以无法直接执行，但当我们调用这个函数的时候，就需要为这个函数补上，比如<code>?1</code>就写成了<code>2</code>，<code>?2</code>就写成了<code>3</code>，这样句子就成了：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">param1</span>: <span class="type">i32</span> = <span class="number">2</span>;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">param2</span>: <span class="type">i32</span> = <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+<p>所以后面的<code>println!</code>在执行的时候就可以用<code>param1</code>和<code>param2</code>了。</p>
+<p>当然在实际编译中，这个过程并不会被解析成这样，而是类似于函数在执行的时候自动去取参数以完成传参，但这种写法有利于你的理解。</p>
+<p>注意，一般情况下Rust语言总是从<code>main</code>函数开始，从上往下依次执行，如果遇到函数则会先跳转到函数中，然后再在函数中执行，直到执行完这个函数，再跳回来继续向下执行。这个内容我们将具体在本章的<a href="#控制流">控制流</a>部分讲解。</p>
+<p>此外，函数还拥有返回值，默认的返回值是空元组<code>()</code>，当我们希望返回值是其它类型时，需要在函数名后加上<code>-&gt;type</code>，并且在函数块（块是指用一对大括号<code>&#123;&#125;</code>包裹的代码段，如果你不清楚块是什么，请参考后面的<a href="#块">块</a>）末尾加上一行对应返回值且不加分号<code>;</code>的表达式（如果你不了解表达式和语句，请参考后面的<a href="#语句和表达式">语句和表达式</a>），例如：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>()&#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">x</span> = <span class="title function_ invoke__">func_name</span>(<span class="number">2</span>, <span class="number">5</span>);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;x = &#123;x&#125;&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">func_name</span>(param1: <span class="type">i32</span>, param2: <span class="type">i32</span>) <span class="punctuation">-&gt;</span> <span class="type">i32</span>&#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;param1 is &#123;&#125;, param2 is &#123;&#125;&quot;</span>, param1, param2);</span><br><span class="line">    param1 + param2</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意返回值并非必须获取的，你可以像使用<code>println!</code>那样直接使用<code>func_name</code>，这样我们将忽略最后的返回值而只是使用其中会产生的效果。但是如果你希望有返回值并且希望使用这个返回值，你必须确定你在实现过程中的数据类型是匹配的。</p>
+<h3 id="计算"><a href="#计算" class="headerlink" title="计算"></a>计算</h3><p>很多时候，我们需要进行计算，无论是字面值的计算、变量的计算、常量的计算，甚至它们的混合计算。我们需要非常丰富复杂的计算符来满足这一切。</p>
+<p>通常而言，我们可以有<code>+,-,*,/</code>来实现这一切，例如：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">a</span> = <span class="number">1</span> + <span class="number">2</span> - <span class="number">3</span> * <span class="number">4</span> / <span class="number">5</span>;</span><br></pre></td></tr></table></figure>
+<p>上面就完成了一个<code>1</code>加<code>2</code>减<code>3</code>乘以<code>4</code>除以<code>5</code>的计算。</p>
+<p>当然我们还可以利用小括号来提升计算优先度：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">a</span> = (<span class="number">1</span> + (<span class="number">2</span> - <span class="number">3</span>)) * (<span class="number">4</span> / <span class="number">5</span>);</span><br></pre></td></tr></table></figure>
+<p>你可以阅读《Rust Book》的<a href="https://doc.rust-lang.org/book/appendix-02-operators.html#appendix-b-operators-and-symbols">运算符附录</a>来获知Rust所有的运算符，建议大概看一下有些什么，但是不用记，需要用到的时候再查。</p>
+<h3 id="控制流"><a href="#控制流" class="headerlink" title="控制流"></a>控制流</h3><p>我们之前已经说过，Rust代码总是从<code>main</code>函数开始从上到下运行，且遇到函数后会跳入并从该函数开始从上到下运行。</p>
+<p>不过很显然，我们并非总是希望从上到下运行，有时候我们希望重复运行好几次同一段代码而不是手动复制几遍，有时候我们需要根据条件选择运行一些代码而非全部运行，这个时候我们就需要我们的控制流了。</p>
+<p>Rust中最常见的控制流有两个，判断和循环。</p>
+<h4 id="判断"><a href="#判断" class="headerlink" title="判断"></a>判断</h4><h5 id="双分支"><a href="#双分支" class="headerlink" title="双分支"></a>双分支</h5><p>我们使用<code>if</code>来进行判断并创建分支，比如：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>()&#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">x</span> = <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">if</span> x &gt; <span class="number">5</span>&#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;&#123;x&#125; &gt; 5&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;&#123;x&#125; &lt; 5&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码很易读，其实就是判断<code>x</code>是否大于<code>5</code>并根据情况输出不同效果，而上面的情况显然会输出<code>3 &lt; 5</code>。你也可以试着改变<code>x</code>或者条件数字的大小来测试不同情况。</p>
+<h5 id="单分支"><a href="#单分支" class="headerlink" title="单分支"></a>单分支</h5><p>此外我们也可以使用不等判断或等于判断，且仅创建单条分支（即不满足就不运行），例如：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>()&#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">x</span> = <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">y</span> = <span class="number">3</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> x == <span class="number">3</span>&#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;x等于3将会显式&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> x!=<span class="number">4</span>&#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;x不等于4将会显式&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="多分支"><a href="#多分支" class="headerlink" title="多分支"></a>多分支</h5><p>我们还可以进行多重条件判断<code>else if</code>，以下是《Rust Book》的示例：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">number</span> = <span class="number">6</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> number % <span class="number">4</span> == <span class="number">0</span> &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;number is divisible by 4&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> number % <span class="number">3</span> == <span class="number">0</span> &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;number is divisible by 3&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> number % <span class="number">2</span> == <span class="number">0</span> &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;number is divisible by 2&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;number is not divisible by 4, 3, or 2&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里检测了<code>number</code>能被哪些数字整除，但实际上这种写法无法成功，因为当检测到第一个为<code>true</code>的代码块时就会直接进入该代码块的运行，而不会完成后续的<code>else if</code>判断。建议不要过多使用<code>else if</code>，如果产生了超过三个分支（比如上面这个例子有四个分支），就要考虑重构代码。</p>
+<h5 id="let中用if"><a href="#let中用if" class="headerlink" title="let中用if"></a>let中用if</h5><p>同样是《Rust Book》的一个示例：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">num</span> = <span class="number">6</span>;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">is_equal_5</span> = <span class="keyword">if</span> num==<span class="number">5</span> &#123; <span class="literal">true</span> &#125; <span class="keyword">else</span> &#123; <span class="literal">false</span> &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;num等于5吗？&#123;is_equal_5&#125;&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过这种方式我们可以通过条件进行赋值，但是注意，你需要在条件分支块的最后一个语句末尾不添加分号<code>;</code>，原因我们在前面已经说过了，此外还应保证分支块的返回值类型相同。</p>
+<h4 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h4><p>Rust有三种循环：<code>loop</code>、<code>while</code>和<code>for</code>。</p>
+<h5 id="loop"><a href="#loop" class="headerlink" title="loop"></a>loop</h5><figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>()&#123;</span><br><span class="line">    <span class="keyword">loop</span> &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;这是一个死循环，请按Ctrl+C结束程序以停止循环&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>loop</code>可以通过<code>break</code>命令跳出，我通过<code>continue</code>跳过单次循环，例如：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>()&#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">i</span> = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">times</span> = <span class="keyword">loop</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> i == <span class="number">100</span> &#123;</span><br><span class="line">            <span class="keyword">break</span> i</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> i == <span class="number">98</span> &#123;</span><br><span class="line">            <span class="built_in">println!</span>(<span class="string">&quot;第&#123;&#125;次不会输出&quot;</span>, i+<span class="number">1</span>);</span><br><span class="line">            i += <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            i += <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;当前i为:&#123;i&#125;&quot;</span>);</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;times are &#123;times&#125;&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意，<code>break</code>可以直接返回，此时默认返回类型为<code>()</code>，也可以在后面添加一个<code>表达式</code>以返回指定变量。</p>
+<p>如果发生了循环嵌套，也可以通过添加循环标签的方式来跳到指定层数的循环中，这是《Rust Book》给的示例：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">count</span> = <span class="number">0</span>;</span><br><span class="line">    <span class="symbol">&#x27;counting_up</span>: <span class="keyword">loop</span> &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;count = &#123;count&#125;&quot;</span>);</span><br><span class="line">        <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">remaining</span> = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">loop</span> &#123;</span><br><span class="line">            <span class="built_in">println!</span>(<span class="string">&quot;remaining = &#123;remaining&#125;&quot;</span>);</span><br><span class="line">            <span class="keyword">if</span> remaining == <span class="number">9</span> &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> count == <span class="number">2</span> &#123;</span><br><span class="line">                <span class="keyword">break</span> <span class="symbol">&#x27;counting_up</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            remaining -= <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        count += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;End count = &#123;count&#125;&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中添加了循环标签<code>&#39;counting_up:’</code>在<code>loop</code>前，然后在<code>break</code>后添加了<code>&#39;counting_up</code>，此时执行该<code>break</code>就会跳回到对应的循环中。循环标签的写法为<code>’label:</code>。</p>
+<h5 id="while"><a href="#while" class="headerlink" title="while"></a>while</h5><p><code>while</code>循环就是可以判断条件的循环，只有为<code>true</code>时才会循环：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">i</span> = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> i &lt; <span class="number">100</span> &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;现在的i等于&#123;i&#125;&quot;</span>);</span><br><span class="line">        i += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以下是一个常用的循环一百次写法（至少对于C语言而言，这种写法很常用）。</p>
+<p>其同样可以用<code>break</code>和<code>continue</code>以及<code>循环标签</code>来控制。</p>
+<h5 id="for"><a href="#for" class="headerlink" title="for"></a>for</h5><p><code>for</code>一般用于遍历循环，比如我们希望遍历某个数组，但是错误的下标极限可能会导致错误崩溃，故可以使用for来遍历，例如：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">x</span> = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> <span class="variable">i</span> <span class="keyword">in</span> x &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;报数：&#123;i&#125;&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同样很易读，使用<code>i</code>来读取访问<code>x</code>数组的内容，每次循环的时候<code>i</code>都会取<code>x</code>中下一个元素，在循环中通过读取<code>i</code>的值就可以得到整个数组的元素。</p>
+<p>事实上，<code>for</code>循环还有更加好用的写法，比如我们刚才说的一百次计数：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>()&#123;</span><br><span class="line">    <span class="keyword">for</span> <span class="variable">i</span> <span class="keyword">in</span> <span class="number">0</span>..<span class="number">100</span> &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;计数：&#123;i&#125;&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>for</code>也可以用前面所说的方式来控制。</p>
+<h2 id="规范"><a href="#规范" class="headerlink" title="规范"></a>规范</h2><h3 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h3><p>注释是很重要的，它可以直接添加在代码里供程序员阅读，但不会被编译器编译进二进制程序中。</p>
+<p>你应该尽量保证在必要的地方使用注释，比如完成某一特定功能的代码段开头。</p>
+<p>Rust提供的基础注释方法有两种：单行注释<code>//</code>和多行注释<code>/**/</code>。</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这是单行注释，它只能注释一行的内容</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">	这是多行注释</span></span><br><span class="line"><span class="comment">	只要在这个范围内你可以写任何行的内容</span></span><br><span class="line"><span class="comment">	<span class="comment">/*而且它可以嵌套*/</span></span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<p>不过为了安全，一般情况下更建议使用单行注释而非多行，并尽量别嵌套多行注释。</p>
+<h3 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h3><p><a href="https://doc.rust-lang.org/book/appendix-01-keywords.html">《Rust Book》</a>中关于关键字的章节，但是不建议你去背去记，用多了自然就知道了哪些是关键字，而就算没记住你不小心把名字用到了这些关键字上，编译器也会提醒你。</p>
 <h3 id="命名规范"><a href="#命名规范" class="headerlink" title="命名规范"></a>命名规范</h3><p>你可以参考《Rust语言圣经》的<a href="https://course.rs/practice/naming.html#命名规范">命名规范</a>章节和<a href="https://github.com/rust-lang/rfcs/blob/master/text/0430-finalizing-naming-conventions.md">Rust RFC 430</a>，但事实上我认为你不需要去专门记这玩意，因为<code>rustc</code>内嵌了命名风格检查，而如果你安装了我说的那一堆工具链，你可以在vscode上很清楚地根据警告知道自己的命名是否符合规范。</p>
 <p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_2/image-20230309163423202.png" alt="命名规范警告示例"></p>
+<h3 id="语句和表达式"><a href="#语句和表达式" class="headerlink" title="语句和表达式"></a>语句和表达式</h3><p>Rust 可以说是一种表达式语言（当然事实上目前在语法上似乎还没完全支持，但目标应该是这个样子的）。</p>
+<p>一般情况下，表达式可以用来进行求值和输出，且表达式之间通常可以相互嵌套。</p>
+<p>表达式求值规则包括指定表达式产生的值和指定其各子表达式的求值顺序。</p>
+<p>相比之下，语句则是主要用于包含表达式求值以及显示地安排表达式求值的顺序。</p>
+<p>一般而言，因为表达式可以被求值，所以可以写在赋值语句等号的右侧，所以你可以用能不能写在等号右边来区分什么是表达式什么是语句，<code>rust-analyzer</code>插件可以帮你很快完成这一点。</p>
+<p>这个部分包含的内容极多而且很绕，现在我们仅仅只说明一下有这样一个概念，并简单列举一下一些你现在需要知道的东西。</p>
+<ul>
+<li><strong>语句</strong>分为<strong>声明语句</strong>和<strong>表达式语句</strong>：<ul>
+<li><strong>声明语句</strong>分为<strong>程序项声明语句</strong>和<strong>let声明语句</strong><ul>
+<li><strong>程序项声明语句</strong>将在未来我们讨论<strong>模块</strong>的时候讲述，现在先不详述。</li>
+<li><strong>let声明语句</strong>即为我们在前面<a href="#Rust的变量">Rust的变量</a>部分讲过的语法。</li>
+</ul>
+</li>
+<li><strong>表达式语句</strong>是指对<strong>表达式</strong>求值并忽略其结果的语句，其存在的目的是触发对内部表达式求值的效果。<ul>
+<li>我们在前面使用<code>println!</code>的时候发现我们并没有在前面添加等号并用<code>let</code>绑定到一个变量上，事实上这种方式就是一种表达式语句，除了宏调用外函数调用也是同理。</li>
+<li><strong>let声明语句</strong>也可以算是一个表达式语句，因为它存在等号，而等号右边只能是表达式。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>表达式</strong>一般有两个作用，表达返回和表达效果。其中表达返回可以被认为是求值，这使表达式可以写在等号右边。表达效果则可以被认为是对外界的改变，比如<code>println!</code>就可以对命令行输出一行文字，而这个效果并非必须在等号右边才会起作用。<ul>
+<li><code>函数</code>、<code>宏</code>、<code>块</code>、<code>算式</code>甚至<code>数字</code>都可以视为表达式。</li>
+</ul>
+</li>
+</ul>
+<p>一个简单的例子，注意观察它们的类型：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>()&#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">_a</span> = <span class="title function_ invoke__">func_name</span>(<span class="number">2</span>, <span class="number">3</span>);   <span class="comment">// 函数有返回值且非()的传值</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">_b</span> = &#123;</span><br><span class="line">        <span class="title function_ invoke__">func_name</span>(<span class="number">3</span>, <span class="number">3</span>);    <span class="comment">// 用最后一行带分号;的块传值</span></span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">_c</span> = &#123;</span><br><span class="line">        <span class="title function_ invoke__">func_name</span>(<span class="number">5</span>, <span class="number">3</span>)     <span class="comment">// 用最后一行不带分号的块传值</span></span><br><span class="line">    &#125;;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="title function_ invoke__">func_name</span>(<span class="number">3</span>, <span class="number">2</span>);    <span class="comment">// 用不传值的形式使用块</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_ invoke__">func_name</span>(<span class="number">3</span>, <span class="number">2</span>);        <span class="comment">// 用不传值的形式使用</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">func_name</span>(param1: <span class="type">i32</span>, param2: <span class="type">i32</span>) <span class="punctuation">-&gt;</span> <span class="type">i32</span>&#123;  <span class="comment">// 显式设置返回值的函数</span></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;param1 is &#123;&#125;, param2 is &#123;&#125;&quot;</span>, param1, param2); <span class="comment">// 不传值形式使用返回()的宏</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">_x</span> = <span class="built_in">println!</span>(<span class="string">&quot;Hello, x&quot;</span>);  <span class="comment">// 传值形式使用返回()的宏</span></span><br><span class="line">    <span class="title function_ invoke__">non_func</span>(); <span class="comment">// 不传值的形式使用默认返回值的函数</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">_y</span> = <span class="title function_ invoke__">non_func</span>();    <span class="comment">// 传值的形式使用默认返回值的函数</span></span><br><span class="line">    <span class="title function_ invoke__">test_func</span>() <span class="comment">// 不用分号使用非()返回值的函数</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">non_func</span>()&#123;  <span class="comment">// 默认返回值的函数</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">test_func</span>()<span class="punctuation">-&gt;</span> <span class="type">i32</span>&#123;   <span class="comment">// 显式设置返回值的函数</span></span><br><span class="line">    <span class="number">5</span> <span class="comment">// 数字表达式</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_2/image-20230310164907566.png" alt="语句和表达式举例"></p>
+<p>如果你想更详细了解，可以参考Rust参考手册（中文版）的<a href="https://rustwiki.org/zh-CN/reference/statements-and-expressions.html">语句和表达式</a>部分，事实上当你遇到很多问题的时候，查阅参考手册是一个不错的习惯。</p>
+<h3 id="块"><a href="#块" class="headerlink" title="块"></a>块</h3><p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_2/image-20230310163659035.png" alt="块"></p>
 <h2 id="知识补充"><a href="#知识补充" class="headerlink" title="知识补充"></a>知识补充</h2><h3 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h3><p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_2/image-20230309161636968.png" alt="作用域"></p>
+<h3 id="Unicode"><a href="#Unicode" class="headerlink" title="Unicode"></a>Unicode</h3><p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_2/image-20230309223247091.png" alt="Unicode"></p>
+<h3 id="ASCII"><a href="#ASCII" class="headerlink" title="ASCII"></a>ASCII</h3><p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_2/image-20230309223201418.png" alt="ASCII"></p>
+<h3 id="IEEE-754"><a href="#IEEE-754" class="headerlink" title="IEEE-754"></a>IEEE-754</h3><p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_2/image-20230309223946906.png" alt="IEEE-754"></p>
+<h3 id="形参和实参"><a href="#形参和实参" class="headerlink" title="形参和实参"></a>形参和实参</h3><p><img src="/blog/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Rust/%E8%B7%9F%E7%9D%80%E6%88%91%E5%AD%A6Rust_2/image-20230309234945487.png" alt="形参和实参"></p>
 ]]></content>
       <tags>
         <tag>ChatGPT</tag>
