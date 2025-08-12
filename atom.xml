@@ -22,7 +22,7 @@
         <title>测试文章</title>
         <link rel="alternate" href="http://example.com/2025/08/13/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/"/>
         <content type="html">&lt;p&gt;这是一篇测试文章&lt;/p&gt;
-&lt;p %=&#34;&#34; asset_img=&#34;&#34; Snipaste_2025-08-13_01-37-33.png=&#34;&#34; 图片引用方法一=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img data-src=&#34;Snipaste_2025-08-13_01-37-33.png&#34; alt=&#34;Snipaste_2025-08-13_01-37-33&#34;&gt;&lt;/p&gt;
 </content>
         <category term="杂文" scheme="http://example.com/categories/%E6%9D%82%E6%96%87/" />
         <category term="原创" scheme="http://example.com/tags/%E5%8E%9F%E5%88%9B/" />
