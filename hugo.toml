@@ -1,0 +1,14 @@
+baseURL = 'https://example.org/'
+languageCode = 'zh-cn'
+title = '云雾海的博客'
+
+[caches]
+  [caches.images]
+    dir = ':cacheDir/images'
+
+[module]
+  [[module.imports]]
+    disable = false
+    ignoreConfig = false
+    ignoreImports = false
+    path = 'github.com/theNewDynamic/gohugo-theme-ananke/v2'
