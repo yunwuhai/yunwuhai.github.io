@@ -1,0 +1,281 @@
+<!doctype html><html lang=en dir=auto><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>Winform自定义一个圆形按钮 | 云雾海的博客</title><meta name=keywords content="C#"><meta name=description content='因为我是电子专业的，学校没教过C#，学下来也基本上都是野路子东看西看基于需求地乱学，故而对C#的理解并不是很深。然而个人项目需要自定义一个控件来实现动态连线功能，不得不从入门直接跳到高级应用进行学习，这里做一个记录以对后面有类似需要的朋友一个参考。目前只是实现了一个简单的变色按钮功能，但是需要使用的大部分技术都用上了，如果需要实现其它更复杂功能的话就把本文当个抛砖引玉吧。
+本文参考了《[C#] （原创）一步一步教你自定义控件——01，TrackBar》,但是在其基础上增加了设置控件区域的功能。另外因为那篇文章被很多人盗用，原文已经不可考，所以不贴地址给他们引流了，如果有需要可以直接百度这个名字即可。
+新建工程
+新建一个项目，选择Windows窗体控件库(.NET Framwork)，然后选择地址、命名。
+
+正常情况下工程里应该有一个UserControl1.cs文件，不要它，直接删除，然后新建一个没有模板的类。
+将此类的访问属性改为public并且继承自Control，如果Control下出现波浪线报错的话是因为没有引用其命名空间，可以按住Alt + Enter后选中第一个命名空间再按一次Enter进行修改，VS将自动添加上using System.Windows.Forms;。
+添加属性
+然后我们根据需求进行添加属性，因为这个功能只是需要实现一个圆形开关，那么我们需要知道的属性就有开关打开时的颜色，开关关闭时的颜色，圆形开关的直径，开关的状态四个属性。颜色使用Color类进行定义，直径使用int或者float进行定义，开关状态用布尔进行定义，并且给他们赋值上初始值。
+private Color openColor = Color.FromArgb(128, 255, 128);	// 开启默认浅绿色
+private Color closeColor = Color.FromArgb(255, 128, 128);	// 关闭默认浅红色
+private int diameter = 20;	// 直径默认20，且为整数类型
+private bool isOpen = false;	// 默认关闭
+然后为他们添加上各自的访问器：
+
+
+
+
+我们可以注意到，他们各自的get访问器其实没啥特别的，但是set访问器中除了基本的赋值以外，每个访问器中都有Invalidate();这么一句，它的工作目的是重新绘制一遍控件。
+
+一般来说，如果你调整的这个属性将会影响到当前控件的外观，那么就有必要加上这么一句，它的功能类似于将原本的控件从你的屏幕上删除，然后根据新的定义创建一个新的控件。
+然后我们再观察直径的访问器中使用了Size = new Size(diameter, diameter);这么一句话，它的目的是什么呢？其实从语义上就可以推测知道，是重新赋值了大小属性，其中宽度和长度变成了直径的。但是理论上其实不加这句也没有问题，因为我们后面会使用一个指定边界函数实现相同功能，但是如果不加上的话我们在使用Winform的设计模式的时候就容易出现bug，调整大小的时候，如果调大就会出现内容消失的情况，需要手动去调整一下才能重新刷新出来。我理解的原因是设计模式其实开启了一个模拟窗口，但是这里我们修改属性值的时候只有一些基础属性会被显示出来而不会触发具体的方法函数。故而我们不能运行后面那个指定边界函数进行样式的刷新，导致出现视觉bug。
+然后另一个需要注意的是，我们在IsOpen中使用了一个TestSwitch的事件，如果我们的开关状态发生了改变，那么就会触发这个事件。后来如果我们需要，可以为这个事件增加功能，一旦IsOpen被赋值，就可以执行相应的功能。
+不过我们如果需要使用这个功能的话，就还需要添加上委托和事件的定义，一般情况下我们在命名空间内写委托，然后在类里定义事件。
+
+
+但是，我们知道如果想使用VS的设计器的话可以利用属性栏修改控件的属性，所以我们自定义的控件自然也想要相同的功能。此时需要输入[Category("属性分类"), Description("功能描述")]即可添加这些功能。其中属性分类的目的是为了方便我们找到我们自定义的这些功能，而功能描述则是方便使用的时知道该如何填入所需的属性。如果这里出现了报错，同样是因为没有引用所需的命名空间，只需要像前面一样按住Alt + Enter然后进行修正即可。
+以下是我定义的所有的属性以及他们的描述。
+		private Color openColor = Color.FromArgb(128, 255, 128);
+        [Category("DemoUI"), Description("开启时的颜色")]
+        public Color OpenColor
+        {
+            get { return openColor; }
+            set
+            {
+                openColor = value;
+                Invalidate();
+            }
+        }
+
+        private Color closeColor = Color.FromArgb(255, 128, 128);
+        [Category("DemoUI"), Description("关闭时的颜色")]
+        public Color CloseColor
+        {
+            get { return closeColor; }
+            set
+            {
+                closeColor = value;
+                Invalidate();
+            }
+        }
+
+        private int diameter = 20;
+        [Category("DemoUI"), Description("圆直径")]
+        public int Diameter
+        {
+            get { return diameter; }
+            set
+            {
+                diameter = value;
+                Size = new Size(diameter, diameter);
+                Invalidate();
+            }
+        }
+
+        private bool isOpen = false;
+        [Category("DemoUI"), Description("开关状态")]
+        public bool IsOpen
+        {
+            get { return isOpen; }
+            set
+            {
+                isOpen = value;
+                Invalidate();
+                TestSwitch?.Invoke(this, new TestEventArgs(isOpen));
+            }
+        }
+添加方法
+完成了上述工作后，我们还需要为这个控件添加一些方法，然后他就可以成为真正的控件了。'><meta name=author content="云雾海, yunwuhai"><link rel=canonical href=http://localhost:1313/posts/%E6%A1%8C%E9%9D%A2%E7%AB%AF/csharp/winform%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA%E5%9C%86%E5%BD%A2%E6%8C%89%E9%92%AE/><link crossorigin=anonymous href=/assets/css/stylesheet.a482bf00fa5c046040ef7973ad5fdf5657890cacb596c93f1382f664ca542074.css integrity="sha256-pIK/APpcBGBA73lzrV/fVleJDKy1lsk/E4L2ZMpUIHQ=" rel="preload stylesheet" as=style><link rel=icon href=http://localhost:1313/favicon.ico><link rel=icon type=image/png sizes=16x16 href=http://localhost:1313/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=http://localhost:1313/favicon-32x32.png><link rel=apple-touch-icon href=http://localhost:1313/apple-touch-icon.png><link rel=mask-icon href=http://localhost:1313/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=en href=http://localhost:1313/posts/%E6%A1%8C%E9%9D%A2%E7%AB%AF/csharp/winform%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA%E5%9C%86%E5%BD%A2%E6%8C%89%E9%92%AE/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style></noscript><meta property="og:url" content="http://localhost:1313/posts/%E6%A1%8C%E9%9D%A2%E7%AB%AF/csharp/winform%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA%E5%9C%86%E5%BD%A2%E6%8C%89%E9%92%AE/"><meta property="og:site_name" content="云雾海的博客"><meta property="og:title" content="Winform自定义一个圆形按钮"><meta property="og:description" content='因为我是电子专业的，学校没教过C#，学下来也基本上都是野路子东看西看基于需求地乱学，故而对C#的理解并不是很深。然而个人项目需要自定义一个控件来实现动态连线功能，不得不从入门直接跳到高级应用进行学习，这里做一个记录以对后面有类似需要的朋友一个参考。目前只是实现了一个简单的变色按钮功能，但是需要使用的大部分技术都用上了，如果需要实现其它更复杂功能的话就把本文当个抛砖引玉吧。
+本文参考了《[C#] （原创）一步一步教你自定义控件——01，TrackBar》,但是在其基础上增加了设置控件区域的功能。另外因为那篇文章被很多人盗用，原文已经不可考，所以不贴地址给他们引流了，如果有需要可以直接百度这个名字即可。
+新建工程 新建一个项目，选择Windows窗体控件库(.NET Framwork)，然后选择地址、命名。
+正常情况下工程里应该有一个UserControl1.cs文件，不要它，直接删除，然后新建一个没有模板的类。
+将此类的访问属性改为public并且继承自Control，如果Control下出现波浪线报错的话是因为没有引用其命名空间，可以按住Alt + Enter后选中第一个命名空间再按一次Enter进行修改，VS将自动添加上using System.Windows.Forms;。
+添加属性 然后我们根据需求进行添加属性，因为这个功能只是需要实现一个圆形开关，那么我们需要知道的属性就有开关打开时的颜色，开关关闭时的颜色，圆形开关的直径，开关的状态四个属性。颜色使用Color类进行定义，直径使用int或者float进行定义，开关状态用布尔进行定义，并且给他们赋值上初始值。
+private Color openColor = Color.FromArgb(128, 255, 128);	// 开启默认浅绿色 private Color closeColor = Color.FromArgb(255, 128, 128);	// 关闭默认浅红色 private int diameter = 20;	// 直径默认20，且为整数类型 private bool isOpen = false;	// 默认关闭 然后为他们添加上各自的访问器：
+我们可以注意到，他们各自的get访问器其实没啥特别的，但是set访问器中除了基本的赋值以外，每个访问器中都有Invalidate();这么一句，它的工作目的是重新绘制一遍控件。
+一般来说，如果你调整的这个属性将会影响到当前控件的外观，那么就有必要加上这么一句，它的功能类似于将原本的控件从你的屏幕上删除，然后根据新的定义创建一个新的控件。
+然后我们再观察直径的访问器中使用了Size = new Size(diameter, diameter);这么一句话，它的目的是什么呢？其实从语义上就可以推测知道，是重新赋值了大小属性，其中宽度和长度变成了直径的。但是理论上其实不加这句也没有问题，因为我们后面会使用一个指定边界函数实现相同功能，但是如果不加上的话我们在使用Winform的设计模式的时候就容易出现bug，调整大小的时候，如果调大就会出现内容消失的情况，需要手动去调整一下才能重新刷新出来。我理解的原因是设计模式其实开启了一个模拟窗口，但是这里我们修改属性值的时候只有一些基础属性会被显示出来而不会触发具体的方法函数。故而我们不能运行后面那个指定边界函数进行样式的刷新，导致出现视觉bug。
+然后另一个需要注意的是，我们在IsOpen中使用了一个TestSwitch的事件，如果我们的开关状态发生了改变，那么就会触发这个事件。后来如果我们需要，可以为这个事件增加功能，一旦IsOpen被赋值，就可以执行相应的功能。
+不过我们如果需要使用这个功能的话，就还需要添加上委托和事件的定义，一般情况下我们在命名空间内写委托，然后在类里定义事件。
+但是，我们知道如果想使用VS的设计器的话可以利用属性栏修改控件的属性，所以我们自定义的控件自然也想要相同的功能。此时需要输入[Category("属性分类"), Description("功能描述")]即可添加这些功能。其中属性分类的目的是为了方便我们找到我们自定义的这些功能，而功能描述则是方便使用的时知道该如何填入所需的属性。如果这里出现了报错，同样是因为没有引用所需的命名空间，只需要像前面一样按住Alt + Enter然后进行修正即可。
+以下是我定义的所有的属性以及他们的描述。
+private Color openColor = Color.FromArgb(128, 255, 128); [Category("DemoUI"), Description("开启时的颜色")] public Color OpenColor { get { return openColor; } set { openColor = value; Invalidate(); } } private Color closeColor = Color.FromArgb(255, 128, 128); [Category("DemoUI"), Description("关闭时的颜色")] public Color CloseColor { get { return closeColor; } set { closeColor = value; Invalidate(); } } private int diameter = 20; [Category("DemoUI"), Description("圆直径")] public int Diameter { get { return diameter; } set { diameter = value; Size = new Size(diameter, diameter); Invalidate(); } } private bool isOpen = false; [Category("DemoUI"), Description("开关状态")] public bool IsOpen { get { return isOpen; } set { isOpen = value; Invalidate(); TestSwitch?.Invoke(this, new TestEventArgs(isOpen)); } } 添加方法 完成了上述工作后，我们还需要为这个控件添加一些方法，然后他就可以成为真正的控件了。'><meta property="og:locale" content="zh-cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2021-03-21T22:45:35+08:00"><meta property="article:modified_time" content="2021-03-21T22:45:35+08:00"><meta property="article:tag" content="C#"><meta property="og:image" content="http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E"><meta name=twitter:title content="Winform自定义一个圆形按钮"><meta name=twitter:description content='因为我是电子专业的，学校没教过C#，学下来也基本上都是野路子东看西看基于需求地乱学，故而对C#的理解并不是很深。然而个人项目需要自定义一个控件来实现动态连线功能，不得不从入门直接跳到高级应用进行学习，这里做一个记录以对后面有类似需要的朋友一个参考。目前只是实现了一个简单的变色按钮功能，但是需要使用的大部分技术都用上了，如果需要实现其它更复杂功能的话就把本文当个抛砖引玉吧。
+本文参考了《[C#] （原创）一步一步教你自定义控件——01，TrackBar》,但是在其基础上增加了设置控件区域的功能。另外因为那篇文章被很多人盗用，原文已经不可考，所以不贴地址给他们引流了，如果有需要可以直接百度这个名字即可。
+新建工程
+新建一个项目，选择Windows窗体控件库(.NET Framwork)，然后选择地址、命名。
+
+正常情况下工程里应该有一个UserControl1.cs文件，不要它，直接删除，然后新建一个没有模板的类。
+将此类的访问属性改为public并且继承自Control，如果Control下出现波浪线报错的话是因为没有引用其命名空间，可以按住Alt + Enter后选中第一个命名空间再按一次Enter进行修改，VS将自动添加上using System.Windows.Forms;。
+添加属性
+然后我们根据需求进行添加属性，因为这个功能只是需要实现一个圆形开关，那么我们需要知道的属性就有开关打开时的颜色，开关关闭时的颜色，圆形开关的直径，开关的状态四个属性。颜色使用Color类进行定义，直径使用int或者float进行定义，开关状态用布尔进行定义，并且给他们赋值上初始值。
+private Color openColor = Color.FromArgb(128, 255, 128);	// 开启默认浅绿色
+private Color closeColor = Color.FromArgb(255, 128, 128);	// 关闭默认浅红色
+private int diameter = 20;	// 直径默认20，且为整数类型
+private bool isOpen = false;	// 默认关闭
+然后为他们添加上各自的访问器：
+
+
+
+
+我们可以注意到，他们各自的get访问器其实没啥特别的，但是set访问器中除了基本的赋值以外，每个访问器中都有Invalidate();这么一句，它的工作目的是重新绘制一遍控件。
+
+一般来说，如果你调整的这个属性将会影响到当前控件的外观，那么就有必要加上这么一句，它的功能类似于将原本的控件从你的屏幕上删除，然后根据新的定义创建一个新的控件。
+然后我们再观察直径的访问器中使用了Size = new Size(diameter, diameter);这么一句话，它的目的是什么呢？其实从语义上就可以推测知道，是重新赋值了大小属性，其中宽度和长度变成了直径的。但是理论上其实不加这句也没有问题，因为我们后面会使用一个指定边界函数实现相同功能，但是如果不加上的话我们在使用Winform的设计模式的时候就容易出现bug，调整大小的时候，如果调大就会出现内容消失的情况，需要手动去调整一下才能重新刷新出来。我理解的原因是设计模式其实开启了一个模拟窗口，但是这里我们修改属性值的时候只有一些基础属性会被显示出来而不会触发具体的方法函数。故而我们不能运行后面那个指定边界函数进行样式的刷新，导致出现视觉bug。
+然后另一个需要注意的是，我们在IsOpen中使用了一个TestSwitch的事件，如果我们的开关状态发生了改变，那么就会触发这个事件。后来如果我们需要，可以为这个事件增加功能，一旦IsOpen被赋值，就可以执行相应的功能。
+不过我们如果需要使用这个功能的话，就还需要添加上委托和事件的定义，一般情况下我们在命名空间内写委托，然后在类里定义事件。
+
+
+但是，我们知道如果想使用VS的设计器的话可以利用属性栏修改控件的属性，所以我们自定义的控件自然也想要相同的功能。此时需要输入[Category("属性分类"), Description("功能描述")]即可添加这些功能。其中属性分类的目的是为了方便我们找到我们自定义的这些功能，而功能描述则是方便使用的时知道该如何填入所需的属性。如果这里出现了报错，同样是因为没有引用所需的命名空间，只需要像前面一样按住Alt + Enter然后进行修正即可。
+以下是我定义的所有的属性以及他们的描述。
+		private Color openColor = Color.FromArgb(128, 255, 128);
+        [Category("DemoUI"), Description("开启时的颜色")]
+        public Color OpenColor
+        {
+            get { return openColor; }
+            set
+            {
+                openColor = value;
+                Invalidate();
+            }
+        }
+
+        private Color closeColor = Color.FromArgb(255, 128, 128);
+        [Category("DemoUI"), Description("关闭时的颜色")]
+        public Color CloseColor
+        {
+            get { return closeColor; }
+            set
+            {
+                closeColor = value;
+                Invalidate();
+            }
+        }
+
+        private int diameter = 20;
+        [Category("DemoUI"), Description("圆直径")]
+        public int Diameter
+        {
+            get { return diameter; }
+            set
+            {
+                diameter = value;
+                Size = new Size(diameter, diameter);
+                Invalidate();
+            }
+        }
+
+        private bool isOpen = false;
+        [Category("DemoUI"), Description("开关状态")]
+        public bool IsOpen
+        {
+            get { return isOpen; }
+            set
+            {
+                isOpen = value;
+                Invalidate();
+                TestSwitch?.Invoke(this, new TestEventArgs(isOpen));
+            }
+        }
+添加方法
+完成了上述工作后，我们还需要为这个控件添加一些方法，然后他就可以成为真正的控件了。'><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Posts","item":"http://localhost:1313/posts/"},{"@type":"ListItem","position":2,"name":"Winform自定义一个圆形按钮","item":"http://localhost:1313/posts/%E6%A1%8C%E9%9D%A2%E7%AB%AF/csharp/winform%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA%E5%9C%86%E5%BD%A2%E6%8C%89%E9%92%AE/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Winform自定义一个圆形按钮","name":"Winform自定义一个圆形按钮","description":"因为我是电子专业的，学校没教过C#，学下来也基本上都是野路子东看西看基于需求地乱学，故而对C#的理解并不是很深。然而个人项目需要自定义一个控件来实现动态连线功能，不得不从入门直接跳到高级应用进行学习，这里做一个记录以对后面有类似需要的朋友一个参考。目前只是实现了一个简单的变色按钮功能，但是需要使用的大部分技术都用上了，如果需要实现其它更复杂功能的话就把本文当个抛砖引玉吧。\n本文参考了《[C#] （原创）一步一步教你自定义控件——01，TrackBar》,但是在其基础上增加了设置控件区域的功能。另外因为那篇文章被很多人盗用，原文已经不可考，所以不贴地址给他们引流了，如果有需要可以直接百度这个名字即可。\n新建工程 新建一个项目，选择Windows窗体控件库(.NET Framwork)，然后选择地址、命名。\n正常情况下工程里应该有一个UserControl1.cs文件，不要它，直接删除，然后新建一个没有模板的类。\n将此类的访问属性改为public并且继承自Control，如果Control下出现波浪线报错的话是因为没有引用其命名空间，可以按住Alt + Enter后选中第一个命名空间再按一次Enter进行修改，VS将自动添加上using System.Windows.Forms;。\n添加属性 然后我们根据需求进行添加属性，因为这个功能只是需要实现一个圆形开关，那么我们需要知道的属性就有开关打开时的颜色，开关关闭时的颜色，圆形开关的直径，开关的状态四个属性。颜色使用Color类进行定义，直径使用int或者float进行定义，开关状态用布尔进行定义，并且给他们赋值上初始值。\nprivate Color openColor = Color.FromArgb(128, 255, 128);\t// 开启默认浅绿色 private Color closeColor = Color.FromArgb(255, 128, 128);\t// 关闭默认浅红色 private int diameter = 20;\t// 直径默认20，且为整数类型 private bool isOpen = false;\t// 默认关闭 然后为他们添加上各自的访问器：\n我们可以注意到，他们各自的get访问器其实没啥特别的，但是set访问器中除了基本的赋值以外，每个访问器中都有Invalidate();这么一句，它的工作目的是重新绘制一遍控件。\n一般来说，如果你调整的这个属性将会影响到当前控件的外观，那么就有必要加上这么一句，它的功能类似于将原本的控件从你的屏幕上删除，然后根据新的定义创建一个新的控件。\n然后我们再观察直径的访问器中使用了Size = new Size(diameter, diameter);这么一句话，它的目的是什么呢？其实从语义上就可以推测知道，是重新赋值了大小属性，其中宽度和长度变成了直径的。但是理论上其实不加这句也没有问题，因为我们后面会使用一个指定边界函数实现相同功能，但是如果不加上的话我们在使用Winform的设计模式的时候就容易出现bug，调整大小的时候，如果调大就会出现内容消失的情况，需要手动去调整一下才能重新刷新出来。我理解的原因是设计模式其实开启了一个模拟窗口，但是这里我们修改属性值的时候只有一些基础属性会被显示出来而不会触发具体的方法函数。故而我们不能运行后面那个指定边界函数进行样式的刷新，导致出现视觉bug。\n然后另一个需要注意的是，我们在IsOpen中使用了一个TestSwitch的事件，如果我们的开关状态发生了改变，那么就会触发这个事件。后来如果我们需要，可以为这个事件增加功能，一旦IsOpen被赋值，就可以执行相应的功能。\n不过我们如果需要使用这个功能的话，就还需要添加上委托和事件的定义，一般情况下我们在命名空间内写委托，然后在类里定义事件。\n但是，我们知道如果想使用VS的设计器的话可以利用属性栏修改控件的属性，所以我们自定义的控件自然也想要相同的功能。此时需要输入[Category(\u0026quot;属性分类\u0026quot;), Description(\u0026quot;功能描述\u0026quot;)]即可添加这些功能。其中属性分类的目的是为了方便我们找到我们自定义的这些功能，而功能描述则是方便使用的时知道该如何填入所需的属性。如果这里出现了报错，同样是因为没有引用所需的命名空间，只需要像前面一样按住Alt + Enter然后进行修正即可。\n以下是我定义的所有的属性以及他们的描述。\nprivate Color openColor = Color.FromArgb(128, 255, 128); [Category(\u0026#34;DemoUI\u0026#34;), Description(\u0026#34;开启时的颜色\u0026#34;)] public Color OpenColor { get { return openColor; } set { openColor = value; Invalidate(); } } private Color closeColor = Color.FromArgb(255, 128, 128); [Category(\u0026#34;DemoUI\u0026#34;), Description(\u0026#34;关闭时的颜色\u0026#34;)] public Color CloseColor { get { return closeColor; } set { closeColor = value; Invalidate(); } } private int diameter = 20; [Category(\u0026#34;DemoUI\u0026#34;), Description(\u0026#34;圆直径\u0026#34;)] public int Diameter { get { return diameter; } set { diameter = value; Size = new Size(diameter, diameter); Invalidate(); } } private bool isOpen = false; [Category(\u0026#34;DemoUI\u0026#34;), Description(\u0026#34;开关状态\u0026#34;)] public bool IsOpen { get { return isOpen; } set { isOpen = value; Invalidate(); TestSwitch?.Invoke(this, new TestEventArgs(isOpen)); } } 添加方法 完成了上述工作后，我们还需要为这个控件添加一些方法，然后他就可以成为真正的控件了。\n","keywords":["C#"],"articleBody":"因为我是电子专业的，学校没教过C#，学下来也基本上都是野路子东看西看基于需求地乱学，故而对C#的理解并不是很深。然而个人项目需要自定义一个控件来实现动态连线功能，不得不从入门直接跳到高级应用进行学习，这里做一个记录以对后面有类似需要的朋友一个参考。目前只是实现了一个简单的变色按钮功能，但是需要使用的大部分技术都用上了，如果需要实现其它更复杂功能的话就把本文当个抛砖引玉吧。\n本文参考了《[C#] （原创）一步一步教你自定义控件——01，TrackBar》,但是在其基础上增加了设置控件区域的功能。另外因为那篇文章被很多人盗用，原文已经不可考，所以不贴地址给他们引流了，如果有需要可以直接百度这个名字即可。\n新建工程 新建一个项目，选择Windows窗体控件库(.NET Framwork)，然后选择地址、命名。\n正常情况下工程里应该有一个UserControl1.cs文件，不要它，直接删除，然后新建一个没有模板的类。\n将此类的访问属性改为public并且继承自Control，如果Control下出现波浪线报错的话是因为没有引用其命名空间，可以按住Alt + Enter后选中第一个命名空间再按一次Enter进行修改，VS将自动添加上using System.Windows.Forms;。\n添加属性 然后我们根据需求进行添加属性，因为这个功能只是需要实现一个圆形开关，那么我们需要知道的属性就有开关打开时的颜色，开关关闭时的颜色，圆形开关的直径，开关的状态四个属性。颜色使用Color类进行定义，直径使用int或者float进行定义，开关状态用布尔进行定义，并且给他们赋值上初始值。\nprivate Color openColor = Color.FromArgb(128, 255, 128);\t// 开启默认浅绿色 private Color closeColor = Color.FromArgb(255, 128, 128);\t// 关闭默认浅红色 private int diameter = 20;\t// 直径默认20，且为整数类型 private bool isOpen = false;\t// 默认关闭 然后为他们添加上各自的访问器：\n我们可以注意到，他们各自的get访问器其实没啥特别的，但是set访问器中除了基本的赋值以外，每个访问器中都有Invalidate();这么一句，它的工作目的是重新绘制一遍控件。\n一般来说，如果你调整的这个属性将会影响到当前控件的外观，那么就有必要加上这么一句，它的功能类似于将原本的控件从你的屏幕上删除，然后根据新的定义创建一个新的控件。\n然后我们再观察直径的访问器中使用了Size = new Size(diameter, diameter);这么一句话，它的目的是什么呢？其实从语义上就可以推测知道，是重新赋值了大小属性，其中宽度和长度变成了直径的。但是理论上其实不加这句也没有问题，因为我们后面会使用一个指定边界函数实现相同功能，但是如果不加上的话我们在使用Winform的设计模式的时候就容易出现bug，调整大小的时候，如果调大就会出现内容消失的情况，需要手动去调整一下才能重新刷新出来。我理解的原因是设计模式其实开启了一个模拟窗口，但是这里我们修改属性值的时候只有一些基础属性会被显示出来而不会触发具体的方法函数。故而我们不能运行后面那个指定边界函数进行样式的刷新，导致出现视觉bug。\n然后另一个需要注意的是，我们在IsOpen中使用了一个TestSwitch的事件，如果我们的开关状态发生了改变，那么就会触发这个事件。后来如果我们需要，可以为这个事件增加功能，一旦IsOpen被赋值，就可以执行相应的功能。\n不过我们如果需要使用这个功能的话，就还需要添加上委托和事件的定义，一般情况下我们在命名空间内写委托，然后在类里定义事件。\n但是，我们知道如果想使用VS的设计器的话可以利用属性栏修改控件的属性，所以我们自定义的控件自然也想要相同的功能。此时需要输入[Category(\"属性分类\"), Description(\"功能描述\")]即可添加这些功能。其中属性分类的目的是为了方便我们找到我们自定义的这些功能，而功能描述则是方便使用的时知道该如何填入所需的属性。如果这里出现了报错，同样是因为没有引用所需的命名空间，只需要像前面一样按住Alt + Enter然后进行修正即可。\n以下是我定义的所有的属性以及他们的描述。\nprivate Color openColor = Color.FromArgb(128, 255, 128); [Category(\"DemoUI\"), Description(\"开启时的颜色\")] public Color OpenColor { get { return openColor; } set { openColor = value; Invalidate(); } } private Color closeColor = Color.FromArgb(255, 128, 128); [Category(\"DemoUI\"), Description(\"关闭时的颜色\")] public Color CloseColor { get { return closeColor; } set { closeColor = value; Invalidate(); } } private int diameter = 20; [Category(\"DemoUI\"), Description(\"圆直径\")] public int Diameter { get { return diameter; } set { diameter = value; Size = new Size(diameter, diameter); Invalidate(); } } private bool isOpen = false; [Category(\"DemoUI\"), Description(\"开关状态\")] public bool IsOpen { get { return isOpen; } set { isOpen = value; Invalidate(); TestSwitch?.Invoke(this, new TestEventArgs(isOpen)); } } 添加方法 完成了上述工作后，我们还需要为这个控件添加一些方法，然后他就可以成为真正的控件了。\n首先，我们需要重写SetBoundsCore方法，这个方法可以定义控件的边界工作，根据微软给的定义，通过这个方法可以控制控件的Left、Top、Width、Height和BoundSpecified值，其中Left和Top控制着控件的位置，而Width和Height控制着控件边界的大小，而最后一个参数是枚举，不过功能没搞懂是做啥的，但是实际应用中不管也没事，因为我们一般都是重写Width和Height就好了。\nprotected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) { base.SetBoundsCore(x, y, Diameter, Diameter, specified); } 通过这个重写，我们可以让边界大小始终等于圆的直径，其中base的意思是在重写是基于原本的方法进行重写。\n然后我们还需要设置一个可以改变开关值的方法，因为我希望得到的效果是在点击控件时不会改变，而在放开时：如果在控件内放开鼠标可以改变值，而如果在控件外放开鼠标则保持原本只不变。这种情况下我们只需要重写OnMouseUp控件就好了，我重写的内容如下，内容一看就懂，就不多写注释了：\nprotected override void OnMouseUp(MouseEventArgs e)\r{\rbase.OnMouseUp(e);\rif (Region.IsVisible(e.Location))\r{\rif (IsOpen)\r{\rIsOpen = false;\r}\relse\r{\rIsOpen = true;\r}\r}\r} 然后我们再重写OnPaint方法，这个方法在我们每次调用Invalidate()的时候都会用到（就是前面每次我们调用set访问器的时候都会使用的那个函数），它的功能就是把控件在屏幕上画一遍（只是画一遍，并没有Invalidate中的清除原控件的功能）。\n这里我们使用GDI+来画控件，当然事实上你也可以调用图片然后来实现，他们的原理相似。\n首先我们需要让GDI+的分辨率提高（其实这个控件太简单了可能用不着，但是如果未来在画一些复杂的控件的时候可能需要）：\ne.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality; 然后我们现在需要把圆画出来，因为在后面要切割，所以这里其实怎么画都没问题，不过为了严谨我们还是正规点画个圆就行。\nif(isOpen == true) { e.Graphics.FillEllipse(new SolidBrush(OpenColor),0, 0, Diameter, Diameter); } else { e.Graphics.FillEllipse(new SolidBrush(CloseColor), 0, 0, Diameter, Diameter); } 这两句话的意思是使用开启颜色或关闭颜色画个直径为我们设定直径的圆。\n然后最重要的一步来了，虽然我们当前画出来了一个圆，它的样子和我们所需要的样式相同了，但是其本质上还是一个矩形，只是矩形上面画了一个圆而已，而在点击的时候其实点在这个矩形的空白部分我们仍然等同于点到了这个控件。\n这时候，我们需要用Region把这个圆的区域抠出来，具体做法就是新建一个System.Drawing.Drawing2D.GraphicsPath的对象，然后用它在正确位置抠出一个和我们画出的圆一样大小的圆，这样就刚好吧我们需要的圆抠出来了。\nSystem.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath(); path.AddEllipse(0, 0, Diameter, Diameter); Region = new Region(path); 现在，我们就真正有了一个圆形的开关了。\n添加事件 之前我们在属性中使用的事件，可以自己新增事件库进行管理，新建类，然后将其设为public并继承自EventArgs，接着新建事件并设计这个事件的参数和执行的操作。\nusing System; using System.Collections.Generic; using System.Linq; using System.Text; using System.Threading.Tasks; namespace DemoControls { public class TestEventArgs : EventArgs { public TestEventArgs(object value) { Value = value; } public object Value { get; set; } } } 同时我们还可以把这个事件设为默认事件，在开头部分我们定义这个控件类的默认事件为我们前面注册的TestSwitch。\n使用这个控件 那么该如何使用这个控件呢？你可以新建一个工程（一般情况下建议新建工程来使用控件，而控件库单独用一个工程来管理，你未来所有的控件都可以放在控件库里），如果在本解决方案中的话，只需要在解决方案管理器中右键点击你的控件库工程名，选择生成，然后你就可以当前解决方案的任意工程中使用你控件库里的所有控件了。\n而如果你需要在外部使用你的控件库，可以在生成后，进入到你的工程文件夹，Debug或者Release文件夹里的dll文件。如果你需要在某一个工程中使用这个控件的话，就在新工程里点击工具-选择工具箱项，点击浏览，然后添加刚才那个dll文件即可。\n现在我们在当前解决方案试试看吧：\n生成文件、新建工程、然后开始使用设计页面，可以发现设计页面最开头添加了我们的控件库：\n然后我们拖出来两个，设置一下他们的大小和颜色：\n同时双击第一个控件增添事件功能：\n最后启动：\n成功。\n完整的工程下载地址\n","wordCount":"310","inLanguage":"en","image":"http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E","datePublished":"2021-03-21T22:45:35+08:00","dateModified":"2021-03-21T22:45:35+08:00","author":[{"@type":"Person","name":"云雾海"},{"@type":"Person","name":"yunwuhai"}],"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:1313/posts/%E6%A1%8C%E9%9D%A2%E7%AB%AF/csharp/winform%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA%E5%9C%86%E5%BD%A2%E6%8C%89%E9%92%AE/"},"publisher":{"@type":"Organization","name":"云雾海的博客","logo":{"@type":"ImageObject","url":"http://localhost:1313/favicon.ico"}}}</script></head><body id=top><script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add("dark"):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove("dark"):window.matchMedia("(prefers-color-scheme: dark)").matches&&document.body.classList.add("dark")</script><header class=header><nav class=nav><div class=logo><a href=http://localhost:1313/ accesskey=h title="主页 (Alt + H)"><img src=http://localhost:1313/apple-touch-icon.png alt aria-label=logo height=35>主页</a><div class=logo-switches><button id=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg id="moon" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg id="sun" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu><li><a href=http://localhost:1313/categories/ title=分类><span>分类</span></a></li><li><a href=http://localhost:1313/tags/ title=标签><span>标签</span></a></li><li><a href=http://localhost:1313/search/ title="搜索 (Alt + /)" accesskey=/><span>搜索</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><div class=breadcrumbs><a href=http://localhost:1313/>Home</a>&nbsp;»&nbsp;<a href=http://localhost:1313/posts/>Posts</a></div><h1 class="post-title entry-hint-parent">Winform自定义一个圆形按钮</h1><div class=post-meta><span title='2021-03-21 22:45:35 +0800 CST'>March 21, 2021</span>&nbsp;·&nbsp;<span>2 min</span>&nbsp;·&nbsp;<span>310 words</span>&nbsp;·&nbsp;<span>云雾海, yunwuhai</span>&nbsp;|&nbsp;<span>
+<a href=https://github.com/yunwuhai/yunwuhai.github.io/tree/master/content/posts/posts/%e6%a1%8c%e9%9d%a2%e7%ab%af/CSharp/Winform%e8%87%aa%e5%ae%9a%e4%b9%89%e4%b8%80%e4%b8%aa%e5%9c%86%e5%bd%a2%e6%8c%89%e9%92%ae.md rel="noopener noreferrer edit" target=_blank>Suggest Changes</a></span></div></header><div class=toc><details><summary accesskey=c title="(Alt + C)"><span class=details>Table of Contents</span></summary><div class=inner><nav id=TableOfContents><ul><li><a href=#新建工程>新建工程</a></li><li><a href=#添加属性>添加属性</a></li><li><a href=#添加方法>添加方法</a></li><li><a href=#添加事件>添加事件</a></li><li><a href=#使用这个控件>使用这个控件</a></li></ul></nav></div></details></div><div class=post-content><p><em>因为我是电子专业的，学校没教过C#，学下来也基本上都是野路子东看西看基于需求地乱学，故而对C#的理解并不是很深。然而个人项目需要自定义一个控件来实现动态连线功能，不得不从入门直接跳到高级应用进行学习，这里做一个记录以对后面有类似需要的朋友一个参考。目前只是实现了一个简单的变色按钮功能，但是需要使用的大部分技术都用上了，如果需要实现其它更复杂功能的话就把本文当个抛砖引玉吧。</em></p><p><em>本文参考了《[C#] （原创）一步一步教你自定义控件——01，TrackBar》,但是在其基础上增加了设置控件区域的功能。另外因为那篇文章被很多人盗用，原文已经不可考，所以不贴地址给他们引流了，如果有需要可以直接百度这个名字即可。</em></p><h2 id=新建工程>新建工程<a hidden class=anchor aria-hidden=true href=#新建工程>#</a></h2><p>新建一个项目，选择Windows窗体控件库(.NET Framwork)，然后选择地址、命名。</p><p><img alt=在这里插入图片描述 loading=lazy src=https://i-blog.csdnimg.cn/blog_migrate/739585ea15f492b0d84f5b50c03bf306.png#pic_center></p><p>正常情况下工程里应该有一个UserControl1.cs文件，不要它，直接删除，然后新建一个没有模板的类。</p><p>将此类的访问属性改为public并且继承自Control，如果Control下出现波浪线报错的话是因为没有引用其命名空间，可以按住<code>Alt + Enter</code>后选中第一个命名空间再按一次Enter进行修改，VS将自动添加上<code>using System.Windows.Forms;</code>。</p><h2 id=添加属性>添加属性<a hidden class=anchor aria-hidden=true href=#添加属性>#</a></h2><p>然后我们根据需求进行添加属性，因为这个功能只是需要实现一个圆形开关，那么我们需要知道的属性就有开关打开时的颜色，开关关闭时的颜色，圆形开关的直径，开关的状态四个属性。颜色使用Color类进行定义，直径使用int或者float进行定义，开关状态用布尔进行定义，并且给他们赋值上初始值。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=kd>private</span> <span class=n>Color</span> <span class=n>openColor</span> <span class=p>=</span> <span class=n>Color</span><span class=p>.</span><span class=n>FromArgb</span><span class=p>(</span><span class=m>128</span><span class=p>,</span> <span class=m>255</span><span class=p>,</span> <span class=m>128</span><span class=p>);</span>	<span class=c1>// 开启默认浅绿色</span>
+</span></span><span class=line><span class=cl><span class=kd>private</span> <span class=n>Color</span> <span class=n>closeColor</span> <span class=p>=</span> <span class=n>Color</span><span class=p>.</span><span class=n>FromArgb</span><span class=p>(</span><span class=m>255</span><span class=p>,</span> <span class=m>128</span><span class=p>,</span> <span class=m>128</span><span class=p>);</span>	<span class=c1>// 关闭默认浅红色</span>
+</span></span><span class=line><span class=cl><span class=kd>private</span> <span class=kt>int</span> <span class=n>diameter</span> <span class=p>=</span> <span class=m>20</span><span class=p>;</span>	<span class=c1>// 直径默认20，且为整数类型</span>
+</span></span><span class=line><span class=cl><span class=kd>private</span> <span class=kt>bool</span> <span class=n>isOpen</span> <span class=p>=</span> <span class=kc>false</span><span class=p>;</span>	<span class=c1>// 默认关闭</span>
+</span></span></code></pre></div><p>然后为他们添加上各自的访问器：</p><p><img alt=在这里插入图片描述 loading=lazy src=https://i-blog.csdnimg.cn/blog_migrate/fd57a6439e9358d15ad2c206b752bba2.png#pic_center></p><p><img alt=在这里插入图片描述 loading=lazy src=https://i-blog.csdnimg.cn/blog_migrate/543f0ac40433a38bd90034f48897f3fe.png#pic_center></p><p><img alt=在这里插入图片描述 loading=lazy src=https://i-blog.csdnimg.cn/blog_migrate/d0751f17324da7995052ef8543f8f0b0.png#pic_center></p><p><img alt=在这里插入图片描述 loading=lazy src=https://i-blog.csdnimg.cn/blog_migrate/6e40163512af66c91631e13ad14c48a1.png#pic_center></p><p>我们可以注意到，他们各自的get访问器其实没啥特别的，但是set访问器中除了基本的赋值以外，每个访问器中都有<code>Invalidate();</code>这么一句，它的工作目的是重新绘制一遍控件。</p><p><img alt=在这里插入图片描述 loading=lazy src=https://i-blog.csdnimg.cn/blog_migrate/4a719da808aecb7b0ce4feedbf6ef341.png#pic_center></p><p>一般来说，如果你调整的这个属性将会影响到当前控件的外观，那么就有必要加上这么一句，它的功能类似于将原本的控件从你的屏幕上删除，然后根据新的定义创建一个新的控件。</p><p>然后我们再观察直径的访问器中使用了<code>Size = new Size(diameter, diameter);</code>这么一句话，它的目的是什么呢？其实从语义上就可以推测知道，是重新赋值了大小属性，其中宽度和长度变成了直径的。但是理论上其实不加这句也没有问题，因为我们后面会使用一个指定边界函数实现相同功能，但是如果不加上的话我们在使用Winform的设计模式的时候就容易出现bug，调整大小的时候，如果调大就会出现内容消失的情况，需要手动去调整一下才能重新刷新出来。我理解的原因是设计模式其实开启了一个模拟窗口，但是这里我们修改属性值的时候只有一些基础属性会被显示出来而不会触发具体的方法函数。故而我们不能运行后面那个指定边界函数进行样式的刷新，导致出现视觉bug。</p><p>然后另一个需要注意的是，我们在IsOpen中使用了一个TestSwitch的事件，如果我们的开关状态发生了改变，那么就会触发这个事件。后来如果我们需要，可以为这个事件增加功能，一旦IsOpen被赋值，就可以执行相应的功能。</p><p>不过我们如果需要使用这个功能的话，就还需要添加上委托和事件的定义，一般情况下我们在命名空间内写委托，然后在类里定义事件。</p><p><img alt=在这里插入图片描述 loading=lazy src=https://i-blog.csdnimg.cn/blog_migrate/54bdcf19c95fe0409915e213ac2d364a.png#pic_center></p><p><img alt=在这里插入图片描述 loading=lazy src=https://i-blog.csdnimg.cn/blog_migrate/e38aaa0fc11b41260f72bc0d54176302.png#pic_center></p><p>但是，我们知道如果想使用VS的设计器的话可以利用属性栏修改控件的属性，所以我们自定义的控件自然也想要相同的功能。此时需要输入<code>[Category("属性分类"), Description("功能描述")]</code>即可添加这些功能。其中属性分类的目的是为了方便我们找到我们自定义的这些功能，而功能描述则是方便使用的时知道该如何填入所需的属性。如果这里出现了报错，同样是因为没有引用所需的命名空间，只需要像前面一样按住<code>Alt + Enter</code>然后进行修正即可。</p><p>以下是我定义的所有的属性以及他们的描述。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl>		<span class=kd>private</span> <span class=n>Color</span> <span class=n>openColor</span> <span class=p>=</span> <span class=n>Color</span><span class=p>.</span><span class=n>FromArgb</span><span class=p>(</span><span class=m>128</span><span class=p>,</span> <span class=m>255</span><span class=p>,</span> <span class=m>128</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=na>        [Category(&#34;DemoUI&#34;), Description(&#34;开启时的颜色&#34;)]</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=n>Color</span> <span class=n>OpenColor</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>get</span> <span class=p>{</span> <span class=k>return</span> <span class=n>openColor</span><span class=p>;</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=k>set</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>openColor</span> <span class=p>=</span> <span class=k>value</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=n>Invalidate</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=kd>private</span> <span class=n>Color</span> <span class=n>closeColor</span> <span class=p>=</span> <span class=n>Color</span><span class=p>.</span><span class=n>FromArgb</span><span class=p>(</span><span class=m>255</span><span class=p>,</span> <span class=m>128</span><span class=p>,</span> <span class=m>128</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=na>        [Category(&#34;DemoUI&#34;), Description(&#34;关闭时的颜色&#34;)]</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=n>Color</span> <span class=n>CloseColor</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>get</span> <span class=p>{</span> <span class=k>return</span> <span class=n>closeColor</span><span class=p>;</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=k>set</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>closeColor</span> <span class=p>=</span> <span class=k>value</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=n>Invalidate</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=kd>private</span> <span class=kt>int</span> <span class=n>diameter</span> <span class=p>=</span> <span class=m>20</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=na>        [Category(&#34;DemoUI&#34;), Description(&#34;圆直径&#34;)]</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kt>int</span> <span class=n>Diameter</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>get</span> <span class=p>{</span> <span class=k>return</span> <span class=n>diameter</span><span class=p>;</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=k>set</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>diameter</span> <span class=p>=</span> <span class=k>value</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=n>Size</span> <span class=p>=</span> <span class=k>new</span> <span class=n>Size</span><span class=p>(</span><span class=n>diameter</span><span class=p>,</span> <span class=n>diameter</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>                <span class=n>Invalidate</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=kd>private</span> <span class=kt>bool</span> <span class=n>isOpen</span> <span class=p>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=na>        [Category(&#34;DemoUI&#34;), Description(&#34;开关状态&#34;)]</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kt>bool</span> <span class=n>IsOpen</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>get</span> <span class=p>{</span> <span class=k>return</span> <span class=n>isOpen</span><span class=p>;</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=k>set</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>isOpen</span> <span class=p>=</span> <span class=k>value</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=n>Invalidate</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>                <span class=n>TestSwitch</span><span class=p>?.</span><span class=n>Invoke</span><span class=p>(</span><span class=k>this</span><span class=p>,</span> <span class=k>new</span> <span class=n>TestEventArgs</span><span class=p>(</span><span class=n>isOpen</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span></code></pre></div><h2 id=添加方法>添加方法<a hidden class=anchor aria-hidden=true href=#添加方法>#</a></h2><p>完成了上述工作后，我们还需要为这个控件添加一些方法，然后他就可以成为真正的控件了。</p><p>首先，我们需要重写SetBoundsCore方法，这个方法可以定义控件的边界工作，根据微软给的定义，通过这个方法可以控制控件的Left、Top、Width、Height和BoundSpecified值，其中Left和Top控制着控件的位置，而Width和Height控制着控件边界的大小，而最后一个参数是枚举，不过功能没搞懂是做啥的，但是实际应用中不管也没事，因为我们一般都是重写Width和Height就好了。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=kd>protected</span> <span class=kd>override</span> <span class=k>void</span> <span class=n>SetBoundsCore</span><span class=p>(</span><span class=kt>int</span> <span class=n>x</span><span class=p>,</span> <span class=kt>int</span> <span class=n>y</span><span class=p>,</span> <span class=kt>int</span> <span class=n>width</span><span class=p>,</span> <span class=kt>int</span> <span class=n>height</span><span class=p>,</span> <span class=n>BoundsSpecified</span> <span class=n>specified</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=k>base</span><span class=p>.</span><span class=n>SetBoundsCore</span><span class=p>(</span><span class=n>x</span><span class=p>,</span> <span class=n>y</span><span class=p>,</span> <span class=n>Diameter</span><span class=p>,</span> <span class=n>Diameter</span><span class=p>,</span> <span class=n>specified</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><p>通过这个重写，我们可以让边界大小始终等于圆的直径，其中base的意思是在重写是基于原本的方法进行重写。</p><p>然后我们还需要设置一个可以改变开关值的方法，因为我希望得到的效果是在点击控件时不会改变，而在放开时：如果在控件内放开鼠标可以改变值，而如果在控件外放开鼠标则保持原本只不变。这种情况下我们只需要重写OnMouseUp控件就好了，我重写的内容如下，内容一看就懂，就不多写注释了：</p><pre tabindex=0><code>protected override void OnMouseUp(MouseEventArgs e)
+{
+	base.OnMouseUp(e);
+ 	if (Region.IsVisible(e.Location))
+ 	{
+ 		if (IsOpen)
+		{
+			IsOpen = false;
+ 		}
+ 		else
+ 		{
+ 			IsOpen = true;
+ 		}
+ 	}
+}
+</code></pre><p>然后我们再重写OnPaint方法，这个方法在我们每次调用Invalidate()的时候都会用到（就是前面每次我们调用set访问器的时候都会使用的那个函数），它的功能就是把控件在屏幕上画一遍（只是画一遍，并没有Invalidate中的清除原控件的功能）。</p><p>这里我们使用GDI+来画控件，当然事实上你也可以调用图片然后来实现，他们的原理相似。</p><p>首先我们需要让GDI+的分辨率提高（其实这个控件太简单了可能用不着，但是如果未来在画一些复杂的控件的时候可能需要）：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=n>e</span><span class=p>.</span><span class=n>Graphics</span><span class=p>.</span><span class=n>SmoothingMode</span> <span class=p>=</span> <span class=n>System</span><span class=p>.</span><span class=n>Drawing</span><span class=p>.</span><span class=n>Drawing2D</span><span class=p>.</span><span class=n>SmoothingMode</span><span class=p>.</span><span class=n>HighQuality</span><span class=p>;</span>
+</span></span></code></pre></div><p>然后我们现在需要把圆画出来，因为在后面要切割，所以这里其实怎么画都没问题，不过为了严谨我们还是正规点画个圆就行。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=k>if</span><span class=p>(</span><span class=n>isOpen</span> <span class=p>==</span> <span class=kc>true</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=n>e</span><span class=p>.</span><span class=n>Graphics</span><span class=p>.</span><span class=n>FillEllipse</span><span class=p>(</span><span class=k>new</span> <span class=n>SolidBrush</span><span class=p>(</span><span class=n>OpenColor</span><span class=p>),</span><span class=m>0</span><span class=p>,</span> <span class=m>0</span><span class=p>,</span> <span class=n>Diameter</span><span class=p>,</span> <span class=n>Diameter</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=k>else</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=n>e</span><span class=p>.</span><span class=n>Graphics</span><span class=p>.</span><span class=n>FillEllipse</span><span class=p>(</span><span class=k>new</span> <span class=n>SolidBrush</span><span class=p>(</span><span class=n>CloseColor</span><span class=p>),</span> <span class=m>0</span><span class=p>,</span> <span class=m>0</span><span class=p>,</span> <span class=n>Diameter</span><span class=p>,</span> <span class=n>Diameter</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><p>这两句话的意思是使用开启颜色或关闭颜色画个直径为我们设定直径的圆。</p><p>然后最重要的一步来了，虽然我们当前画出来了一个圆，它的样子和我们所需要的样式相同了，但是其本质上还是一个矩形，只是矩形上面画了一个圆而已，而在点击的时候其实点在这个矩形的空白部分我们仍然等同于点到了这个控件。</p><p>这时候，我们需要用Region把这个圆的区域抠出来，具体做法就是新建一个<code>System.Drawing.Drawing2D.GraphicsPath</code>的对象，然后用它在正确位置抠出一个和我们画出的圆一样大小的圆，这样就刚好吧我们需要的圆抠出来了。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=n>System</span><span class=p>.</span><span class=n>Drawing</span><span class=p>.</span><span class=n>Drawing2D</span><span class=p>.</span><span class=n>GraphicsPath</span> <span class=n>path</span> <span class=p>=</span> <span class=k>new</span> <span class=n>System</span><span class=p>.</span><span class=n>Drawing</span><span class=p>.</span><span class=n>Drawing2D</span><span class=p>.</span><span class=n>GraphicsPath</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=n>path</span><span class=p>.</span><span class=n>AddEllipse</span><span class=p>(</span><span class=m>0</span><span class=p>,</span> <span class=m>0</span><span class=p>,</span> <span class=n>Diameter</span><span class=p>,</span> <span class=n>Diameter</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=n>Region</span> <span class=p>=</span> <span class=k>new</span> <span class=n>Region</span><span class=p>(</span><span class=n>path</span><span class=p>);</span>
+</span></span></code></pre></div><p>现在，我们就真正有了一个圆形的开关了。</p><h2 id=添加事件>添加事件<a hidden class=anchor aria-hidden=true href=#添加事件>#</a></h2><p>之前我们在属性中使用的事件，可以自己新增事件库进行管理，新建类，然后将其设为public并继承自EventArgs，接着新建事件并设计这个事件的参数和执行的操作。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=k>using</span> <span class=nn>System</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=k>using</span> <span class=nn>System.Collections.Generic</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=k>using</span> <span class=nn>System.Linq</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=k>using</span> <span class=nn>System.Text</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=k>using</span> <span class=nn>System.Threading.Tasks</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>namespace</span> <span class=nn>DemoControls</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=k>class</span> <span class=nc>TestEventArgs</span> <span class=p>:</span> <span class=n>EventArgs</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=n>TestEventArgs</span><span class=p>(</span><span class=kt>object</span> <span class=k>value</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>Value</span> <span class=p>=</span> <span class=k>value</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kt>object</span> <span class=n>Value</span> <span class=p>{</span> <span class=k>get</span><span class=p>;</span> <span class=k>set</span><span class=p>;</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><p>同时我们还可以把这个事件设为默认事件，在开头部分我们定义这个控件类的默认事件为我们前面注册的TestSwitch。</p><p><img alt=在这里插入图片描述 loading=lazy src=https://i-blog.csdnimg.cn/blog_migrate/20b434b3f3024c7e349b2480e5496d4f.png#pic_center></p><h2 id=使用这个控件>使用这个控件<a hidden class=anchor aria-hidden=true href=#使用这个控件>#</a></h2><p>那么该如何使用这个控件呢？你可以新建一个工程（一般情况下建议新建工程来使用控件，而控件库单独用一个工程来管理，你未来所有的控件都可以放在控件库里），如果在本解决方案中的话，只需要在解决方案管理器中右键点击你的控件库工程名，选择生成，然后你就可以当前解决方案的任意工程中使用你控件库里的所有控件了。</p><p>而如果你需要在外部使用你的控件库，可以在生成后，进入到你的工程文件夹，Debug或者Release文件夹里的dll文件。如果你需要在某一个工程中使用这个控件的话，就在新工程里点击工具-选择工具箱项，点击浏览，然后添加刚才那个dll文件即可。</p><p>现在我们在当前解决方案试试看吧：</p><p>生成文件、新建工程、然后开始使用设计页面，可以发现设计页面最开头添加了我们的控件库：</p><p><img alt=在这里插入图片描述 loading=lazy src=https://i-blog.csdnimg.cn/blog_migrate/533f3dc5f5f6af437880e1b5a233b25e.png#pic_center></p><p>然后我们拖出来两个，设置一下他们的大小和颜色：</p><p><img alt=在这里插入图片描述 loading=lazy src=https://i-blog.csdnimg.cn/blog_migrate/ee732094f8a4b7749553b2667701621e.png#pic_center></p><p>同时双击第一个控件增添事件功能：</p><p><img alt=在这里插入图片描述 loading=lazy src=https://i-blog.csdnimg.cn/blog_migrate/6cced7a1cc2475ecca74f99e70f751fa.png#pic_center></p><p>最后启动：</p><p><img alt=在这里插入图片描述 loading=lazy src=https://i-blog.csdnimg.cn/blog_migrate/f03246cf7249a979453708845785e066.gif#pic_center></p><p>成功。</p><p><a href=https://github.com/yunwuhai/TestControlsLib>完整的工程下载地址</a></p></div><footer class=post-footer><ul class=post-tags><li><a href=http://localhost:1313/tags/c%23/>C#</a></li></ul><nav class=paginav><a class=prev href=http://localhost:1313/posts/%E5%B5%8C%E5%85%A5%E5%BC%8F/c_cpp/c%E8%AF%AD%E8%A8%80%E5%8F%AF%E4%BB%A5%E4%BD%BF%E7%94%A8%E5%8F%98%E9%87%8F%E5%AE%9A%E4%B9%89%E6%95%B0%E7%BB%84/><span class=title>« Prev</span><br><span>C语言可以使用变量定义数组</span>
+</a><a class=next href=http://localhost:1313/posts/%E5%B5%8C%E5%85%A5%E5%BC%8F/arduino/arduino%E6%9E%81%E9%80%9F%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B%E4%B8%A4%E7%AF%87%E6%96%87%E7%AB%A0%E8%AE%A9%E4%BD%A0%E4%BC%9A%E7%94%A8arduino%E4%B8%8B/><span class=title>Next »</span><br><span>Arduino极速入门教程——两篇文章让你会用Arduino（下）</span></a></nav></footer></article></main><footer class=footer><span>&copy; 2025 <a href=http://localhost:1313/>云雾海的博客</a></span> ·
+<span>Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg viewBox="0 0 12 6" fill="currentColor"><path d="M12 6H0l6-6z"/></svg>
+</a><script>let menu=document.getElementById("menu");menu&&(menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}),document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove("dark"),localStorage.setItem("pref-theme","light")):(document.body.classList.add("dark"),localStorage.setItem("pref-theme","dark"))})</script><script>document.querySelectorAll("pre > code").forEach(e=>{const n=e.parentNode.parentNode,t=document.createElement("button");t.classList.add("copy-code"),t.innerHTML="copy";function s(){t.innerHTML="copied!",setTimeout(()=>{t.innerHTML="copy"},2e3)}t.addEventListener("click",t=>{if("clipboard"in navigator){navigator.clipboard.writeText(e.textContent),s();return}const n=document.createRange();n.selectNodeContents(e);const o=window.getSelection();o.removeAllRanges(),o.addRange(n);try{document.execCommand("copy"),s()}catch{}o.removeRange(n)}),n.classList.contains("highlight")?n.appendChild(t):n.parentNode.firstChild==n||(e.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?e.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(t):e.parentNode.appendChild(t))})</script></body></html>

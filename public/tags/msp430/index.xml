@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>MSP430 on 云雾海的博客</title>
+    <link>http://localhost:1313/tags/msp430/</link>
+    <description>Recent content in MSP430 on 云雾海的博客</description>
+    <image>
+      <title>云雾海的博客</title>
+      <url>http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- 0.150.1</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 28 Aug 2020 16:34:57 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/msp430/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用 CCS 导出 TXT 用于 BSL 烧录</title>
+      <link>http://localhost:1313/posts/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/%E4%BD%BF%E7%94%A8ccs%E5%AF%BC%E5%87%BAtxt%E7%94%A8%E4%BA%8Ebsl%E7%83%A7%E5%BD%95/</link>
+      <pubDate>Fri, 28 Aug 2020 16:34:57 +0800</pubDate>
+      <guid>http://localhost:1313/posts/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/%E4%BD%BF%E7%94%A8ccs%E5%AF%BC%E5%87%BAtxt%E7%94%A8%E4%BA%8Ebsl%E7%83%A7%E5%BD%95/</guid>
+      <description>&lt;h1 id=&#34;使用-ccs-导出-txt-用于-bsl-烧录&#34;&gt;使用 CCS 导出 TXT 用于 BSL 烧录&lt;/h1&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/c4583c9a3d9f17715f7bfe9319a8bc29.png#pic_center&#34;&gt;
+&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/9699fe20aa6ffef261a000b3fd8bc2ba.png#pic_center&#34;&gt;
+&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/dbe6eb5628f458c8fb049e0216c87aff.png#pic_center&#34;&gt;
+&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/73853efe3996224d43427459dd322c6f.png#pic_center&#34;&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>MSP430在Energia上的使用（上）</title>
+      <link>http://localhost:1313/posts/%E5%B5%8C%E5%85%A5%E5%BC%8F/arduino/msp430%E5%9C%A8energia%E4%B8%8A%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8A/</link>
+      <pubDate>Wed, 26 Aug 2020 17:32:10 +0800</pubDate>
+      <guid>http://localhost:1313/posts/%E5%B5%8C%E5%85%A5%E5%BC%8F/arduino/msp430%E5%9C%A8energia%E4%B8%8A%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8A/</guid>
+      <description>&lt;h1 id=&#34;msp430-在-energia-上的使用上&#34;&gt;MSP430 在 Energia 上的使用（上）&lt;/h1&gt;
+&lt;p&gt;说实话我也不确定会不会有后面的笔记，但是这次实验的确相当于没有做完。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#msp430-%E5%9C%A8-energia-%E4%B8%8A%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8A&#34;&gt;MSP430 在 Energia 上的使用（上）&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C&#34;&gt;准备工作&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E9%97%AE%E9%A2%98%E6%84%8F%E4%B9%89&#34;&gt;问题意义&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%AE%9E%E9%AA%8C%E4%B8%80%E6%B5%8B%E8%AF%95%E4%BC%A0%E8%BE%93%E6%8E%A5%E5%8F%A3&#34;&gt;实验一：测试传输接口&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%AE%9E%E9%AA%8C%E7%8E%B0%E8%B1%A1&#34;&gt;实验现象：&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%AE%9E%E9%AA%8C%E7%BB%93%E8%AE%BA&#34;&gt;实验结论：&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%AE%9E%E9%AA%8C%E4%BA%8C%E7%A7%BB%E6%A4%8D%E5%88%B0-arduinoide&#34;&gt;实验二：移植到 ArduinoIDE&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%A4%87%E6%B3%A8&#34;&gt;备注&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;准备工作&#34;&gt;准备工作&lt;/h2&gt;
+&lt;p&gt;终于狠下心花了百元大洋买了块 MSP430F5529LP 板子，准备研究一下板载仿真器在 Energia 中是如何进行烧录的。&lt;/p&gt;
+&lt;p&gt;通过 TI 公司的官方文件《MSP430F5529 LaunchPad Development Kit……》，我们其实可以得到 LaunchPad 的原理图，因为整个原理图用了四页，这里就不详细展示了，有需要可以在 TI 官网找。我只截取板载仿真器和 MSP430F5529 芯片的接口部分的图&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/ce2078a0f1addb14d8380c3564acccfa.png#pic_center&#34;&gt;&lt;/p&gt;
+&lt;p&gt;其中板载仿真器被 TI 公司命名为 ezFET，应该是简版仿真器的意思，除去电源线部分，我们可以看到信息传输分为两部分——SBW 和 UART。其中 SBW 相当于两线 JTAG，可以当做仿真器接口，而 UART 则是使用的 MSP430 的 BSL 接口，其只能作为烧录口。&lt;/p&gt;
+&lt;p&gt;那么看到这其实问题就很简单了，我们需要确定 Energia 在烧录的时候具体是用的哪个接口。&lt;/p&gt;
+&lt;h2 id=&#34;问题意义&#34;&gt;问题意义&lt;/h2&gt;
+&lt;p&gt;一般情况下，我们在使用 LaunchPad 时，是不需要管这个仿真器是如何工作的，但是如果当我们手里只有一块没有板载仿真器的开发板或者甚至只有一块芯片的时候，我们又该如何对其使用 Energia 呢，是应该用 JTAG 连接吗，还是使用 SBW，亦或是使用 BSL？我们是否能将 EnergiaIDE 的移植到 ArduinoIDE 上呢（因为 Energia 事实上能够使用的资源远远不及 Arduino，而且无法用 VSCode 这个大杀器）？&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

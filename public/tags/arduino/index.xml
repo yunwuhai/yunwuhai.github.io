@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Arduino on 云雾海的博客</title>
+    <link>http://localhost:1313/tags/arduino/</link>
+    <description>Recent content in Arduino on 云雾海的博客</description>
+    <image>
+      <title>云雾海的博客</title>
+      <url>http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- 0.150.1</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 02 Feb 2021 15:17:03 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/arduino/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Arduino极速入门教程——两篇文章让你会用Arduino（下）</title>
+      <link>http://localhost:1313/posts/%E5%B5%8C%E5%85%A5%E5%BC%8F/arduino/arduino%E6%9E%81%E9%80%9F%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B%E4%B8%A4%E7%AF%87%E6%96%87%E7%AB%A0%E8%AE%A9%E4%BD%A0%E4%BC%9A%E7%94%A8arduino%E4%B8%8B/</link>
+      <pubDate>Tue, 02 Feb 2021 15:17:03 +0800</pubDate>
+      <guid>http://localhost:1313/posts/%E5%B5%8C%E5%85%A5%E5%BC%8F/arduino/arduino%E6%9E%81%E9%80%9F%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B%E4%B8%A4%E7%AF%87%E6%96%87%E7%AB%A0%E8%AE%A9%E4%BD%A0%E4%BC%9A%E7%94%A8arduino%E4%B8%8B/</guid>
+      <description>&lt;p&gt;&lt;em&gt;接&lt;a href=&#34;Arduino%E6%9E%81%E9%80%9F%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B%E2%80%94%E2%80%94%E4%B8%A4%E7%AF%87%E6%96%87%E7%AB%A0%E8%AE%A9%E4%BD%A0%E4%BC%9A%E7%94%A8Arduino%EF%BC%88%E4%B8%8A%EF%BC%89.md&#34;&gt;上篇&lt;/a&gt;关于Arduino基础环境配置、界面介绍和C语言基础，这一篇的内容为具体如何在Arduino中进行编程。&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;在vscode上配置arduino&#34;&gt;在VSCode上配置Arduino&lt;/h2&gt;
+&lt;h3 id=&#34;什么是vscode&#34;&gt;什么是VSCode&lt;/h3&gt;
+&lt;p&gt;VSCode，即Visual Studio Code，是微软制作的一个开源免费编辑器，当今始接最热门的主流代码编辑器之一。百度vscode或者点我给出的这个&lt;a href=&#34;https://code.visualstudio.com/&#34;&gt;链接&lt;/a&gt;，可以进到官网下载。编辑器与IDE（集成开发环境）不同，VSCode更加像一个可以加载插件的记事本，不过如果配置得当，VSCode也可以用来当作一个简陋的IDE使用。&lt;/p&gt;
+&lt;h3 id=&#34;为什么用vscode&#34;&gt;为什么用VSCode&lt;/h3&gt;
+&lt;p&gt;Arduino IDE本身其实只是一个非常简陋的IDE，没有代码补全、丰富的高亮、代码跳转重构等功能，而这些我们都可以在VSCode上进行实现，这可以是不必要的（如果你能力足够强用记事本直接写代码也是可行的），但是作为初学者或者开发者使用这些功能能够让你快速学习或者实现你想要实现的功能。&lt;/p&gt;
+&lt;h3 id=&#34;怎么配置&#34;&gt;怎么配置&lt;/h3&gt;
+&lt;p&gt;先下载并安装VSCode。&lt;/p&gt;
+&lt;p&gt;接着下载插件，在最左边选择扩展按钮，然后搜索并安装我标出的这几个插件，你就能有一个可以装Arduino的中文VSCode了（我的VSCode与你们的应该样式不同，因为我安装了样式的插件）：&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/c7fc4b5633e0fc1458fc5acd5d2860b2.png#pic_center&#34;&gt;&lt;/p&gt;
+&lt;p&gt;然后打开安装好的VSCode，左上角选择：文件-打开文件夹，然后选择一个你以后专门保存Arduino代码的文件夹打开。&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/52016e4852c6b62c2703dc61160c1321.png#pic_center&#34;&gt;&lt;/p&gt;
+&lt;p&gt;在左上角文件选项中选择首选项-设置。&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/106e1e65d5a45b502d2f482a5a21e34c.png#pic_center&#34;&gt;&lt;/p&gt;
+&lt;p&gt;然后设置界面的右上角，选择打开设置（json）&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/f37302a0a933a2447a87ac01aba3df89.png#pic_center&#34;&gt;&lt;/p&gt;
+&lt;p&gt;然后我们就进入到了一个JSON文件界面，在原本的文件开头如下内容，不过需要&lt;strong&gt;注意：下面第一行的path为你安装Arduino的位置，我安装在D:/Software/Arduino文件夹里的，如果设置自己的地址也请按照我这种双斜杠的格式来写。&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;s2&#34;&gt;&amp;#34;arduino.path&amp;#34;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;D:\\Software\\Arduino&amp;#34;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;s2&#34;&gt;&amp;#34;C_Cpp.intelliSenseEngine&amp;#34;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;Tag Parser&amp;#34;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;s2&#34;&gt;&amp;#34;editor.insertSpaces&amp;#34;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;s2&#34;&gt;&amp;#34;files.autoGuessEncoding&amp;#34;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;s2&#34;&gt;&amp;#34;arduino.logLevel&amp;#34;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;info&amp;#34;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;s2&#34;&gt;&amp;#34;explorer.confirmDelete&amp;#34;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;false&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;s2&#34;&gt;&amp;#34;editor.detectIndentation&amp;#34;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;false&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;点击Ctrl+s保存JSON文件，然后重启VSCode，现在你的VSCode环境就配置好了。&lt;/p&gt;
+&lt;h2 id=&#34;arduino的程序内容&#34;&gt;Arduino的程序内容&lt;/h2&gt;
+&lt;h3 id=&#34;打开例程&#34;&gt;打开例程&lt;/h3&gt;
+&lt;p&gt;现在我们先来打开一个官方例程，首先打开Arduino IDE，选择文件-示例-Basic-Blink，这是Arduino官方提供的一个灯光闪烁程序。&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/09daac37204e1034f935706c1892f310.png#pic_center&#34;&gt;&lt;/p&gt;
+&lt;p&gt;点开后按Ctrl+S，IDE会告诉你该文件处于只读状态，需要将项目保存在其它位置，点击确定，然后将文件保存在我们前面设置的VSCode工作文件夹里，然后我们就可以退出并通过VSCode打开它了。&lt;/p&gt;
+&lt;p&gt;例程将会是我们很好的学习资源，这些例程有些来自于开发板，有些来自于函数库，有些来自于官方，但是我们如果已经安装好的东西，找例程并且想要在VSCode中进行修改测试或者仅仅是查看，都可以通过这种方式来。&lt;/p&gt;
+&lt;h3 id=&#34;程序结构&#34;&gt;程序结构&lt;/h3&gt;
+&lt;p&gt;我们现在可以发现其实这个Blink中有两个函数setup和loop，它们的功能我在下图中标示了：&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/f5df60433d2ca2d95e1e3134913dece1.png#pic_center&#34;&gt;&lt;/p&gt;
+&lt;p&gt;setup和loop是Arduino的逻辑核心，普通的Arduino程序都是基于这两个函数进行运行的，一般我们在setup中初始化环境，然后在loop区域写我们需要实现的功能。&lt;/p&gt;
+&lt;p&gt;如果想知道这两个函数是怎么实现的，可以查看&lt;code&gt;{你的Arduino安装地址}\hardware\arduino\avr\cores\arduino&lt;/code&gt;中main.cpp和Arduino.h文件，大概意思就是我们在程序中实现的setup和loop函数将会通过Arduino.h被引用，然后在main.cpp中被执行，Arduino.h只是一个引用传递文件，这里我们重点关注main.cpp：&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/931b69a6a1a66f5302b28401b63b14df.png#pic_center&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;功能函数&#34;&gt;功能函数&lt;/h3&gt;
+&lt;p&gt;现在我们再来看看Blink文件：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// the setup function runs once when you press reset or power the board
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;setup&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;c1&#34;&gt;// initialize digital pin LED_BUILTIN as an output.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;n&#34;&gt;pinMode&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;LED_BUILTIN&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;OUTPUT&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// the loop function runs over and over again forever
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;loop&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;digitalWrite&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;LED_BUILTIN&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;HIGH&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;   &lt;span class=&#34;c1&#34;&gt;// turn the LED on (HIGH is the voltage level)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;n&#34;&gt;delay&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1000&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;                       &lt;span class=&#34;c1&#34;&gt;// wait for a second
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;n&#34;&gt;digitalWrite&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;LED_BUILTIN&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;LOW&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;    &lt;span class=&#34;c1&#34;&gt;// turn the LED off by making the voltage LOW
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;n&#34;&gt;delay&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1000&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;                       &lt;span class=&#34;c1&#34;&gt;// wait for a second
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;前面那一堆介绍注释我就不复制了，有兴趣自己看，我们现在关注程序中出现的功能函数：&lt;code&gt;pinMode()&lt;/code&gt;、&lt;code&gt;digitalWrite()&lt;/code&gt;、&lt;code&gt;delay()&lt;/code&gt;。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Arduino极速入门教程——两篇文章让你会用Arduino（上）</title>
+      <link>http://localhost:1313/posts/%E5%B5%8C%E5%85%A5%E5%BC%8F/arduino/arduino%E6%9E%81%E9%80%9F%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B%E4%B8%A4%E7%AF%87%E6%96%87%E7%AB%A0%E8%AE%A9%E4%BD%A0%E4%BC%9A%E7%94%A8arduino%E4%B8%8A/</link>
+      <pubDate>Mon, 01 Feb 2021 20:06:25 +0800</pubDate>
+      <guid>http://localhost:1313/posts/%E5%B5%8C%E5%85%A5%E5%BC%8F/arduino/arduino%E6%9E%81%E9%80%9F%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B%E4%B8%A4%E7%AF%87%E6%96%87%E7%AB%A0%E8%AE%A9%E4%BD%A0%E4%BC%9A%E7%94%A8arduino%E4%B8%8A/</guid>
+      <description>&lt;p&gt;&lt;em&gt;开坑使我快乐，本教程仅供初学者入门学习使用，要想深入还是得靠自己。本教程假设读者为完全无编程基础的普通人，所以行文可能会稍显啰嗦，但相信仍然会是目前比较精炼简短的教程。&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;arduino是啥&#34;&gt;Arduino是啥&lt;/h2&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/f76db95c185db2bdcbe5ec32110da6dd.jpeg#pic_center&#34;&gt;&lt;/p&gt;
+&lt;p&gt;一个开源的硬件开发平台，其特点在于简单易学易上手，而且国内外资源多，有啥问题也好解决。&lt;/p&gt;
+&lt;h2 id=&#34;arduino要些什么知识&#34;&gt;Arduino要些什么知识&lt;/h2&gt;
+&lt;h3 id=&#34;基础&#34;&gt;基础&lt;/h3&gt;
+&lt;p&gt;&lt;em&gt;有这些基础你基本上可以用Arduino做出网上常见的60%的项目。&lt;/em&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;C语言基础和一点面向对象语言编程概念
+&lt;ol&gt;
+&lt;li&gt;Arduino编程时使用C++，但是C++是兼容C语言的，一些简单基础的部分有C语言基础就能实现。&lt;/li&gt;
+&lt;li&gt;在基础使用时我们仍然会使用到面向对象编程的东西，先掌握概念和一点基础的东西，初学阶段够用就行。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;初中电学知识和一点数电模电概念
+&lt;ol&gt;
+&lt;li&gt;知道短路、断路概念还有电压电流电阻之间的关系计算，这是硬件制作最基础的东西。&lt;/li&gt;
+&lt;li&gt;有一些涉及电容、电感、半导体的内容，这些一般属于模电知识，初学的时候不需要了解，因为我们可以用别人做好的电路，稍微连连线就行。&lt;/li&gt;
+&lt;li&gt;数字电路会是一个很常用的概念，不过初学阶段你只需要知道二进制计算就行。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;时间、精力和钱
+&lt;ol&gt;
+&lt;li&gt;虽然Arduino的资料很多，但是偶尔你也可能遇到百度上找不到的问题（也有可能是你因为知识不够无法形容出来的问题），要把这些问题解决你需要花很多时间来搜索、学习、试错。&lt;/li&gt;
+&lt;li&gt;学习是一个很耗费精力的事，事实上你最好喜欢一样知识或者有一个明确需要学习它的理由，才能更好坚持下来。&lt;/li&gt;
+&lt;li&gt;Arduino属于硬件开发平台，和平常我们电脑手机上开发一个程序软件游戏不同，硬件购买时将会花费大量的金钱，我会在后面不时提一下怎么尽量省钱去买这些硬件，但是实际学习中你仍然要做好花钱的准备。&lt;/li&gt;
+&lt;li&gt;不过不要被我上面说的吓到了，毕竟硬件如果能做好也是可以带来收入的，很多东西都是会者不难，难者不会，现代社会赚钱不就是赚信息差嘛。我在学Arduino没多久的时候，靠着百度搜搜改改，就用它接到了我人生中的第一笔单子，用了一下午赚了三百块。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;进阶&#34;&gt;进阶&lt;/h3&gt;
+&lt;p&gt;&lt;em&gt;这些是你觉得自己已经行了之后可以继续深入学习的方向，本教程会不时提及但是不做详述。&lt;/em&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;C++语言编程
+&lt;ol&gt;
+&lt;li&gt;C++是Arduino的核心语言，虽然运行效率略低于直接用C，但是其带来的方便性可以让我们无视这几毫秒。&lt;/li&gt;
+&lt;li&gt;网上说C++有点难学，但是不要担心，你只是需要用它来做Arduino而已，不会怎么用到C++那些乱七八糟的复杂特性。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;嵌入式编程
+&lt;ol&gt;
+&lt;li&gt;当你可以自己从底层上将一个全新的芯片做成Arduino的时候，你就可以算嵌入式编程入门了。&lt;/li&gt;
+&lt;li&gt;有句话叫嵌入式门槛在门里，前期简单入门做点简单事不用担心，但是越到后面学习难度越陡峭，请提前做好准备。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;操作系统
+&lt;ol&gt;
+&lt;li&gt;这里涉及到嵌入式编程的高级操作了，主要目的是为了实现多线程（让芯片同一时间处理多件事），不需要去详细学，接触到嵌入式后自然会学到&lt;/li&gt;
+&lt;li&gt;如果你从软件那边往嵌入式这边学的话也会学到这个东西，操作系统往上就是我们平常在系统环境上的编程，往下就是针对硬件的编程&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;网络编程
+&lt;ol&gt;
+&lt;li&gt;这个主要是未来物联网开发会更加多，甚至现在所谓的嵌入式编程和物联网编程都有点代称的感觉了，所以你需要掌握一定的网络编程的知识&lt;/li&gt;
+&lt;li&gt;如果你有操作系统上的网络编程开发经验，那么你在理解这一块上会比较容易，而如果你学会了这块，后面想学互联网行业的技术也会比较容易&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;复杂的电路知识
+&lt;ol&gt;
+&lt;li&gt;初中那点电路知识在这肯定是不够的，高频射频电路、高速电路的设计，这些也是可以学习的一个点（但是不是必学的，因为这一块实际上会有专门的开发人员），当然实际上这里也包括了半导体设计、FPGA啥的（这又是另外一个行业了，但是了解一些知识有助于更好地理解一些底层原理）&lt;/li&gt;
+&lt;li&gt;玩Arduino的大多都是对极客、发明家之类的感兴趣的朋友，所以会电路设计肯定会让你节省下更多的时间精力和钱&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;非常非常多的时间、精力和钱
+&lt;ol&gt;
+&lt;li&gt;你要深入学习那么路线就肯定是很陡峭的，事实上我在上面罗列的这些东西也只是所有知识的冰山一角，不过你既然都看到这了想必也下定决心了，所以，加油吧。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;学习须知&#34;&gt;学习须知&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;请务必保持不求甚解的态度，所有的东西你不需要挨个记住，只需有个大概印象即可，因为有些知识并不是你后来会常用的，花时间去记浪费时间又容易造成挫败感，而经常用的东西你在多用了之后自然就记住了。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;有个大概印象后需要多自己做项目，做点小玩意，可以搜索借鉴代码，但是要多思考，这样才能帮助你融会贯通所学的知识，也才能让你从一大堆知识中总结凝练出能够帮助到自己的东西。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;环境搭建&#34;&gt;环境搭建&lt;/h2&gt;
+&lt;p&gt;在看完这一章之前先别买硬件，免得吃亏买贵了。&lt;/p&gt;
+&lt;p&gt;百度Arduino，你一般会看到最前面的两个链接，其中一个是&lt;a href=&#34;https://www.arduino.cc/&#34;&gt;英文官网&lt;/a&gt;，另二个是&lt;a href=&#34;https://www.arduino.cn/&#34;&gt;中文社区&lt;/a&gt;。这两个网站里面都有安装包可以下载，我们这里举例为选择官网下载，点击我上面给的链接即可进入英文官网，然后界面中依次选择：Software-Download，在出现的下载界面里点击你需要的程序包。&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;如果选择ZIP file你将获得一个压缩包，这个属于免安装的方式，直接解压就可以使用，更方便，但是稳定性弱点（一般也没啥）。其中Windows平台不建议点那个Windows app选项，那个是从Windows应用商店下载安装的，这种安装方式有时候要搞点花的不方便。&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;下载好后你将获得一个安装程序或者压缩文件，将Arduino安装或解压到你一个找得到的位置即可，它可能会让你安装一个驱动，同样安装即可。&lt;/p&gt;
+&lt;p&gt;然后你的Arduino环境就搭建好了，非常简单。&lt;/p&gt;
+&lt;h2 id=&#34;界面介绍&#34;&gt;界面介绍&lt;/h2&gt;
+&lt;p&gt;现在打开你的Arduino（实际上它叫Arduino IDE，即Arduino的集成开发环境）：&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/aece828185d2568e885958e84703cb27.png#pic_center&#34;&gt;&lt;/p&gt;
+&lt;p&gt;让我们来看看界面长啥样：&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/40ba8766233b7acfd00109ff5b3b75a8.png#pic_center&#34;&gt;&lt;/p&gt;
+&lt;p&gt;可以看到，下载安装好后它就是一个不大简单的中文界面，现在我将其放大然后标注一下主界面的内容：&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/3b00d2466908d268bae58c866204cb1c.png#pic_center&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;配置&#34;&gt;配置&lt;/h3&gt;
+&lt;p&gt;为了方便起见，在此对我们的Arduino IDE进行配置一下，点击文件-首选项：&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/36e0214d5c5af7f8162fcddd2bcb4d62.png#pic_center&#34;&gt;&lt;/p&gt;
+&lt;p&gt;然后我们可以看到新界面，也没啥大变化，多了个行号和可折叠符号，不喜欢也可以去掉，不过建议留着，比较方便：&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/85ea6fa9deb287122e87cbe789a5735b.png#pic_center&#34;&gt;&lt;/p&gt;
+&lt;p&gt;设置完了，我们再看看工具栏中还有一些其它什么有用的功能没：&lt;/p&gt;
+&lt;h3 id=&#34;文件&#34;&gt;文件&lt;/h3&gt;
+&lt;p&gt;首先点开文件，这里面最重要的除了刚才讲过的首选项界面，另一个就是示例了，里面给出了很多例子供以学习：&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/2909eca58ef255c6ecae2b9c29b2134c.png#pic_center&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;编辑&#34;&gt;编辑&lt;/h3&gt;
+&lt;p&gt;然后是编辑界面，这里有一个复制到论坛和复制为HTML可以把代码以特定格式进行全部复制，便于分享；&lt;/p&gt;
+&lt;p&gt;另外下面还有三行关于注释、缩进的功能，如果再框选一大段文字后通过快捷键进行操作的话，可以实现块注释和块缩进：&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>MSP432在Energia上的使用（下）</title>
+      <link>http://localhost:1313/posts/%E5%B5%8C%E5%85%A5%E5%BC%8F/arduino/msp432%E5%9C%A8energia%E4%B8%8A%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8B/</link>
+      <pubDate>Sat, 07 Nov 2020 19:46:09 +0800</pubDate>
+      <guid>http://localhost:1313/posts/%E5%B5%8C%E5%85%A5%E5%BC%8F/arduino/msp432%E5%9C%A8energia%E4%B8%8A%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8B/</guid>
+      <description>&lt;h1 id=&#34;msp432-在-energia-上的使用下&#34;&gt;MSP432 在 Energia 上的使用（下）&lt;/h1&gt;
+&lt;p&gt;&lt;em&gt;其实我自己都没想到我居然会来填坑，不过说实话这好像也算不上填坑，毕竟之前在&lt;a href=&#34;MSP430%E5%9C%A8Energia%E4%B8%8A%E7%9A%84%E4%BD%BF%E7%94%A8%EF%BC%88%E4%B8%8A%EF%BC%89.md&#34;&gt;MSP430 在 Energia 上的使用（上）&lt;/a&gt;这个帖子里讲的是 MSP430，而且说的准备在 VSCode 里装 Energia 其实到现在还没弄，不过这里还是想介绍一下 Energia 的另一项功能，一个专属于 MSP432 的功能。&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#msp432-%E5%9C%A8-energia-%E4%B8%8A%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8B&#34;&gt;MSP432 在 Energia 上的使用（下）&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%8F%91%E7%8E%B0&#34;&gt;发现&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95&#34;&gt;使用方法&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#task1&#34;&gt;TASK1&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#task2&#34;&gt;TASK2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#task3&#34;&gt;TASK3&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;发现&#34;&gt;发现&lt;/h2&gt;
+&lt;p&gt;事实证明多看官网还是有好处的，之前我在使用 Energia 对 MSP430 进行编程时一直非常疑惑，为什么 TI 公司不直接使用 Arduino 已有的 IDE 而非要做个自己的 Energia 导致不为人知非常冷门，但是官网上的介绍回答了我这一点。打开&lt;a href=&#34;https://energia.nu/&#34;&gt;Energia 官网&lt;/a&gt;，进入 Guide 界面，翻阅一下可以看见一个名词——&lt;strong&gt;MultiTasking&lt;/strong&gt;，即多任务。众所周知如果单片机想要实现多任务并行，一般需要自己搭建 RTOS 或者更复杂一点进行专门的时分复用设计，这些方法往往需要较丰富的知识才能实现。而 Energia 就可以非常简单地（其实如果进行一些复杂操作也是挺复杂的）实现多任务操作。而官网在这里其实也给出了关于 Multitasking 的&lt;a href=&#34;https://energia.nu/guide/foundations/programming_technique/multitasking/&#34;&gt;介绍&lt;/a&gt;，值得注意的是&lt;strong&gt;目前该功能只能作用与 MSP432，MSP432E，CC3320 和 CC1310&lt;/strong&gt;几种芯片，这也是为什么我把这一章名字改成了 MSP432 而不是 MSP430。（说起来每次打开 Energia 它的启动显示里面也写到了 Energia MT，实际上就是说的这个功能，不过我一直没咋注意）&lt;/p&gt;
+&lt;h2 id=&#34;使用方法&#34;&gt;使用方法&lt;/h2&gt;
+&lt;p&gt;其实官网原文就有一个大概介绍了，我这里就重复一下。关于 MultiTasking（以下简称 MT）的使用其实非常简单（如果不想做太复杂的话）。&lt;/p&gt;
+&lt;p&gt;每次新建工程后，我们会有一个初始界面，上面写的 void setup()和 void loop()（其实就是正常 Energia 或 Arduino IDE 在新建后的工程界面），我们可以把这个界面称之为工程主界面。如果只使用工程主界面写一个程序，那么它只是普通的单线程程序，但是如果你使用的是 MSP432 这类单片机，你可以点击 IDE 右上角的倒三角符号，新建一个 task，随便输入一个名字作为新任务（Task）的名字（注意不要输入后缀，IDE 会自动将其生成为 ino）然后你可以在里面写两个函数，他们便可以当成一个新的 setup 和 loop 函数了，此时如果烧录进芯片后，芯片便会同时运行两个任务（实际上并不是同时运行，只是通过快速转换两个任务的运行最后看上去是同时运行）。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>MSP430在Energia上的使用（上）</title>
+      <link>http://localhost:1313/posts/%E5%B5%8C%E5%85%A5%E5%BC%8F/arduino/msp430%E5%9C%A8energia%E4%B8%8A%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8A/</link>
+      <pubDate>Wed, 26 Aug 2020 17:32:10 +0800</pubDate>
+      <guid>http://localhost:1313/posts/%E5%B5%8C%E5%85%A5%E5%BC%8F/arduino/msp430%E5%9C%A8energia%E4%B8%8A%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8A/</guid>
+      <description>&lt;h1 id=&#34;msp430-在-energia-上的使用上&#34;&gt;MSP430 在 Energia 上的使用（上）&lt;/h1&gt;
+&lt;p&gt;说实话我也不确定会不会有后面的笔记，但是这次实验的确相当于没有做完。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#msp430-%E5%9C%A8-energia-%E4%B8%8A%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8A&#34;&gt;MSP430 在 Energia 上的使用（上）&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C&#34;&gt;准备工作&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E9%97%AE%E9%A2%98%E6%84%8F%E4%B9%89&#34;&gt;问题意义&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%AE%9E%E9%AA%8C%E4%B8%80%E6%B5%8B%E8%AF%95%E4%BC%A0%E8%BE%93%E6%8E%A5%E5%8F%A3&#34;&gt;实验一：测试传输接口&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%AE%9E%E9%AA%8C%E7%8E%B0%E8%B1%A1&#34;&gt;实验现象：&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%AE%9E%E9%AA%8C%E7%BB%93%E8%AE%BA&#34;&gt;实验结论：&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%AE%9E%E9%AA%8C%E4%BA%8C%E7%A7%BB%E6%A4%8D%E5%88%B0-arduinoide&#34;&gt;实验二：移植到 ArduinoIDE&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%A4%87%E6%B3%A8&#34;&gt;备注&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;准备工作&#34;&gt;准备工作&lt;/h2&gt;
+&lt;p&gt;终于狠下心花了百元大洋买了块 MSP430F5529LP 板子，准备研究一下板载仿真器在 Energia 中是如何进行烧录的。&lt;/p&gt;
+&lt;p&gt;通过 TI 公司的官方文件《MSP430F5529 LaunchPad Development Kit……》，我们其实可以得到 LaunchPad 的原理图，因为整个原理图用了四页，这里就不详细展示了，有需要可以在 TI 官网找。我只截取板载仿真器和 MSP430F5529 芯片的接口部分的图&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/ce2078a0f1addb14d8380c3564acccfa.png#pic_center&#34;&gt;&lt;/p&gt;
+&lt;p&gt;其中板载仿真器被 TI 公司命名为 ezFET，应该是简版仿真器的意思，除去电源线部分，我们可以看到信息传输分为两部分——SBW 和 UART。其中 SBW 相当于两线 JTAG，可以当做仿真器接口，而 UART 则是使用的 MSP430 的 BSL 接口，其只能作为烧录口。&lt;/p&gt;
+&lt;p&gt;那么看到这其实问题就很简单了，我们需要确定 Energia 在烧录的时候具体是用的哪个接口。&lt;/p&gt;
+&lt;h2 id=&#34;问题意义&#34;&gt;问题意义&lt;/h2&gt;
+&lt;p&gt;一般情况下，我们在使用 LaunchPad 时，是不需要管这个仿真器是如何工作的，但是如果当我们手里只有一块没有板载仿真器的开发板或者甚至只有一块芯片的时候，我们又该如何对其使用 Energia 呢，是应该用 JTAG 连接吗，还是使用 SBW，亦或是使用 BSL？我们是否能将 EnergiaIDE 的移植到 ArduinoIDE 上呢（因为 Energia 事实上能够使用的资源远远不及 Arduino，而且无法用 VSCode 这个大杀器）？&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Arduino通过USB转TTL无BootLoader（引导程序）烧录程序的两种办法</title>
+      <link>http://localhost:1313/posts/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/arduino%E9%80%9A%E8%BF%87usb%E8%BD%ACttl%E6%97%A0bootloader%E5%BC%95%E5%AF%BC%E7%A8%8B%E5%BA%8F%E7%83%A7%E5%BD%95%E7%A8%8B%E5%BA%8F%E7%9A%84%E4%B8%A4%E7%A7%8D%E5%8A%9E%E6%B3%95/</link>
+      <pubDate>Sun, 09 Aug 2020 19:51:21 +0800</pubDate>
+      <guid>http://localhost:1313/posts/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/arduino%E9%80%9A%E8%BF%87usb%E8%BD%ACttl%E6%97%A0bootloader%E5%BC%95%E5%AF%BC%E7%A8%8B%E5%BA%8F%E7%83%A7%E5%BD%95%E7%A8%8B%E5%BA%8F%E7%9A%84%E4%B8%A4%E7%A7%8D%E5%8A%9E%E6%B3%95/</guid>
+      <description>&lt;h1 id=&#34;arduino-通过-usb-转-ttl-无-bootloader引导程序烧录程序的两种办法&#34;&gt;Arduino 通过 USB 转 TTL 无 BootLoader（引导程序）烧录程序的两种办法&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#arduino-%E9%80%9A%E8%BF%87-usb-%E8%BD%AC-ttl-%E6%97%A0-bootloader%E5%BC%95%E5%AF%BC%E7%A8%8B%E5%BA%8F%E7%83%A7%E5%BD%95%E7%A8%8B%E5%BA%8F%E7%9A%84%E4%B8%A4%E7%A7%8D%E5%8A%9E%E6%B3%95&#34;&gt;Arduino 通过 USB 转 TTL 无 BootLoader（引导程序）烧录程序的两种办法&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%E6%B3%A8%E6%84%8F&#34;&gt;注意&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E4%BA%8E-bootloader-%E7%9A%84%E5%BA%9F%E8%AF%9D&#34;&gt;于 BootLoader 的废话&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E9%80%9A%E8%BF%87-arduinoide-%E7%9A%84-serial-%E6%A8%A1%E5%BC%8F%E7%83%A7%E5%BD%95&#34;&gt;通过 ArduinoIDE 的 Serial 模式烧录&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E9%80%9A%E8%BF%87%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%96%87%E4%BB%B6%E7%83%A7%E5%BD%95&#34;&gt;通过二进制文件烧录&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E6%80%BB%E7%BB%93&#34;&gt;总结&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;注意&#34;&gt;注意&lt;/h2&gt;
+&lt;p&gt;（这个实验室基于 stm32duino 的，avr 单片机并不直接通用，不过如果你准备尝试使用串口来给 avr 单片机（&lt;em&gt;就是 Arduino 官方出的几款 Arduino&lt;/em&gt;）烧录 Arduino 的 BootLoader，建议直接放弃因为 avr 单片机并不支持直接使用串口上传程序，而且 Arduino 的 BootLoader 好像目的也就是让 Arduino 能够直接串口烧录程序。&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;也就是说你不能在没有 BootLoader 的情况下烧录 avr-Arduino 的 BootLoader，而当你可以用串口给 avr-Arduino 烧录 BootLoader 时就说明你已经有 BootLoader 了，可以不用再烧录一次了&lt;/em&gt;）&lt;/p&gt;
+&lt;h2 id=&#34;于-bootloader-的废话&#34;&gt;于 BootLoader 的废话&lt;/h2&gt;
+&lt;p&gt;因为准备参加电赛，想着如果比赛可以用 Arduino 或许会方便很多，所以准备研究一下 Arduino 的底层程序，学习一下如何把随便一块芯片都能做成 Arduino 来开发。不过这篇帖子和此并没有太大关系，只是属于机缘巧合做的一个小实验而已，对于已知 BootLoader 的原理或者想自己写 BootLoader 的朋友并无太大帮助。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

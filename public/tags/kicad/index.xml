@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>KiCAD on 云雾海的博客</title>
+    <link>http://localhost:1313/tags/kicad/</link>
+    <description>Recent content in KiCAD on 云雾海的博客</description>
+    <image>
+      <title>云雾海的博客</title>
+      <url>http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- 0.150.1</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 20 Nov 2020 16:24:28 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/kicad/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>如何使用KiCAD画扩展板</title>
+      <link>http://localhost:1313/posts/%E5%B5%8C%E5%85%A5%E5%BC%8F/%E7%A1%AC%E4%BB%B6%E8%AE%BE%E8%AE%A1/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8kicad%E7%94%BB%E6%89%A9%E5%B1%95%E6%9D%BF/</link>
+      <pubDate>Fri, 20 Nov 2020 16:24:28 +0800</pubDate>
+      <guid>http://localhost:1313/posts/%E5%B5%8C%E5%85%A5%E5%BC%8F/%E7%A1%AC%E4%BB%B6%E8%AE%BE%E8%AE%A1/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8kicad%E7%94%BB%E6%89%A9%E5%B1%95%E6%9D%BF/</guid>
+      <description>&lt;p&gt;&lt;em&gt;使用过 Arduino 的朋友或多或少应该都见过 Arduino 那种直插的扩展板，不用排线不用焊接，只需排针排母上下对齐然后轻轻一推，就完成了模块化和集成化的完美结合。本文从自己制作的一个板子出发，基于 KiCAD 简单介绍一下扩展板的画法。&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF&#34;&gt;设计思路&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E7%AC%AC%E4%B8%80%E6%AD%A5%E7%94%BB%E5%A5%BD%E5%86%85%E9%83%A8%E7%94%B5%E8%B7%AF&#34;&gt;第一步：画好内部电路&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E7%94%BB%E7%9B%B4%E6%8F%92%E5%BC%95%E8%84%9A%E7%AC%A6%E5%8F%B7&#34;&gt;第二步：画直插引脚符号&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E7%AC%AC%E4%B8%89%E6%AD%A5%E5%B0%86%E7%9B%B4%E6%8F%92%E5%BC%95%E8%84%9A%E7%AC%A6%E5%8F%B7%E5%AF%BC%E5%85%A5%E5%B9%B6%E8%BF%9E%E6%8E%A5&#34;&gt;第三步：将直插引脚符号导入并连接&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E7%AC%AC%E5%9B%9B%E6%AD%A5%E7%94%BB%E7%9B%B4%E6%8F%92%E5%BC%95%E8%84%9A%E5%B0%81%E8%A3%85&#34;&gt;第四步：画直插引脚封装&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E7%AC%AC%E4%BA%94%E6%AD%A5%E4%BF%AE%E6%94%B9%E8%B7%AF%E5%BE%84&#34;&gt;第五步：修改路径&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E7%AC%AC%E5%85%AD%E6%AD%A5%E5%88%86%E9%85%8D%E5%B0%81%E8%A3%85&#34;&gt;第六步：分配封装&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E7%AC%AC%E4%B8%83%E6%AD%A5%E7%94%BB-pcb&#34;&gt;第七步：画 PCB&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E7%AC%AC%E5%85%AB%E6%AD%A5%E5%AF%BC%E5%87%BA%E7%94%9F%E4%BA%A7%E6%96%87%E4%BB%B6%E5%B9%B6%E6%89%93%E6%9D%BF&#34;&gt;第八步：导出生产文件并打板&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;设计思路&#34;&gt;设计思路&lt;/h2&gt;
+&lt;p&gt;首先需要确定自己是要制作什么扩展板，这里我是为了自己的项目设计了一个 stm32f103c8 的板子，功能就是做成一个最小系统板，所有的接口都单独引出。&lt;/p&gt;
+&lt;h2 id=&#34;第一步画好内部电路&#34;&gt;第一步：画好内部电路&lt;/h2&gt;
+&lt;p&gt;在&lt;a href=&#34;https://www.ultralibrarian.com/&#34;&gt;Ultra&lt;/a&gt;找到需要的芯片的符号并下载，在导入后画出板子的内部电路。内部电路很简单，画出复位电路、供电电路、晶振时钟电路、冲击电流保护、开关显示电路。同时将 BOOT1 拉低，因为这块板子我不需要使用内置 SRAM 启动。&lt;/p&gt;
+&lt;p&gt;画好成果如下：&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/a92be0b5ec033941b724f24bc6d62234.png#pic_center&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;第二步画直插引脚符号&#34;&gt;第二步：画直插引脚符号&lt;/h2&gt;
+&lt;p&gt;因为要做成扩展板，那么很多时候直插引脚的结构往往就是相同的，如果每次使用的时候都要重新画一次直插引脚，那么很显然这会是很复杂麻烦的一件事，所以直接将其做成一个直插引脚符号会很省时省力。在我的设计里面，这个板子是一个六边形，然后每条边上有八个引脚，同时这八个引脚里面前两个始终为 GND 和 3V3，然后我画了如下的这样的符号，为了省时省力，在自认为不会犯错的情况下，我对每个引脚的设置都为 Passive。&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/dba682d8053996fc90374886226162a2.png#pic_center&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;第三步将直插引脚符号导入并连接&#34;&gt;第三步：将直插引脚符号导入并连接&lt;/h2&gt;
+&lt;p&gt;画好符号后，就只需要将所需引脚连接起来即可，而后如果遇到其它的扩展板，也只需要将对应的引脚相互连接即可，这里我下拉了 BOOT0，如果需要让它上拉，只需要在外部电路连接 3V3 即可。&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/f83d4560f9e0be9449355ec0a73264dd.png#pic_center&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;第四步画直插引脚封装&#34;&gt;第四步：画直插引脚封装&lt;/h2&gt;
+&lt;p&gt;和符号同理，这样设计之后就不需要每次都重新打孔，而且还要费心费力地去计算孔的位置，太麻烦，所以直接设计成封装。新建库、封装，通过计算找出所有孔的位置，然后挨个放孔、画边，最终结果如下，记住边框一定要用 Fab 层，这在后面的设计中很重要：&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/babba4e346f479e516680958fe224673.png#pic_center&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;第五步修改路径&#34;&gt;第五步：修改路径&lt;/h2&gt;
+&lt;p&gt;为了使用这个扩展板的时候所有工程都可以用这个库，可以把库文件夹放在当前工程的上一级路径，然后点击首选项-管理封装库，找到刚才新建的库，对其路径进行修改为&lt;code&gt;$(KIPRJMOD)/../库文件夹名&lt;/code&gt;，例如我的路径即为：&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/895e0091817832dd537dd368d78f1c8d.png#pic_center&#34;&gt;&lt;/p&gt;
+&lt;p&gt;这里的/..可以理解为打开上一级目录，而&lt;code&gt;$(KIPRJMOD)&lt;/code&gt;则表示当前工程路径，这样只要每次新建工程都放在和库同级路径下，即可保证该库的使用了。&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/a62aef866dbe3905a25f8274030f4beb.png#pic_center&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;第六步分配封装&#34;&gt;第六步：分配封装&lt;/h2&gt;
+&lt;p&gt;回到原理图界面，在标注完成且电器规则检查无误后即可分配封装了。&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/24cbc87936a9598681caec733809f6c9.png#pic_center&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;第七步画-pcb&#34;&gt;第七步：画 PCB&lt;/h2&gt;
+&lt;p&gt;分配完封装就可以直接开始连线了，不过注意的是需要现在电路板设置界面关闭要求封装中定义外框，这里的外框其实指的是 Crt 层，这样的话我们使用 Fab 层作为外框就可以在不干扰 PCB 电气特性的情况下同时不受禁止外框重叠的管束，那么其它元件就可以放在我们的直插引脚封装里面了！剩下的就是排布和拉线即可。&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/7a28511938582f9e2418211a4b887209.png#pic_center&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/f52f168bcd78db04df8a3c485f60167c.png#pic_center&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;第八步导出生产文件并打板&#34;&gt;第八步：导出生产文件并打板&lt;/h2&gt;
+&lt;p&gt;注意控制我们的 PCB 在 10cm*10cm 之间，这样我们就可以使用嘉立创的 5 元打样优惠了。导出生产文件然后打样的过程网上有很多，我在这里就不详述了。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

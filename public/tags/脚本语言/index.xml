@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>脚本语言 on 云雾海的博客</title>
+    <link>http://localhost:1313/tags/%E8%84%9A%E6%9C%AC%E8%AF%AD%E8%A8%80/</link>
+    <description>Recent content in 脚本语言 on 云雾海的博客</description>
+    <image>
+      <title>云雾海的博客</title>
+      <url>http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- 0.150.1</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 01 Dec 2020 22:09:18 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/%E8%84%9A%E6%9C%AC%E8%AF%AD%E8%A8%80/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>通过报文对嵌入式进行编程举例</title>
+      <link>http://localhost:1313/posts/%E7%AE%97%E6%B3%95/%E8%87%AA%E5%88%B6%E8%84%9A%E6%9C%AC%E8%AF%AD%E8%A8%80/%E9%80%9A%E8%BF%87%E6%8A%A5%E6%96%87%E5%AF%B9%E5%B5%8C%E5%85%A5%E5%BC%8F%E8%BF%9B%E8%A1%8C%E7%BC%96%E7%A8%8B%E4%B8%BE%E4%BE%8B/</link>
+      <pubDate>Tue, 01 Dec 2020 22:09:18 +0800</pubDate>
+      <guid>http://localhost:1313/posts/%E7%AE%97%E6%B3%95/%E8%87%AA%E5%88%B6%E8%84%9A%E6%9C%AC%E8%AF%AD%E8%A8%80/%E9%80%9A%E8%BF%87%E6%8A%A5%E6%96%87%E5%AF%B9%E5%B5%8C%E5%85%A5%E5%BC%8F%E8%BF%9B%E8%A1%8C%E7%BC%96%E7%A8%8B%E4%B8%BE%E4%BE%8B/</guid>
+      <description>&lt;p&gt;&lt;em&gt;这是对我之前《&lt;a href=&#34;%E5%A6%82%E4%BD%95%E5%81%87%E8%A3%85%E7%94%A8C%E8%AF%AD%E8%A8%80%E4%B8%BA%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%86%99%E4%B8%80%E4%B8%AA%E6%96%B0%E8%AF%AD%E8%A8%80.md&#34;&gt;如何假装用C语言为嵌入式写一个新语言&lt;/a&gt;》进行一个举例，以便更好地理解这种编程方式。&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%E6%8A%A5%E5%A4%B4s%E6%8A%A5%E5%B0%BEe&#34;&gt;报头(S)报尾(E)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E6%8E%A7%E5%88%B6%E6%8C%87%E4%BB%A4&#34;&gt;控制指令&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E7%A8%8B%E5%BA%8F%E9%80%BB%E8%BE%91%E6%8C%87%E4%BB%A4&#34;&gt;程序逻辑指令&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E4%B8%BE%E4%BE%8B&#34;&gt;举例&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;报头s报尾e&#34;&gt;报头(S)报尾(E)&lt;/h2&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;报头和报尾&lt;/th&gt;
+          &lt;th&gt;ASCII&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;BUGUS&lt;/td&gt;
+          &lt;td&gt;42 55 47 55 53&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;BUGUE&lt;/td&gt;
+          &lt;td&gt;42 55 47 55 45&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;CODES&lt;/td&gt;
+          &lt;td&gt;43 4f 44 45 53&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;CODEE&lt;/td&gt;
+          &lt;td&gt;43 4f 44 45 45&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;VORCS&lt;/td&gt;
+          &lt;td&gt;56 4f 52 43 53&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;VORCE&lt;/td&gt;
+          &lt;td&gt;56 4f 52 43 45&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;CONSTS&lt;/td&gt;
+          &lt;td&gt;43 4f 4e 53 54 53&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;CONSTE&lt;/td&gt;
+          &lt;td&gt;43 4f 4e 53 54 45&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;RVARS&lt;/td&gt;
+          &lt;td&gt;52 56 41 52 53&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;RVARE&lt;/td&gt;
+          &lt;td&gt;52 56 41 52 45&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;SAVES&lt;/td&gt;
+          &lt;td&gt;53 41 56 45 53&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;SAVEE&lt;/td&gt;
+          &lt;td&gt;53 41 56 45 45&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;WVARS&lt;/td&gt;
+          &lt;td&gt;57 56 41 52 53&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;WVARE&lt;/td&gt;
+          &lt;td&gt;57 56 41 52 45&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;控制指令&#34;&gt;控制指令&lt;/h2&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;指令内容&lt;/th&gt;
+          &lt;th&gt;指令标号（用户不可见）&lt;/th&gt;
+          &lt;th&gt;参数1&lt;/th&gt;
+          &lt;th&gt;参数2&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;输入输出选择（基础IO模块）&lt;/td&gt;
+          &lt;td&gt;0x02&lt;/td&gt;
+          &lt;td&gt;引脚选择（暂时0x01-0x0a）&lt;/td&gt;
+          &lt;td&gt;输入0输出1&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;输出高低选择（基础IO模块）&lt;/td&gt;
+          &lt;td&gt;0x03&lt;/td&gt;
+          &lt;td&gt;引脚选择（暂时0x01-0x0a）&lt;/td&gt;
+          &lt;td&gt;低电平0高电平1&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;毫秒级延时（时序模块）&lt;/td&gt;
+          &lt;td&gt;0x04&lt;/td&gt;
+          &lt;td&gt;延时时间（暂时0x01-0xff）&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;程序逻辑指令&#34;&gt;程序逻辑指令&lt;/h2&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;指令内容&lt;/th&gt;
+          &lt;th&gt;指令标号&lt;/th&gt;
+          &lt;th&gt;信息1&lt;/th&gt;
+          &lt;th&gt;信息2&lt;/th&gt;
+          &lt;th&gt;信息3&lt;/th&gt;
+          &lt;th&gt;信息4&lt;/th&gt;
+          &lt;th&gt;信息5&lt;/th&gt;
+          &lt;th&gt;信息6&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;循环启动器（程序基础控制模块）&lt;/td&gt;
+          &lt;td&gt;0x01&lt;/td&gt;
+          &lt;td&gt;CODE返回位&lt;/td&gt;
+          &lt;td&gt;VORC返回位&lt;/td&gt;
+          &lt;td&gt;CONST返回位&lt;/td&gt;
+          &lt;td&gt;RVAR返回位&lt;/td&gt;
+          &lt;td&gt;SAVE返回位&lt;/td&gt;
+          &lt;td&gt;WVAR返回位&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;举例&#34;&gt;举例&lt;/h2&gt;
+&lt;p&gt;加入用户输入了这样一个程序：&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>如何假装用C语言为嵌入式写一个新语言</title>
+      <link>http://localhost:1313/posts/%E7%AE%97%E6%B3%95/%E8%87%AA%E5%88%B6%E8%84%9A%E6%9C%AC%E8%AF%AD%E8%A8%80/%E5%A6%82%E4%BD%95%E5%81%87%E8%A3%85%E7%94%A8c%E8%AF%AD%E8%A8%80%E4%B8%BA%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%86%99%E4%B8%80%E4%B8%AA%E6%96%B0%E8%AF%AD%E8%A8%80/</link>
+      <pubDate>Tue, 24 Nov 2020 22:58:10 +0800</pubDate>
+      <guid>http://localhost:1313/posts/%E7%AE%97%E6%B3%95/%E8%87%AA%E5%88%B6%E8%84%9A%E6%9C%AC%E8%AF%AD%E8%A8%80/%E5%A6%82%E4%BD%95%E5%81%87%E8%A3%85%E7%94%A8c%E8%AF%AD%E8%A8%80%E4%B8%BA%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%86%99%E4%B8%80%E4%B8%AA%E6%96%B0%E8%AF%AD%E8%A8%80/</guid>
+      <description>&lt;p&gt;&lt;em&gt;我们在使用无线嵌入式器件的时候，或多或少对于AT指令都有所了解——通过通信口发送一串字符，以AT开头，换行符结尾，中间插入指令内容，就可以实现对芯片寄存器的配置。这种指令式配置类似于蓝牙、WiFi等设备可能比较简单，但是如果我们打算用它去实现一个比较复杂的编程呢？是否也可以通过这种方式，是否可以在不使用编译器的情况下，通过指令调取内部程序并执行？我将会通过一个小demo进行测试这种编程方式的可行性。&lt;/em&gt;
+&lt;strong&gt;&lt;a href=&#34;https://github.com/yunwuhai/MassagePrograming&#34;&gt;本文的程序可以在这里下载&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%E4%BD%BF%E7%94%A8%E5%B7%A5%E5%85%B7&#34;&gt;使用工具&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B&#34;&gt;工作流程&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E6%8C%87%E4%BB%A4%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1&#34;&gt;指令程序设计&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%8A%9F%E8%83%BD%E6%98%A0%E5%B0%84%E5%B9%B6%E5%8D%95%E6%8C%87%E4%BB%A4%E8%BF%90%E8%A1%8C&#34;&gt;功能映射并单指令运行&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%A4%9A%E6%8C%87%E4%BB%A4%E8%BF%90%E8%A1%8C&#34;&gt;多指令运行&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E4%B8%8A%E4%BD%8D%E6%9C%BA%E7%BC%96%E7%A8%8B&#34;&gt;上位机编程&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0&#34;&gt;传递参数&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E8%BF%94%E5%9B%9E%E5%80%BC&#34;&gt;返回值&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E6%80%9D%E8%B7%AF%E8%A7%A3%E6%9E%90&#34;&gt;思路解析&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%8F%82%E6%95%B0&#34;&gt;参数&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E8%BF%94%E5%9B%9E%E5%80%BC-1&#34;&gt;返回值&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%8F%98%E9%87%8F%E5%92%8C%E5%B8%B8%E9%87%8F&#34;&gt;变量和常量&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%E8%BE%93%E5%85%A5%E5%88%A4%E6%96%AD&#34;&gt;输入判断&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E8%BE%93%E5%87%BA%E5%88%A4%E6%96%AD&#34;&gt;输出判断&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E6%8A%A5%E6%96%87&#34;&gt;报文&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E6%80%BB%E7%BB%93%E5%92%8C%E5%8F%8D%E6%80%9D&#34;&gt;总结和反思&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;使用工具&#34;&gt;使用工具&lt;/h2&gt;
+&lt;p&gt;Code::Blocks， C语言&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;工作流程&#34;&gt;工作流程&lt;/h2&gt;
+&lt;p&gt;整个系统的工作流程比较简单，如下图所示：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-mermaid&#34; data-lang=&#34;mermaid&#34;&gt;graph LR
+	Send[报文发送端] --通信--&amp;gt; ReCV
+	subgraph 单片机
+		ReCV[报文接收端]--&amp;gt;Mem[存储]
+		Mem--&amp;gt;Read[读取指令]
+		Read--函数和参数--&amp;gt;Work[完成操作]
+		Work--返回值--&amp;gt;Mem
+	end
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这里的报文内容其实来自于上位机对下位机内部已有程序的映射，例如我在单片机中已经设置好了一个函数void Exp()，那么我们就可以在上位机制作一个模块，使用者如果调取了这个模块那么上位机就会自动将该模块对应的指令值插入到报文中，假设这里是0x05，那么下位机如果在报文中检测到了0x05，就会自动执行Exp()函数。&lt;/p&gt;
+&lt;p&gt;当然详细内容会更复杂，我们现在只是有了一个基本概念，还需要继续完善内容。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;指令程序设计&#34;&gt;指令程序设计&lt;/h2&gt;
+&lt;p&gt;如果我们需要实现指令编程，那么内部肯定不止有Exp()一个程序，先不考虑指针传参的情况，我们根据参数和返回值的不同情况可以将函数分为以下几种情况：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;无参数无返回值&lt;/li&gt;
+&lt;li&gt;无参数有返回值&lt;/li&gt;
+&lt;li&gt;有参数无返回值&lt;/li&gt;
+&lt;li&gt;有参数有返回值&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;而实际上参数的个数不定，我们暂时先不考虑不定参数的情况，可以分为：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;单个参数&lt;/li&gt;
+&lt;li&gt;多个参数&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;而实际上多个参数的情况可以包含单个参数，那么我们就在这个demo中设置如下几种情况。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;无参数无返回值函数&lt;/li&gt;
+&lt;li&gt;无参数有返回值函数&lt;/li&gt;
+&lt;li&gt;两个参数无返回值函数&lt;/li&gt;
+&lt;li&gt;三个参数有返回值函数&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;为此，我设计了如下几个函数：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;/*
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt; * 全局变量声明
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt; */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;static&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;flag&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;/*
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt; *	函数声明和定义
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt; */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;SayHello&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 打印一行Hello World!
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Hello World!&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;NowFlag&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;   &lt;span class=&#34;c1&#34;&gt;// 将flag值自增一然后打印出来并返回
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;flag&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;flag = %d&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;flag&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;flag&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;ShowSum&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;b&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;// 打印两个参数之和
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;%d + %d = %d&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;b&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;b&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;GetSum&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;b&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 打印并返回三参数之和
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;b&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;%d + %d + %d = %d&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;b&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sum&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;现在我们在main中测试调用他们并运行一下：&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

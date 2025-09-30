@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Qt on 云雾海的博客</title>
+    <link>http://localhost:1313/tags/qt/</link>
+    <description>Recent content in Qt on 云雾海的博客</description>
+    <image>
+      <title>云雾海的博客</title>
+      <url>http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- 0.150.1</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 05 May 2022 23:00:50 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/qt/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Qt Creator打开时报错python27.dll和报错应用程序错误解决办法</title>
+      <link>http://localhost:1313/posts/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/qt-creator%E6%89%93%E5%BC%80%E6%97%B6%E6%8A%A5%E9%94%99python27.dll%E5%92%8C%E6%8A%A5%E9%94%99%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E9%94%99%E8%AF%AF%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95%E7%BD%91%E5%9D%80/</link>
+      <pubDate>Thu, 05 May 2022 23:00:50 +0800</pubDate>
+      <guid>http://localhost:1313/posts/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/qt-creator%E6%89%93%E5%BC%80%E6%97%B6%E6%8A%A5%E9%94%99python27.dll%E5%92%8C%E6%8A%A5%E9%94%99%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E9%94%99%E8%AF%AF%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95%E7%BD%91%E5%9D%80/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;记录一下，实测有效&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.csdn.net/qq_31721897/article/details/124076326?spm=1001.2014.3001.5502&#34;&gt;《 QT找不到python27.dll解决办法》&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.csdn.net/weixin_52764460/article/details/119110317&#34;&gt;《打开Qt Creator软件时报警告：xxx.exe应用程序错误》&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,11 +1,59 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Categories on 云雾海的博客</title>
     <link>http://localhost:1313/categories/</link>
     <description>Recent content in Categories on 云雾海的博客</description>
-    <generator>Hugo</generator>
+    <image>
+      <title>云雾海的博客</title>
+      <url>http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- 0.150.1</generator>
     <language>zh-cn</language>
+    <lastBuildDate>Sat, 27 Sep 2025 15:07:00 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>网络协议学习</title>
+      <link>http://localhost:1313/categories/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/</link>
+      <pubDate>Sat, 27 Sep 2025 15:07:00 +0800</pubDate>
+      <guid>http://localhost:1313/categories/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>嵌入式</title>
+      <link>http://localhost:1313/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/</link>
+      <pubDate>Sun, 21 Sep 2025 15:07:00 +0800</pubDate>
+      <guid>http://localhost:1313/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>解决方案</title>
+      <link>http://localhost:1313/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</link>
+      <pubDate>Thu, 05 May 2022 23:00:50 +0800</pubDate>
+      <guid>http://localhost:1313/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>算法</title>
+      <link>http://localhost:1313/categories/%E7%AE%97%E6%B3%95/</link>
+      <pubDate>Tue, 05 Apr 2022 20:16:44 +0800</pubDate>
+      <guid>http://localhost:1313/categories/%E7%AE%97%E6%B3%95/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>桌面端</title>
+      <link>http://localhost:1313/categories/%E6%A1%8C%E9%9D%A2%E7%AB%AF/</link>
+      <pubDate>Sun, 21 Mar 2021 22:45:35 +0800</pubDate>
+      <guid>http://localhost:1313/categories/%E6%A1%8C%E9%9D%A2%E7%AB%AF/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>杂谈</title>
+      <link>http://localhost:1313/categories/%E6%9D%82%E8%B0%88/</link>
+      <pubDate>Sun, 20 Dec 2020 16:58:48 +0800</pubDate>
+      <guid>http://localhost:1313/categories/%E6%9D%82%E8%B0%88/</guid>
+      <description></description>
+    </item>
   </channel>
 </rss>

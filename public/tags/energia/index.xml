@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Energia on 云雾海的博客</title>
+    <link>http://localhost:1313/tags/energia/</link>
+    <description>Recent content in Energia on 云雾海的博客</description>
+    <image>
+      <title>云雾海的博客</title>
+      <url>http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- 0.150.1</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 07 Nov 2020 19:46:09 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/energia/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>MSP432在Energia上的使用（下）</title>
+      <link>http://localhost:1313/posts/%E5%B5%8C%E5%85%A5%E5%BC%8F/arduino/msp432%E5%9C%A8energia%E4%B8%8A%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8B/</link>
+      <pubDate>Sat, 07 Nov 2020 19:46:09 +0800</pubDate>
+      <guid>http://localhost:1313/posts/%E5%B5%8C%E5%85%A5%E5%BC%8F/arduino/msp432%E5%9C%A8energia%E4%B8%8A%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8B/</guid>
+      <description>&lt;h1 id=&#34;msp432-在-energia-上的使用下&#34;&gt;MSP432 在 Energia 上的使用（下）&lt;/h1&gt;
+&lt;p&gt;&lt;em&gt;其实我自己都没想到我居然会来填坑，不过说实话这好像也算不上填坑，毕竟之前在&lt;a href=&#34;MSP430%E5%9C%A8Energia%E4%B8%8A%E7%9A%84%E4%BD%BF%E7%94%A8%EF%BC%88%E4%B8%8A%EF%BC%89.md&#34;&gt;MSP430 在 Energia 上的使用（上）&lt;/a&gt;这个帖子里讲的是 MSP430，而且说的准备在 VSCode 里装 Energia 其实到现在还没弄，不过这里还是想介绍一下 Energia 的另一项功能，一个专属于 MSP432 的功能。&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#msp432-%E5%9C%A8-energia-%E4%B8%8A%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8B&#34;&gt;MSP432 在 Energia 上的使用（下）&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%8F%91%E7%8E%B0&#34;&gt;发现&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95&#34;&gt;使用方法&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#task1&#34;&gt;TASK1&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#task2&#34;&gt;TASK2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#task3&#34;&gt;TASK3&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;发现&#34;&gt;发现&lt;/h2&gt;
+&lt;p&gt;事实证明多看官网还是有好处的，之前我在使用 Energia 对 MSP430 进行编程时一直非常疑惑，为什么 TI 公司不直接使用 Arduino 已有的 IDE 而非要做个自己的 Energia 导致不为人知非常冷门，但是官网上的介绍回答了我这一点。打开&lt;a href=&#34;https://energia.nu/&#34;&gt;Energia 官网&lt;/a&gt;，进入 Guide 界面，翻阅一下可以看见一个名词——&lt;strong&gt;MultiTasking&lt;/strong&gt;，即多任务。众所周知如果单片机想要实现多任务并行，一般需要自己搭建 RTOS 或者更复杂一点进行专门的时分复用设计，这些方法往往需要较丰富的知识才能实现。而 Energia 就可以非常简单地（其实如果进行一些复杂操作也是挺复杂的）实现多任务操作。而官网在这里其实也给出了关于 Multitasking 的&lt;a href=&#34;https://energia.nu/guide/foundations/programming_technique/multitasking/&#34;&gt;介绍&lt;/a&gt;，值得注意的是&lt;strong&gt;目前该功能只能作用与 MSP432，MSP432E，CC3320 和 CC1310&lt;/strong&gt;几种芯片，这也是为什么我把这一章名字改成了 MSP432 而不是 MSP430。（说起来每次打开 Energia 它的启动显示里面也写到了 Energia MT，实际上就是说的这个功能，不过我一直没咋注意）&lt;/p&gt;
+&lt;h2 id=&#34;使用方法&#34;&gt;使用方法&lt;/h2&gt;
+&lt;p&gt;其实官网原文就有一个大概介绍了，我这里就重复一下。关于 MultiTasking（以下简称 MT）的使用其实非常简单（如果不想做太复杂的话）。&lt;/p&gt;
+&lt;p&gt;每次新建工程后，我们会有一个初始界面，上面写的 void setup()和 void loop()（其实就是正常 Energia 或 Arduino IDE 在新建后的工程界面），我们可以把这个界面称之为工程主界面。如果只使用工程主界面写一个程序，那么它只是普通的单线程程序，但是如果你使用的是 MSP432 这类单片机，你可以点击 IDE 右上角的倒三角符号，新建一个 task，随便输入一个名字作为新任务（Task）的名字（注意不要输入后缀，IDE 会自动将其生成为 ino）然后你可以在里面写两个函数，他们便可以当成一个新的 setup 和 loop 函数了，此时如果烧录进芯片后，芯片便会同时运行两个任务（实际上并不是同时运行，只是通过快速转换两个任务的运行最后看上去是同时运行）。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>MSP430在Energia上的使用（上）</title>
+      <link>http://localhost:1313/posts/%E5%B5%8C%E5%85%A5%E5%BC%8F/arduino/msp430%E5%9C%A8energia%E4%B8%8A%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8A/</link>
+      <pubDate>Wed, 26 Aug 2020 17:32:10 +0800</pubDate>
+      <guid>http://localhost:1313/posts/%E5%B5%8C%E5%85%A5%E5%BC%8F/arduino/msp430%E5%9C%A8energia%E4%B8%8A%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8A/</guid>
+      <description>&lt;h1 id=&#34;msp430-在-energia-上的使用上&#34;&gt;MSP430 在 Energia 上的使用（上）&lt;/h1&gt;
+&lt;p&gt;说实话我也不确定会不会有后面的笔记，但是这次实验的确相当于没有做完。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#msp430-%E5%9C%A8-energia-%E4%B8%8A%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8A&#34;&gt;MSP430 在 Energia 上的使用（上）&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C&#34;&gt;准备工作&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E9%97%AE%E9%A2%98%E6%84%8F%E4%B9%89&#34;&gt;问题意义&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%AE%9E%E9%AA%8C%E4%B8%80%E6%B5%8B%E8%AF%95%E4%BC%A0%E8%BE%93%E6%8E%A5%E5%8F%A3&#34;&gt;实验一：测试传输接口&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%AE%9E%E9%AA%8C%E7%8E%B0%E8%B1%A1&#34;&gt;实验现象：&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%AE%9E%E9%AA%8C%E7%BB%93%E8%AE%BA&#34;&gt;实验结论：&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%AE%9E%E9%AA%8C%E4%BA%8C%E7%A7%BB%E6%A4%8D%E5%88%B0-arduinoide&#34;&gt;实验二：移植到 ArduinoIDE&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%A4%87%E6%B3%A8&#34;&gt;备注&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;准备工作&#34;&gt;准备工作&lt;/h2&gt;
+&lt;p&gt;终于狠下心花了百元大洋买了块 MSP430F5529LP 板子，准备研究一下板载仿真器在 Energia 中是如何进行烧录的。&lt;/p&gt;
+&lt;p&gt;通过 TI 公司的官方文件《MSP430F5529 LaunchPad Development Kit……》，我们其实可以得到 LaunchPad 的原理图，因为整个原理图用了四页，这里就不详细展示了，有需要可以在 TI 官网找。我只截取板载仿真器和 MSP430F5529 芯片的接口部分的图&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;在这里插入图片描述&#34; loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/ce2078a0f1addb14d8380c3564acccfa.png#pic_center&#34;&gt;&lt;/p&gt;
+&lt;p&gt;其中板载仿真器被 TI 公司命名为 ezFET，应该是简版仿真器的意思，除去电源线部分，我们可以看到信息传输分为两部分——SBW 和 UART。其中 SBW 相当于两线 JTAG，可以当做仿真器接口，而 UART 则是使用的 MSP430 的 BSL 接口，其只能作为烧录口。&lt;/p&gt;
+&lt;p&gt;那么看到这其实问题就很简单了，我们需要确定 Energia 在烧录的时候具体是用的哪个接口。&lt;/p&gt;
+&lt;h2 id=&#34;问题意义&#34;&gt;问题意义&lt;/h2&gt;
+&lt;p&gt;一般情况下，我们在使用 LaunchPad 时，是不需要管这个仿真器是如何工作的，但是如果当我们手里只有一块没有板载仿真器的开发板或者甚至只有一块芯片的时候，我们又该如何对其使用 Energia 呢，是应该用 JTAG 连接吗，还是使用 SBW，亦或是使用 BSL？我们是否能将 EnergiaIDE 的移植到 ArduinoIDE 上呢（因为 Energia 事实上能够使用的资源远远不及 Arduino，而且无法用 VSCode 这个大杀器）？&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>STM32 on 云雾海的博客</title>
+    <link>http://localhost:1313/tags/stm32/</link>
+    <description>Recent content in STM32 on 云雾海的博客</description>
+    <image>
+      <title>云雾海的博客</title>
+      <url>http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- 0.150.1</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 05 Nov 2021 14:06:52 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/stm32/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>如何在STM32CubeIDE中使用CMSIS DSP库</title>
+      <link>http://localhost:1313/posts/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/%E5%A6%82%E4%BD%95%E5%9C%A8stm32cubeide%E4%B8%AD%E4%BD%BF%E7%94%A8cmsis-dsp%E5%BA%93%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E5%9C%B0%E5%9D%80/</link>
+      <pubDate>Fri, 05 Nov 2021 14:06:52 +0800</pubDate>
+      <guid>http://localhost:1313/posts/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/%E5%A6%82%E4%BD%95%E5%9C%A8stm32cubeide%E4%B8%AD%E4%BD%BF%E7%94%A8cmsis-dsp%E5%BA%93%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E5%9C%B0%E5%9D%80/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://community.st.com/s/article/configuring-dsp-libraries-on-stm32cubeide&#34;&gt;Configuring DSP libraries on STM32CubeIDE&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Arduino通过USB转TTL无BootLoader（引导程序）烧录程序的两种办法</title>
+      <link>http://localhost:1313/posts/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/arduino%E9%80%9A%E8%BF%87usb%E8%BD%ACttl%E6%97%A0bootloader%E5%BC%95%E5%AF%BC%E7%A8%8B%E5%BA%8F%E7%83%A7%E5%BD%95%E7%A8%8B%E5%BA%8F%E7%9A%84%E4%B8%A4%E7%A7%8D%E5%8A%9E%E6%B3%95/</link>
+      <pubDate>Sun, 09 Aug 2020 19:51:21 +0800</pubDate>
+      <guid>http://localhost:1313/posts/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/arduino%E9%80%9A%E8%BF%87usb%E8%BD%ACttl%E6%97%A0bootloader%E5%BC%95%E5%AF%BC%E7%A8%8B%E5%BA%8F%E7%83%A7%E5%BD%95%E7%A8%8B%E5%BA%8F%E7%9A%84%E4%B8%A4%E7%A7%8D%E5%8A%9E%E6%B3%95/</guid>
+      <description>&lt;h1 id=&#34;arduino-通过-usb-转-ttl-无-bootloader引导程序烧录程序的两种办法&#34;&gt;Arduino 通过 USB 转 TTL 无 BootLoader（引导程序）烧录程序的两种办法&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#arduino-%E9%80%9A%E8%BF%87-usb-%E8%BD%AC-ttl-%E6%97%A0-bootloader%E5%BC%95%E5%AF%BC%E7%A8%8B%E5%BA%8F%E7%83%A7%E5%BD%95%E7%A8%8B%E5%BA%8F%E7%9A%84%E4%B8%A4%E7%A7%8D%E5%8A%9E%E6%B3%95&#34;&gt;Arduino 通过 USB 转 TTL 无 BootLoader（引导程序）烧录程序的两种办法&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%E6%B3%A8%E6%84%8F&#34;&gt;注意&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E4%BA%8E-bootloader-%E7%9A%84%E5%BA%9F%E8%AF%9D&#34;&gt;于 BootLoader 的废话&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E9%80%9A%E8%BF%87-arduinoide-%E7%9A%84-serial-%E6%A8%A1%E5%BC%8F%E7%83%A7%E5%BD%95&#34;&gt;通过 ArduinoIDE 的 Serial 模式烧录&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E9%80%9A%E8%BF%87%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%96%87%E4%BB%B6%E7%83%A7%E5%BD%95&#34;&gt;通过二进制文件烧录&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E6%80%BB%E7%BB%93&#34;&gt;总结&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;注意&#34;&gt;注意&lt;/h2&gt;
+&lt;p&gt;（这个实验室基于 stm32duino 的，avr 单片机并不直接通用，不过如果你准备尝试使用串口来给 avr 单片机（&lt;em&gt;就是 Arduino 官方出的几款 Arduino&lt;/em&gt;）烧录 Arduino 的 BootLoader，建议直接放弃因为 avr 单片机并不支持直接使用串口上传程序，而且 Arduino 的 BootLoader 好像目的也就是让 Arduino 能够直接串口烧录程序。&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;也就是说你不能在没有 BootLoader 的情况下烧录 avr-Arduino 的 BootLoader，而当你可以用串口给 avr-Arduino 烧录 BootLoader 时就说明你已经有 BootLoader 了，可以不用再烧录一次了&lt;/em&gt;）&lt;/p&gt;
+&lt;h2 id=&#34;于-bootloader-的废话&#34;&gt;于 BootLoader 的废话&lt;/h2&gt;
+&lt;p&gt;因为准备参加电赛，想着如果比赛可以用 Arduino 或许会方便很多，所以准备研究一下 Arduino 的底层程序，学习一下如何把随便一块芯片都能做成 Arduino 来开发。不过这篇帖子和此并没有太大关系，只是属于机缘巧合做的一个小实验而已，对于已知 BootLoader 的原理或者想自己写 BootLoader 的朋友并无太大帮助。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

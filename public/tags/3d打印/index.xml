@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>3D打印 on 云雾海的博客</title>
+    <link>http://localhost:1313/tags/3d%E6%89%93%E5%8D%B0/</link>
+    <description>Recent content in 3D打印 on 云雾海的博客</description>
+    <image>
+      <title>云雾海的博客</title>
+      <url>http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- 0.150.1</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 24 Aug 2020 23:49:15 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/3d%E6%89%93%E5%8D%B0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>3D打印机打印中途停止且显示挤出头温度过低</title>
+      <link>http://localhost:1313/posts/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/3d%E6%89%93%E5%8D%B0%E6%9C%BA%E6%89%93%E5%8D%B0%E4%B8%AD%E9%80%94%E5%81%9C%E6%AD%A2%E4%B8%94%E6%98%BE%E7%A4%BA%E6%8C%A4%E5%87%BA%E5%A4%B4%E6%B8%A9%E5%BA%A6%E8%BF%87%E4%BD%8E/</link>
+      <pubDate>Mon, 24 Aug 2020 23:49:15 +0800</pubDate>
+      <guid>http://localhost:1313/posts/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/3d%E6%89%93%E5%8D%B0%E6%9C%BA%E6%89%93%E5%8D%B0%E4%B8%AD%E9%80%94%E5%81%9C%E6%AD%A2%E4%B8%94%E6%98%BE%E7%A4%BA%E6%8C%A4%E5%87%BA%E5%A4%B4%E6%B8%A9%E5%BA%A6%E8%BF%87%E4%BD%8E/</guid>
+      <description>&lt;h1 id=&#34;3d-打印机打印中途停止且显示挤出头温度过低&#34;&gt;3D 打印机打印中途停止且显示挤出头温度过低&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#3d-%E6%89%93%E5%8D%B0%E6%9C%BA%E6%89%93%E5%8D%B0%E4%B8%AD%E9%80%94%E5%81%9C%E6%AD%A2%E4%B8%94%E6%98%BE%E7%A4%BA%E6%8C%A4%E5%87%BA%E5%A4%B4%E6%B8%A9%E5%BA%A6%E8%BF%87%E4%BD%8E&#34;&gt;3D 打印机打印中途停止且显示挤出头温度过低&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%E6%89%93%E5%8D%B0%E6%9C%BA%E5%9E%8B%E5%8F%B7&#34;&gt;打印机型号&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E9%97%AE%E9%A2%98&#34;&gt;问题&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95&#34;&gt;解决方法&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E6%B3%A8%E6%84%8F&#34;&gt;注意&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;打印机型号&#34;&gt;打印机型号&lt;/h2&gt;
+&lt;p&gt;Anycubic chiron3D&lt;/p&gt;
+&lt;h2 id=&#34;问题&#34;&gt;问题&lt;/h2&gt;
+&lt;p&gt;PLA 在 200℃ 打印过程中突然停止，挤出头在屏幕上显示温度降到约 120 度左右，喷头处于打印件之间出现明显的结节，退回到主菜单显示挤出头温度过低。同时打印件部分平面有明显的缺陷空隙，在点击结束打印后再次进入打印界面无模型文件。&lt;/p&gt;
+&lt;h2 id=&#34;解决方法&#34;&gt;解决方法&lt;/h2&gt;
+&lt;p&gt;因为故障后无法读取存储卡文件，怀疑是固件问题，通过 USB 接口将电脑连接打印机，使用切片软件（我用的 Cura4.6），选择打印机-&amp;gt;上传固件，同时将之前的 gcode 文件重新生成（不确定这一步是否必须）。&lt;/p&gt;
+&lt;h2 id=&#34;注意&#34;&gt;注意&lt;/h2&gt;
+&lt;p&gt;以上仅为我个人在此次遇到这种问题时的解决方法，并不一定适用于所有机器以及所有情况，其他情况还有：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;使用电脑直接联机打印，可能中间在数据传输过程中出现问题。&lt;/li&gt;
+&lt;li&gt;储存卡中文件异常，可能是切片软件使用了某种不应该使用的插件，或是在导出或生成过程中出现错误，或是存储卡热插拔导致存储失败。&lt;/li&gt;
+&lt;li&gt;供电电压不稳定，确定好供电电压是否正常，且确定是否和打印机工作电压相匹配。&lt;/li&gt;
+&lt;li&gt;如在使用我的解决办法后没有解决且以上可能都排除后，请确定存储卡、挤出头、挤出机等设备是否出现问题，若是非 DIY 产品最好找客服。&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
+  </channel>
+</rss>

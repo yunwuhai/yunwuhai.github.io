@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Makefile on 云雾海的博客</title>
+    <link>http://localhost:1313/tags/makefile/</link>
+    <description>Recent content in Makefile on 云雾海的博客</description>
+    <image>
+      <title>云雾海的博客</title>
+      <url>http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- 0.150.1</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 08 Mar 2022 00:30:45 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/makefile/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>STM32CubeMX GCC工程Makefile内容详解</title>
+      <link>http://localhost:1313/posts/%E5%B5%8C%E5%85%A5%E5%BC%8F/c_cpp/stm32cubemx-gcc%E5%B7%A5%E7%A8%8Bmakefile%E5%86%85%E5%AE%B9%E8%AF%A6%E8%A7%A3/</link>
+      <pubDate>Tue, 08 Mar 2022 00:30:45 +0800</pubDate>
+      <guid>http://localhost:1313/posts/%E5%B5%8C%E5%85%A5%E5%BC%8F/c_cpp/stm32cubemx-gcc%E5%B7%A5%E7%A8%8Bmakefile%E5%86%85%E5%AE%B9%E8%AF%A6%E8%A7%A3/</guid>
+      <description>&lt;h1 id=&#34;stm32cubemx-gcc工程makefile内容详解&#34;&gt;STM32CubeMX GCC工程Makefile内容详解&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#stm32cubemx-gcc%E5%B7%A5%E7%A8%8Bmakefile%E5%86%85%E5%AE%B9%E8%AF%A6%E8%A7%A3&#34;&gt;STM32CubeMX GCC工程Makefile内容详解&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%9F%BA%E7%A1%80%E4%BB%8B%E7%BB%8D&#34;&gt;基础介绍&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E6%B3%A8%E6%84%8F&#34;&gt;注意&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#makefile&#34;&gt;Makefile&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#target&#34;&gt;TARGET&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#debug&#34;&gt;DEBUG&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#opt&#34;&gt;OPT&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#build_dir&#34;&gt;BUILD_DIR&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#c_sources&#34;&gt;C_SOURCES&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#asm_sources&#34;&gt;ASM_SOURCES&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#prefix&#34;&gt;PREFIX&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#ccascpsz&#34;&gt;CC,AS,CP,SZ&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#hexbin&#34;&gt;HEX,BIN&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#cpu&#34;&gt;CPU&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#fpu&#34;&gt;FPU&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#float-abi&#34;&gt;FLOAT-ABI&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#mcu&#34;&gt;MCU&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#ad_defsc_defs&#34;&gt;AD_DEFS,C_DEFS&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#as_includesc_includes&#34;&gt;AS_INCLUDES,C_INCLUDES&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#asflagscflags&#34;&gt;ASFLAGS,CFLAGS&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#ifeq-debug-1&#34;&gt;ifeq ($(DEBUG), 1)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#cflags&#34;&gt;CFLAGS&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#ldscripts&#34;&gt;LDSCRIPTS&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#libslibdir&#34;&gt;LIBS,LIBDIR&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#ldflags&#34;&gt;LDFLAGS&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#all&#34;&gt;all&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#objects&#34;&gt;OBJECTS&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#build&#34;&gt;BUILD&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#clean&#34;&gt;clean&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#flash&#34;&gt;flash&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#dependencies&#34;&gt;dependencies&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E7%BB%93%E8%AF%AD&#34;&gt;结语&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;基础介绍&#34;&gt;基础介绍&lt;/h2&gt;
+&lt;p&gt;因为项目原因，需要对编译系统进行一些比较复杂的使用，但是我对于编译系统这一块并不是非常精通了解，所以需要进行一下学习。正巧，众所周知STM32推出过非常实用的工具——STM32CubeMX，这个工具可以对STM32进行一些基础配置并设置一些配置代码，基本可以靠图形界面完成对STM32的所有初始化配置，然后它就会生成一个基础工程，编程者在这个基础上进行设置即可。&lt;/p&gt;
+&lt;p&gt;当然，本文主要关注点是在编译系统，所以该工具的配置什么的就不详细说了，基本上就是简单随便配置一下时钟就可以了（事实上应该时钟都不需要配置），重点在于我们生成工程的时候需要选择生成Makefile工程，这样才可以使用我们的开源工具链进行配置。&lt;/p&gt;
+&lt;p&gt;之后我们可以得到如下的工程目录（当然，众所周知CubeMX的一些设置会影响到工程根目录的具体结构，不过这都不是重点）：&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://i-blog.csdnimg.cn/blog_migrate/6938647bafeaacf0a1a8963e69dd68a0.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;其中build目录是编译后生成的，先不管，另外Core文件夹下的Test文件夹及其中内容是我进行测试的时候添加的，暂时也先不管。&lt;/p&gt;
+&lt;p&gt;我们先来看看其它的东西，首先是Core中的内容，这部分的内容基本上就完全是STM32CubeMX生成的，Inc中放h文件而Src中放c文件，里面的文件都是在CubeMX中配置过的东西，这些东西是每次CubeMX在修改后都会重新生成的东西（也有可能是你修改了哪一部分，就会重新生成哪一部分的文件，这个是CubeMX自己的机制，不重要）。&lt;/p&gt;
+&lt;p&gt;其次是Drivers中的内容，这些内容实际上都是从 CubeMX的安装目录里的sdk中复制过来的，如果我们在配置的时候没有选择要将这些东西复制过来，那么CubeMX也不会生成这个目录下的内容（或者不能说生成，而就是直接复制过来），但是取而代之的就是你使用的所有sdk的库函数，都是直接调用的安装目录里的东西，那么为了安全性着想，就不要在编程的时候修改他们了，否则你的库函数就被你的代码污染了，当然这样做的好处就是你的代码复用性会提高而且工程体积会稍微小点。&lt;/p&gt;
+&lt;p&gt;然后是下面的&lt;code&gt;.mxproject&lt;/code&gt;文件，CubeMX的工程文件，不管。&lt;/p&gt;
+&lt;p&gt;接着就是我们等会最重要的Makefile，这个是Make工具的脚本文件，如果你不知道Make工具是啥，建议先了解一下再看本文会好一点。&lt;/p&gt;
+&lt;p&gt;之后是&lt;code&gt;MakeTest.ioc&lt;/code&gt;文件，CubeMX的配置文件，不管。&lt;/p&gt;
+&lt;p&gt;然后是后缀为s的start文件，这个文件是芯片的项目启动文件，一般不需要管，里面放了中断向量表之类的东西。&lt;/p&gt;
+&lt;p&gt;最后是后缀为ld的链接脚本文件，这个是用于链接的，等会会说。&lt;/p&gt;
+&lt;h2 id=&#34;注意&#34;&gt;注意&lt;/h2&gt;
+&lt;p&gt;本文的解析结构并没有按照makefile的解析顺序来，而是采用从上到下的顺序来解说的（当然会根据实际情况进行跳跃），主要原因在于我学习这个东西的目的主要是直接把这个Makefile当成一个模板，然后未来直接在这个模板上进行修改就可以了，而到目前为止我暂时还不打算自己从头来写个Makefile（毕竟能用就行，平时哪需要那么麻烦）。&lt;/p&gt;
+&lt;p&gt;考虑到篇幅，就不单独把全部makefile列出来了，需要时你直接用CubeMX生成一个工程然后看它Makefile即可，只要STM32公司那边没有对这个规则进行大改，那么下面这些内容应该都大差不差。&lt;/p&gt;
+&lt;p&gt;此外，本文中很多东西其实可以在&lt;a href=&#34;https://gcc.gnu.org/onlinedocs/&#34;&gt;gcc的手册&lt;/a&gt;中找到答案，如果感兴趣可以去看看。&lt;/p&gt;
+&lt;h2 id=&#34;makefile&#34;&gt;Makefile&lt;/h2&gt;
+&lt;h3 id=&#34;target&#34;&gt;TARGET&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;TARGET&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; MakeTest
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;设置目标文件名，实际上就是做了个变量，并且把Makefile这个作为参数传入。平时当成工程名即可，如果要换工程，就自己随便重新取个名字。&lt;/p&gt;
+&lt;h3 id=&#34;debug&#34;&gt;DEBUG&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;DEBUG&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;是否进行调试编译，这里表示是，release版关闭调试时将1改成其它数即可，具体原因后面会讲到。&lt;/p&gt;
+&lt;h3 id=&#34;opt&#34;&gt;OPT&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;OPT&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; -Og
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;优化等级，这里使用Og的目的是因为开启了调试，所以优化时需要产生合理的优化而不和调试选项冲突。如果是release版本，可以使用&lt;code&gt;-Os&lt;/code&gt;（提高速度并优化体积）或&lt;code&gt;-O3&lt;/code&gt;（大幅提高速度但会增大体积）等命令，关于这部分的介绍可以参考&lt;a href=&#34;https://www.zhihu.com/question/27090458/answer/137944410&#34;&gt;知乎回答&lt;/a&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;build_dir&#34;&gt;BUILD_DIR&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;BUILD_DIR&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; build
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;编译目标地址，这也是前面提到为什么我会生成一个build文件夹，实际上就是这个变量进行的命名，如果你需要，可以把它修改成任何名字，然后编译出来的所有文件就都会放在这个你新命名的文件夹里面了。不过一般不建议修改，因为大家通用的都是build，不建议太特立独行。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
