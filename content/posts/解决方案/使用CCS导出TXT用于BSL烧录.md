@@ -10,7 +10,7 @@ tags:
 - MSP432
 - BSL
 author: ["云雾海"]
-description: "本文介绍了如何使用CCS导出TXT文件以便于通过BSL进行烧录。"
+description: "本文首发于CSDN，原文：https://blog.csdn.net/qq_44884716/article/details/108282347"
 license: CC-BY-SA 4.0
 ---
 

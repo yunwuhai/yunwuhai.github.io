@@ -8,7 +8,7 @@ tags:
 - vim
 - Linux
 author: ["云雾海"]
-description: "本文介绍了如何在Vim编辑器中使用系统剪贴板的功能。"
+description: "本文首发于CSDN，原文：https://blog.csdn.net/qq_44884716/article/details/111707347"
 license: CC-BY-SA 4.0
 ---
 

@@ -9,7 +9,7 @@ tags:
 - CMSIS
 - DSP
 author: ["云雾海"]
-description: "本文介绍了如何在STM32CubeIDE中使用CMSIS DSP库，并提供了详细的步骤和官方文档链接。"
+description: "本文首发于CSDN，原文：https://blog.csdn.net/qq_44884716/article/details/121161817"
 license: CC-BY-SA 4.0
 ---
 

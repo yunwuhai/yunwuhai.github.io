@@ -14,7 +14,7 @@ draft: true
 
 # STM32 HAL库 USB使用简析
 
-> [!description]
+> [!NOTE]
 >
 > 这是我在学习USB的实践笔记，理论部分可以参考《[USB基础概念](./USB基础概念.md)》。水平有限，如有发现错误遗漏，欢迎指出。
 
