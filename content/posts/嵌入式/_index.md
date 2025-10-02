@@ -5,4 +5,5 @@ description: "关于嵌入式开发的笔记"
 draft: false
 searchHidden: true
 hideMeta: true
+weight: 1
 ---
