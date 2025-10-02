@@ -17,7 +17,7 @@ noClasses = false
 
 [[menu.main]]
 identifier = "posts"
-name = "文章"
+name = "目录"
 url = "/posts/"
 weight = 10
 
@@ -38,6 +38,12 @@ identifier = "search"
 name = "搜索"
 url = "/search/"
 weight = 40
+
+[[menu.main]]
+identifier = "archives"
+name = "归档"
+url = "/archives/"
+weight = 50
 
 [minify]
 disableXML = true
@@ -90,8 +96,8 @@ shouldSort = true
 threshold = 0.4
 
 [params.homeInfoParams]
-Content = "此处记录着我的生活和学习之路。"
-Title = "云雾海的博客"
+Content = "此处记录着我来时的路"
+Title = "云筑"
 
 [params.label]
 icon = "/apple-touch-icon.png"
@@ -99,21 +105,29 @@ iconHeight = 35
 text = "主页"
 
 [params.profileMode]
-enabled = false
+enabled = true
 imageHeight = 120
-imageTitle = "my image"
-imageUrl = "<img location>"
+imageTitle = "我的头像"
+imageUrl = "https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/q4SymNypcxz7Dga.thumb.1000_0.png"
 imageWidth = 120
-subtitle = "This is subtitle"
-title = "ExampleSite"
+title = "云筑"
+subtitle = "此处记录着我来时的路"
 
 [[params.profileMode.buttons]]
 name = "文章"
 url = "posts"
 
 [[params.profileMode.buttons]]
+name = "分类"
+url = "categories"
+
+[[params.profileMode.buttons]]
 name = "标签"
 url = "tags"
+
+[[params.profileMode.buttons]]
+name = "搜索"
+url = "search"
 
 [[params.socialIcons]]
 name = "bilibili"
