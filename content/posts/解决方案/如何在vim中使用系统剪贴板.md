@@ -1,6 +1,6 @@
 ---
 date: 2020-12-25T21:10:10+08:00
-draft: true
+draft: false
 title: '如何在Vim中使用系统剪贴板'
 categories:
 - 解决方案
