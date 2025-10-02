@@ -14,7 +14,7 @@ draft: false
 
 
 *我们在使用无线嵌入式器件的时候，或多或少对于AT指令都有所了解——通过通信口发送一串字符，以AT开头，换行符结尾，中间插入指令内容，就可以实现对芯片寄存器的配置。这种指令式配置类似于蓝牙、WiFi等设备可能比较简单，但是如果我们打算用它去实现一个比较复杂的编程呢？是否也可以通过这种方式，是否可以在不使用编译器的情况下，通过指令调取内部程序并执行？我将会通过一个小demo进行测试这种编程方式的可行性。*
-**[本文的程序可以在这里下载](https://github.com/yunwuhai/MassagePrograming)**
+**[本文的程序可以在这里下载](https://github.com/yunwuhai/MessagePrograming)**
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
