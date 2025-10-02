@@ -114,7 +114,7 @@ title = "云筑"
 subtitle = "此处记录着我来时的路"
 
 [[params.profileMode.buttons]]
-name = "文章"
+name = "目录"
 url = "posts"
 
 [[params.profileMode.buttons]]
@@ -128,6 +128,10 @@ url = "tags"
 [[params.profileMode.buttons]]
 name = "搜索"
 url = "search"
+
+[[params.profileMode.buttons]]
+name = "归档"
+url = "archives"
 
 [[params.socialIcons]]
 name = "bilibili"
