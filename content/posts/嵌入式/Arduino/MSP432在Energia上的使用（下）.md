@@ -2,7 +2,7 @@
 title: "MSP432在Energia上的使用（下）"
 draft: false
 categories:
-- 嵌入式
+- 嵌入式/Arduino
 tags:
 - Arduino
 - MSP432

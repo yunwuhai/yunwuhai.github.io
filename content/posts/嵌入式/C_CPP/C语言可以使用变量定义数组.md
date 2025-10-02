@@ -2,9 +2,10 @@
 title: "C语言可以使用变量定义数组"
 draft: false
 categories:
-- 嵌入式
+- 嵌入式/C_CPP
 tags:
-- C/C++
+- C
+- C++
 license: CC-BY-SA 4.0
 description: "本文首发于CSDN，原文：https://blog.csdn.net/qq_44884716/article/details/115869020"
 date: 2021-04-19T17:05:43+08:00

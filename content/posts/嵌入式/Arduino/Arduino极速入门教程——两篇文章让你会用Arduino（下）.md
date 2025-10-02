@@ -2,7 +2,7 @@
 title: "Arduino极速入门教程——两篇文章让你会用Arduino（下）"
 draft: false
 categories:
-  - 嵌入式
+  - 嵌入式/Arduino
 tags:
   - Arduino
 license: CC-BY-SA 4.0

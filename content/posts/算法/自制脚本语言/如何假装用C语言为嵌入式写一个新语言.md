@@ -1,9 +1,10 @@
 ---
 title: "如何假装用C语言为嵌入式写一个新语言"
 categories:
-- 算法
+- 算法/自制脚本语言
 tags:
-- C/C++
+- C
+- C++
 - 脚本语言
 license: CC-BY-SA 4.0
 description: 本文首发于CSDN，原文：https://blog.csdn.net/qq_44884716/article/details/110099699

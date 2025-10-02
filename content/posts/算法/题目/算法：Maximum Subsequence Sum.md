@@ -1,9 +1,13 @@
 ---
-分类: [算法]
-标签: [题目]
-知识共享许可协议: CC-BY-SA 4.0
-备注: 本文首发于CSDN，原文：https://blog.csdn.net/qq_44884716/article/details/123927121
-时间: 2022-04-02 19:09:57
+title: "算法：Maximum Subsequence Sum"
+draft: false
+categories:
+- 算法/题目
+tags:
+- 题目
+license: CC-BY-SA 4.0
+description: 本文首发于CSDN，原文：https://blog.csdn.net/qq_44884716/article/details/123927121
+date: 2022-04-02T19:09:57+08:00
 ---
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->

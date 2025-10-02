@@ -1,9 +1,10 @@
 ---
 title: "深度底层剖析，你所不知道的printf"
 categories:
-- 嵌入式
+- 嵌入式/C_CPP
 tags:
-- C/C++
+- C
+- C++
 license: CC-BY-SA 4.0
 description: 本文首发于CSDN，原文：https://blog.csdn.net/qq_44884716/article/details/119810890
 date: 2021-08-19T21:02:23+08:00

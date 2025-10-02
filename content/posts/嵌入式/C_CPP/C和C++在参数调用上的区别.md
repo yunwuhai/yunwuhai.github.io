@@ -2,9 +2,10 @@
 title: "C和C++在参数调用上的区别"
 draft: false
 categories:
-- 嵌入式
+- 嵌入式/C_CPP
 tags:
-- C/C++
+- C
+- C++
 license: "CC-BY-SA 4.0"
 description: "本文首发于CSDN，原文：https://blog.csdn.net/qq_44884716/article/details/109561677"
 date: "2020-11-08T17:10:52+08:00"

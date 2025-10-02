@@ -2,9 +2,10 @@
 title: "C的main函数解析"
 draft: false
 categories:
-- 嵌入式
+- 嵌入式/C_CPP
 tags:
-- C/C++
+- C
+- C++
 license: CC-BY-SA 4.0
 description: 本文首发于CSDN，原文：https://blog.csdn.net/qq_44884716/article/details/111412695
 date: 2020-12-20T00:14:50+08:00
