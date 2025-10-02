@@ -15,7 +15,7 @@ description: 本文首发于CSDN，原文：https://blog.csdn.net/qq_44884716/ar
 
 # MSP432 在 Energia 上的使用（下）
 
-_其实我自己都没想到我居然会来填坑，不过说实话这好像也算不上填坑，毕竟之前在[MSP430 在 Energia 上的使用（上）](MSP430在Energia上的使用（上）.md)这个帖子里讲的是 MSP430，而且说的准备在 VSCode 里装 Energia 其实到现在还没弄，不过这里还是想介绍一下 Energia 的另一项功能，一个专属于 MSP432 的功能。_
+_其实我自己都没想到我居然会来填坑，不过说实话这好像也算不上填坑，毕竟之前在[MSP430 在 Energia 上的使用（上）](https://yunwuhai.github.io/posts/%E5%B5%8C%E5%85%A5%E5%BC%8F/arduino/msp430%E5%9C%A8energia%E4%B8%8A%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8A/)这个帖子里讲的是 MSP430，而且说的准备在 VSCode 里装 Energia 其实到现在还没弄，不过这里还是想介绍一下 Energia 的另一项功能，一个专属于 MSP432 的功能。_
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 

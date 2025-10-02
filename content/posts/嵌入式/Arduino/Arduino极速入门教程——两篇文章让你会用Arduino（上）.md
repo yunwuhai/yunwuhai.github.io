@@ -211,4 +211,4 @@ void loop(){
 
 ## 后言
 
-本教程只有两章，下一章内容即为具体编程部分：[链接](Arduino极速入门教程——两篇文章让你会用Arduino（下）.md)。
+本教程只有两章，下一章内容即为具体编程部分：[链接]([Arduino极速入门教程——两篇文章让你会用Arduino（下）.md](https://yunwuhai.github.io/posts/%E5%B5%8C%E5%85%A5%E5%BC%8F/arduino/arduino%E6%9E%81%E9%80%9F%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B%E4%B8%A4%E7%AF%87%E6%96%87%E7%AB%A0%E8%AE%A9%E4%BD%A0%E4%BC%9A%E7%94%A8arduino%E4%B8%8B/))。

@@ -16,7 +16,7 @@ draft: true
 
 > [!NOTE]
 >
-> 这是我在学习USB的实践笔记，理论部分可以参考《[USB基础概念](./USB基础概念.md)》。水平有限，如有发现错误遗漏，欢迎指出。
+> 这是我在学习USB的实践笔记，理论部分可以参考《[USB基础概念](https://yunwuhai.github.io/posts/%E5%B5%8C%E5%85%A5%E5%BC%8F/usb/usb%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/)》。水平有限，如有发现错误遗漏，欢迎指出。
 
 ## CubeMX配置
 
