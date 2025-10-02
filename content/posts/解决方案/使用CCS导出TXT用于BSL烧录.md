@@ -1,6 +1,6 @@
 ---
 date: 2020-08-28T16:34:57+08:00
-draft: true
+draft: false
 title: '使用 CCS 导出 TXT 用于 BSL 烧录'
 categories:
 - 解决方案
