@@ -2,7 +2,7 @@
 title: "Winform自定义一个圆形按钮"
 draft: false
 categories:
-- 桌面端/CSharp
+- CSharp
 tags:
 - C#
 license: CC-BY-SA 4.0

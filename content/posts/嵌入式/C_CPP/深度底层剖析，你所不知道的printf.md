@@ -1,7 +1,7 @@
 ---
 title: "深度底层剖析，你所不知道的printf"
 categories:
-- 嵌入式/C_CPP
+- C_CPP
 tags:
 - C
 - C++

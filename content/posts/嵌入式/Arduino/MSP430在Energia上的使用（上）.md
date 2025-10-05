@@ -1,7 +1,7 @@
 ---
 title: "MSP430在Energia上的使用（上）"
 categories:
-- 嵌入式/Arduino
+- Arduino
 tags:
 - Arduino
 - MSP430

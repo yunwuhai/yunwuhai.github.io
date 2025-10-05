@@ -2,7 +2,7 @@
 title: "C的main函数解析"
 draft: false
 categories:
-- 嵌入式/C_CPP
+- C_CPP
 tags:
 - C
 - C++

@@ -2,7 +2,7 @@
 title: "如何使用KiCAD画扩展板"
 draft: false
 categories:
-- 嵌入式/硬件设计
+- 硬件设计
 tags:
 - KiCAD
 - 扩展板

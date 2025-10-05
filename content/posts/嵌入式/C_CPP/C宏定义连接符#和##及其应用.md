@@ -2,7 +2,7 @@
 title: "C宏定义连接符#和##及其应用"
 draft: false
 categories:
-- 嵌入式/C_CPP
+- C_CPP
 tags:
 - C
 - C++

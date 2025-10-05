@@ -2,7 +2,7 @@
 title: "C和C++在参数调用上的区别"
 draft: false
 categories:
-- 嵌入式/C_CPP
+- C_CPP
 tags:
 - C
 - C++

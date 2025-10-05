@@ -1,7 +1,7 @@
 ---
 title: "三极管（BJT）与场效应管（FET）的比较"
 categories:
-- 嵌入式/硬件设计
+- 硬件设计
 tags:
 - BJT
 - FET

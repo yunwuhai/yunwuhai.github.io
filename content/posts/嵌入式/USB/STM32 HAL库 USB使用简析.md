@@ -1,7 +1,7 @@
 ---
 title: "STM32 HAL库 USB使用简析"
 categories: 
-- 嵌入式/USB
+- USB
 tags: 
 - USB
 license: CC-BY-SA 4.0

@@ -2,7 +2,7 @@
 title: "USB基础概念"
 draft: false
 categories: 
-- 嵌入式/USB
+- USB
 tags: 
 - USB
 license: CC-BY-SA 4.0

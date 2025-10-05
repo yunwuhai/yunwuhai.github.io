@@ -2,7 +2,7 @@
 title: "C语言可以使用变量定义数组"
 draft: false
 categories:
-- 嵌入式/C_CPP
+- C_CPP
 tags:
 - C
 - C++

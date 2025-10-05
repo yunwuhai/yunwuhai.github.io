@@ -2,7 +2,7 @@
 title: "C/C++中malloc的强制转换"
 draft: false
 categories: 
-- 嵌入式/C_CPP
+- C_CPP
 tags: 
 - C
 - C++

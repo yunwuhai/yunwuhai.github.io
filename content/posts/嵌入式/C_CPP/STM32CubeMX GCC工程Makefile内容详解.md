@@ -2,7 +2,7 @@
 title: "STM32CubeMX GCC工程Makefile内容详解"
 draft: false
 categories:
-- 嵌入式/C_CPP
+- C_CPP
 tags:
 - STM32CubeMX
 - C
