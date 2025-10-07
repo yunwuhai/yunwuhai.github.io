@@ -1,6 +1,6 @@
 ---
 date: 2025-10-05T19:07:56+08:00
-draft: true
+draft: false
 title: 'IPv4和IPv6比较'
 categories:
  - 网络协议学习
