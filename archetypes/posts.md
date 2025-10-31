@@ -5,7 +5,7 @@ title: '{{ replace .File.ContentBaseName `-` ` ` | title }}'
 categories:
  - category1
 tags:
- = tag1
+ - tag1
  - tag2
 author: ["云雾海"]
 description: "文章简介"
