@@ -1,6 +1,6 @@
 ---
 date: 2026-03-18T16:46:38+08:00
-draft: true
+draft: false
 title: 'Qwen3-ASR远程部署'
 categories:
  - 解决方案
