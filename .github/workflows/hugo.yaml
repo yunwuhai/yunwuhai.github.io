@@ -105,3 +105,14 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+      # IndexNow：把最近更新的页面推送给 Bing / Yandex / Seznam / Naver。
+      # Google 不参与 IndexNow，它只看 sitemap 和抓取。
+      # 必须放在部署之后：搜索引擎会实时校验 https://blog.yunwuhai.com/<key>.txt 这个公开文件。
+      - name: Checkout (for IndexNow helper)
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 1
+      # key 文件本身就在 static/ 里，公开是它的设计，不需要配置 secret
+      - name: Submit new URLs to IndexNow
+        if: github.event_name == 'push'
+        run: node scripts/indexnow.mjs

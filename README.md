@@ -46,7 +46,8 @@ assets/
   avatar.png, favicon.png
 i18n/zh-cn.toml             # 简体中文文案（站点语言键是 zh-cn，需自带一份）
 scripts/covers/gen_cover.py # 封面图生成器（1200x630）
-static/                     # 站点验证文件、旧 URL 跳转页
+scripts/indexnow.mjs        # 部署后把新页面推送给 Bing / Yandex（IndexNow）
+static/                     # 站点验证文件、IndexNow key 文件、旧 URL 跳转页
 themes/hugo-theme-stack/    # 主题（git submodule）
 ```
 
@@ -150,6 +151,27 @@ GitHub Pages 没有服务端重定向，一旦文章的目录名变了，旧链�
 
 现有全部旧 URL 都已保留，改动后建议用线上 `sitemap.xml` 的 URL 列表与本地 `public/` 做一次比对。
 
+## 搜索引擎
+
+- **Google**：Search Console 里有两个资源——域名资源 `yunwuhai.com`（DNS TXT 验证）和旧的 URL 前缀资源 `https://yunwuhai.github.io/`。两个域名各自的 sitemap 都已提交；旧资源上做过一次 Change of address（github.io → yunwuhai.com），通常需要几周才完全生效。
+- **Bing**：Webmaster Tools 里有三个站点（`blog.yunwuhai.com`、`yunwuhai.com`、`yunwuhai.github.io`），前两个是通过 DNS CNAME 验证的：
+  - `<验证码>.yunwuhai.com` / `<验证码>.blog.yunwuhai.com` → `verify.bing.com`（Cloudflare，未代理）
+  - **这两条 CNAME 不能删**，Bing 会定期复查所有权。
+- sitemap 由 Hugo 自动生成（`outputs.home` 含 `RSS`，sitemap 默认开启），两个站点都在各自的 Webmaster 后台提交过。
+
+### IndexNow（发布后自动推送）
+
+`.github/workflows/hugo.yaml` 的 deploy 任务在**部署完成之后**运行 `scripts/indexnow.mjs`：拉取线上的 `sitemap.xml`，筛出最近 3 天内更新过的 URL，用 IndexNow 协议推给 Bing / Yandex / Seznam / Naver（Google 不参与该协议）。
+
+- key 文件是 `static/<32 位十六进制>.txt`，内容就是 key 本身，会被原样发布到 `https://blog.yunwuhai.com/<key>.txt`。
+- **这个 key 本来就必须公开**：它不是密码，只是一个「我拥有该域名」的标记，搜索引擎要能读到它才认这次提交。别人拿到它最多能替你提交本域名下的 URL，既改不了站点也读不到任何数据，各引擎还都有频率限制。
+- 想换 key：删掉旧的 `static/<key>.txt`，放一个新的（`openssl rand -hex 16` 或任意 32 位十六进制），不用改任何代码——脚本会自动找 `static/` 里符合格式的那个文件。
+- 想调整「多久算新」：本地跑时设 `INDEXNOW_MAX_AGE_DAYS=7`；只想看会提交哪些 URL 而不真发请求，加 `INDEXNOW_DRY_RUN=1`。
+
+```bash
+INDEXNOW_DRY_RUN=1 node scripts/indexnow.mjs
+```
+
 ## 维护备忘
 
 - **i18n**：站点语言键是 `zh-cn`，主题只提供 `zh.toml`，Hugo 不会自动回退，因此仓库自带一份 `i18n/zh-cn.toml`。改界面文案就改这里。
@@ -162,6 +184,7 @@ GitHub Pages 没有服务端重定向，一旦文章的目录名变了，旧链�
   - 替换已有图片时注意 Git 无法去重：每换一次都是历史里的完整副本，别对同一张图反复微调重存。
 - **封面图是纯装饰**：`scripts/covers/gen_cover.py` 只按分区配色生成渐变+纹理背景，**不画标题文字**（标题由主题在卡片和文章页渲染，重复会重影）。颜色表在脚本里的 `TOP_COLORS` / `SUB_COLORS`。
 - **CI 用 `fetch-depth: 1`**：`hugo.toml` 里 `enableGitInfo = false`，构建不读 Git 历史，因此浅克隆即可。如果以后要按 commit 时间生成"最后更新"，需把 `.github/workflows/hugo.yaml` 的 `fetch-depth` 改回 `0` 并打开 `enableGitInfo`。
+- **IndexNow key 与 sitemap 一起验证**：改了 `hugo.toml` 的 `baseURL` 或站点结构后，记得确认 `https://blog.yunwuhai.com/<key>.txt` 与新 sitemap 都能访问，否则 IndexNow 提交会被引擎拒绝（403）。
 - **文件名不要带 `#`**：曾有一篇目录名含 `#`，导致 Hugo 生成的 srcset 在 `#` 处截断 URL、产生 18 处死链。现已改名并用 alias + 静态跳转页保住旧链接。
 
 ## 开源协议
