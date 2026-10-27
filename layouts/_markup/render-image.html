@@ -1,12 +1,11 @@
 {{- /*
   覆盖主题 _markup/render-image.html。
 
-  背景：本博客正文里的图片全部是外链（raw.githubusercontent.com / csdnimg.cn），
-  主题默认会为每张图调用 resources.GetRemote 去读尺寸以启用画廊布局。
-  这会让每次干净构建都依赖外网、耗时可观，CI 网络抖动时还会刷一堆 WARN。
+  正文图片已本地化（各 leaf bundle 的 img/ 目录），走主题完整流程：
+  读取宽高、输出 gallery-image 类以启用瀑布流布局。
 
-  因此：远程图片直接输出朴素的 <img>，不联网、不处理；
-  本地资源（如文章目录里的图）仍走主题的完整流程。
+  保留远程图分支作为兜底：若以后又引用外链图，直接输出朴素 <img>，
+  不调用 resources.GetRemote（避免构建依赖外网、CI 网络抖动刷 WARN）。
 */ -}}
 {{- $dest := .Destination -}}
 {{- $remote := or (hasPrefix $dest "http://") (hasPrefix $dest "https://") -}}
@@ -15,6 +14,7 @@
     <img src="{{ $dest | safeURL }}"
         alt="{{ .PlainText }}"
         {{ with .Title }}title="{{ . | markdownify }}"{{ end }}
+        referrerpolicy="no-referrer"
         loading="lazy">
 {{- else -}}
     {{- $image := partial "helper/image" (dict "Resources" .Page.Resources "Image" $dest "Context" .Page) -}}

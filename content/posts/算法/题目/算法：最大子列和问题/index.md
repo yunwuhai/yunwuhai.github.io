@@ -32,7 +32,7 @@ date: 2022-04-02T18:45:44+08:00
 
 ## 题目内容
 
-![](https://i-blog.csdnimg.cn/blog_migrate/b33313796b189830baee455d6d9f6f39.png)
+![](img/b33313796b189830baee455d6d9f6f39.webp)
 
 ## 分析
 
@@ -155,12 +155,12 @@ date: 2022-04-02T18:45:44+08:00
 
 1.暴力穷举
 
-![](https://i-blog.csdnimg.cn/blog_migrate/e7eac1179b6cb0d0857de2e2fb6d8008.png)
+![](img/e7eac1179b6cb0d0857de2e2fb6d8008.webp)
 
 2.分而治之
 
-![](https://i-blog.csdnimg.cn/blog_migrate/58fe4c0e624ac5d9b7d8622c0a6bb780.png)
+![](img/58fe4c0e624ac5d9b7d8622c0a6bb780.webp)
 
 3.在线处理
 
-![](https://i-blog.csdnimg.cn/blog_migrate/94e73b4218a8e77ae0df4e31cf461637.png)
+![](img/94e73b4218a8e77ae0df4e31cf461637.webp)

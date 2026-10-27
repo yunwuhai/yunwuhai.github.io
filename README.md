@@ -154,8 +154,14 @@ GitHub Pages 没有服务端重定向，一旦文章的目录名变了，旧链�
 
 - **i18n**：站点语言键是 `zh-cn`，主题只提供 `zh.toml`，Hugo 不会自动回退，因此仓库自带一份 `i18n/zh-cn.toml`。改界面文案就改这里。
 - **不要改主题源码**：`themes/hugo-theme-stack` 是 submodule，所有改动都通过站点级覆盖完成（`layouts/`、`assets/scss/custom.scss`、`assets/icons/`）。
-- **正文外链图片不参与图片处理**：`layouts/_markup/render-image.html` 对 http(s) 开头的图片直接输出 `<img>`，不走 `resources.GetRemote`。这样构建不依赖外网（正文里的图有 84 张托管在 raw.githubusercontent.com，国内网络下取不到会让构建超时失败）。
+- **正文图片全部本地化**：所有正文图片都放在各自文章的 leaf bundle 里（`content/posts/<分区>/<文章>/img/*.webp`），Markdown 里用相对路径 `img/xxx.webp` 引用。仓库里不再有外链图片，构建完全不依赖外网。
+  - 图片格式统一 WebP（q82，长边 ≤1400px），动图按体积决定转 WebP 还是保留 GIF。
+  - `layouts/_markup/render-image.html` 仍保留远程图兜底分支：万一以后又贴了外链，直接输出朴素 `<img referrerpolicy="no-referrer">`，不会触发 `resources.GetRemote` 拖慢构建。
+  - 加图时把图片放进对应文章的 `img/` 目录即可；leaf bundle 里未被引用的文件也会被发布，所以别留废弃图片。
+  - **单张图控制在 200 KB 以内**：WebP 已压缩过，Git 无法再压缩，仓库体积约等于图片字节总和。目前 294 张图共 11 MB，平均 38 KB/张。
+  - 替换已有图片时注意 Git 无法去重：每换一次都是历史里的完整副本，别对同一张图反复微调重存。
 - **封面图是纯装饰**：`scripts/covers/gen_cover.py` 只按分区配色生成渐变+纹理背景，**不画标题文字**（标题由主题在卡片和文章页渲染，重复会重影）。颜色表在脚本里的 `TOP_COLORS` / `SUB_COLORS`。
+- **CI 用 `fetch-depth: 1`**：`hugo.toml` 里 `enableGitInfo = false`，构建不读 Git 历史，因此浅克隆即可。如果以后要按 commit 时间生成"最后更新"，需把 `.github/workflows/hugo.yaml` 的 `fetch-depth` 改回 `0` 并打开 `enableGitInfo`。
 - **文件名不要带 `#`**：曾有一篇目录名含 `#`，导致 Hugo 生成的 srcset 在 `#` 处截断 URL、产生 18 处死链。现已改名并用 alias + 静态跳转页保住旧链接。
 
 ## 开源协议

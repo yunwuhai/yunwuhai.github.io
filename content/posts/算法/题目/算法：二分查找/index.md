@@ -30,7 +30,7 @@ date: 2022-04-02T19:15:43+08:00
 
 ## 题目内容
 
-![](https://i-blog.csdnimg.cn/blog_migrate/80ee402aab26dfab5a084b8debd34bbb.png)
+![](img/80ee402aab26dfab5a084b8debd34bbb.webp)
 
 ## 分析
 
@@ -57,4 +57,4 @@ Position BinarySearch( List L, ElementType X )
 
 ## 运行结果
 
-![](https://i-blog.csdnimg.cn/blog_migrate/8e4473c0a1730ecd1baf286221e3d230.png)
+![](img/8e4473c0a1730ecd1baf286221e3d230.webp)

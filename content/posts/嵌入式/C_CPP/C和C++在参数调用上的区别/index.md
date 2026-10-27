@@ -62,7 +62,7 @@ void example_CPP(int &a,int *b,int c){
 ```
 
 输出结果如下：
-![C++测试结果](https://i-blog.csdnimg.cn/blog_migrate/925a891acf596a733db3fb59b898353d.png#pic_center)
+![C++测试结果](img/925a891acf596a733db3fb59b898353d.webp)
 
 当我们使用直接传参时，实际过程可以理解为我们把原来 z 的值赋值给一个新的变量 c，在对 c 进行了一堆操作后释放 c 的空间，而 z 实际上并没有参与到函数中，而仅仅起到一个赋初值的作用。
 
@@ -95,6 +95,6 @@ void example_CPP(int &a,int *b,int c){
 
 编译器报错：
 
-![C测试编译器报错](https://i-blog.csdnimg.cn/blog_migrate/86ace46f0a427868daad34a4ecf4e3fc.png#pic_center)
+![C测试编译器报错](img/86ace46f0a427868daad34a4ecf4e3fc.webp)
 
 _这两个错误分别报的函数声明和函数定义_

@@ -93,9 +93,9 @@ SaySomething(Hello, Bye, 1, 2);
 
 ## 效果图
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/2f064b62237548df93038e322b1de940.png#pic_center)
+![在这里插入图片描述](img/2f064b62237548df93038e322b1de940.webp)
 
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/5cf23f0dcea0655e79b1b36e365ff762.png#pic_center)
+![在这里插入图片描述](img/5cf23f0dcea0655e79b1b36e365ff762.webp)
 
 

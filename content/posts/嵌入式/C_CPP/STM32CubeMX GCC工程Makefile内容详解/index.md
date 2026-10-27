@@ -66,7 +66,7 @@ description: 本文首发于CSDN，原文：https://blog.csdn.net/qq_44884716/ar
 
 之后我们可以得到如下的工程目录（当然，众所周知CubeMX的一些设置会影响到工程根目录的具体结构，不过这都不是重点）：
 
-![](https://i-blog.csdnimg.cn/blog_migrate/6938647bafeaacf0a1a8963e69dd68a0.png)
+![](img/6938647bafeaacf0a1a8963e69dd68a0.webp)
 
 其中build目录是编译后生成的，先不管，另外Core文件夹下的Test文件夹及其中内容是我进行测试的时候添加的，暂时也先不管。
 

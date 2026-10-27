@@ -36,4 +36,4 @@ for num in range(100, 1000):
 
 ## 执行效果
 
-![image-20251102164034357](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251102164034357.png)
+![image-20251102164034357](img/image-20251102164034357.webp)

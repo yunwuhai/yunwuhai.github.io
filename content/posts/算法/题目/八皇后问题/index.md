@@ -347,7 +347,7 @@ if __name__ == "__main__":
 
 ## 执行效果
 
-![八皇后问题](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/八皇后问题.gif)
+![八皇后问题](img/八皇后问题.gif)
 
-![image-20251102161310859](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251102161310859.png)
+![image-20251102161310859](img/image-20251102161310859.webp)
 

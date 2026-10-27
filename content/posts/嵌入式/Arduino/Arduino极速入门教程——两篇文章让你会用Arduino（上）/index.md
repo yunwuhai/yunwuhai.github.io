@@ -16,7 +16,7 @@ date: 2021-02-01T20:06:25+08:00
 
 ## Arduino是啥
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/f76db95c185db2bdcbe5ec32110da6dd.jpeg#pic_center)
+![在这里插入图片描述](img/f76db95c185db2bdcbe5ec32110da6dd.webp)
 
 
 一个开源的硬件开发平台，其特点在于简单易学易上手，而且国内外资源多，有啥问题也好解决。
@@ -85,17 +85,17 @@ date: 2021-02-01T20:06:25+08:00
 
 现在打开你的Arduino（实际上它叫Arduino IDE，即Arduino的集成开发环境）：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/aece828185d2568e885958e84703cb27.png#pic_center)
+![在这里插入图片描述](img/aece828185d2568e885958e84703cb27.webp)
 
 
 让我们来看看界面长啥样：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/40ba8766233b7acfd00109ff5b3b75a8.png#pic_center)
+![在这里插入图片描述](img/40ba8766233b7acfd00109ff5b3b75a8.webp)
 
 
 可以看到，下载安装好后它就是一个不大简单的中文界面，现在我将其放大然后标注一下主界面的内容：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/3b00d2466908d268bae58c866204cb1c.png#pic_center)
+![在这里插入图片描述](img/3b00d2466908d268bae58c866204cb1c.webp)
 
 
 
@@ -103,12 +103,12 @@ date: 2021-02-01T20:06:25+08:00
 
 为了方便起见，在此对我们的Arduino IDE进行配置一下，点击文件-首选项：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/36e0214d5c5af7f8162fcddd2bcb4d62.png#pic_center)
+![在这里插入图片描述](img/36e0214d5c5af7f8162fcddd2bcb4d62.webp)
 
 
 然后我们可以看到新界面，也没啥大变化，多了个行号和可折叠符号，不喜欢也可以去掉，不过建议留着，比较方便：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/85ea6fa9deb287122e87cbe789a5735b.png#pic_center)
+![在这里插入图片描述](img/85ea6fa9deb287122e87cbe789a5735b.webp)
 
 
 设置完了，我们再看看工具栏中还有一些其它什么有用的功能没：
@@ -117,7 +117,7 @@ date: 2021-02-01T20:06:25+08:00
 
 首先点开文件，这里面最重要的除了刚才讲过的首选项界面，另一个就是示例了，里面给出了很多例子供以学习：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/2909eca58ef255c6ecae2b9c29b2134c.png#pic_center)
+![在这里插入图片描述](img/2909eca58ef255c6ecae2b9c29b2134c.webp)
 
 
 ### 编辑
@@ -126,7 +126,7 @@ date: 2021-02-01T20:06:25+08:00
 
 另外下面还有三行关于注释、缩进的功能，如果再框选一大段文字后通过快捷键进行操作的话，可以实现块注释和块缩进：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/099a88fc84c8c91039499ff4f172045d.png#pic_center)
+![在这里插入图片描述](img/099a88fc84c8c91039499ff4f172045d.webp)
 
 ```c++
 void setup(){
@@ -144,21 +144,21 @@ void loop(){
 
 而显示项目文件夹顾名思义就是找到项目当前地址，而加载库则为添加所需库文件，至于添加文件顾名思义就是把一些文件内容添加到工程里：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/68ae354466bc7fd07773b4dfc1963038.png#pic_center)
+![在这里插入图片描述](img/68ae354466bc7fd07773b4dfc1963038.webp)
 
 
 ### 工具
 
 工具栏是一个很重要的部分，我们经常要在这里设置东西，其中自动格式化就是调整代码的缩进让他符合C++语言推荐规范。项目存档就是把项目通过zip封装起来进行保存。修正编码并重新加载我也不知道是个啥，目前没用过。管理库就是对库文件进行管理。串口监视器和绘图器都是串口工具，但是一个直接显示文字，一个可以把数字以图像形式绘制。下面的东西是开发板设置，后面我会详细讲。编程器和烧录引导程序一般用不到，后面会提。
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/2de159245d15b26457c1367c4c019fb8.png#pic_center)
+![在这里插入图片描述](img/2de159245d15b26457c1367c4c019fb8.webp)
 
 
 ### 帮助
 
 帮助界面提供的都是官方的英文网址链接，可以在网站上进行查询相应的需求功能，不过一般重要的只有参考功能，其它可以不管。
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/a259a8fee7326e14dd789e50ee9e799d.png#pic_center)
+![在这里插入图片描述](img/a259a8fee7326e14dd789e50ee9e799d.webp)
 
 
 ## 硬件
@@ -167,12 +167,12 @@ void loop(){
 
 官方Arduino（是的，虽然是开源硬件，但是它仍然有个官方，类似于基金会的形式存在）使用的单片机为AVR系列（这些所谓系列一般就是指的芯片提供厂家），其中最著名的Arduino开发板名字叫Arduino UNO（音同乌诺），官方的长这样，买下来应该要一百多：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/55fb6288f448b5b447c8a97c90f39aa7.jpeg#pic_center)
+![在这里插入图片描述](img/55fb6288f448b5b447c8a97c90f39aa7.webp)
 
 
 他的芯片是AVR系列的Atmega328p单片机，当然因为这是开源的产品，所以也有很多非官方的板子（这不是盗版，因为硬件是开源的，事实上通过电路图你自己也可以来做一个板子），网上我见过最便宜的只要十块左右（当时打折，总之一般不超过二十，当然有一些添加了新的外设那种会很贵但是买了也不亏，不过目前如果你不懂就别买），总之别买贵了。初学者买UNO是最方便的，看到这里你可以去买UNO板了，但是其它的东西也还是先别买（最好找那种送USB线的，因为这种方口USB比较少见）。然后我们可以看到UNO的板载资源有这些：
 
-![](https://i-blog.csdnimg.cn/blog_migrate/aee98a2cdb591403204d8e6471e5541e.jpeg)
+![](img/aee98a2cdb591403204d8e6471e5541e.webp)
 
 其中USB接口可以用来供电或者上传程序，DC插头只能用于供电，左右两边的两排孔是用于接线的。而上面那很大一坨的芯片，就是ATMEGA328p，是核心芯片，而复位按键功能类似于重启按钮。其它的暂时不需要知道，因为平常也不用。
 
@@ -201,7 +201,7 @@ void loop(){
 
 2. 看完如图所示的部分
 
-   ![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/7c0a8b900bfb068d506bb81346c792d1.png#pic_center)
+   ![在这里插入图片描述](img/7c0a8b900bfb068d506bb81346c792d1.webp)
 
 
 3. 尝试写出这样一个程序：

@@ -27,7 +27,7 @@ draft: true
 
 选择芯片，如果还没有确定好要用什么芯片，也可以直接在CubeMX中进行芯片选型。我的芯片是STM32F103RCT6。
 
-![选择芯片](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20250921152011749.png)
+![选择芯片](img/image-20250921152011749.webp)
 
 进入到配置界面后，按照如下顺序快速进行一些基础配置。
 
@@ -35,23 +35,23 @@ draft: true
 
 #### 配置SWD
 
-![配置SWD](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20250921152921971.png)
+![配置SWD](img/image-20250921152921971.webp)
 
 #### 配置时钟
 
-![配置晶振](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20250921153029954.png)
+![配置晶振](img/image-20250921153029954.webp)
 
 #### 调整晶振频率 
 
 注意这里只用调整晶振频率就可以了，因为打开USB后会自动配置其它部分
 
-![调整晶振频率](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20250921153651439.png)
+![调整晶振频率](img/image-20250921153651439.webp)
 
 #### 打开USB
 
 因为不同芯片的USB配置不同（部分可能支持High Speed、Low Speed模式），这里可能会有所差异，根据自己需要进行选择。
 
-![打开USB](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20250921153900296.png)
+![打开USB](img/image-20250921153900296.webp)
 
 #### 配置USB设备模式配置
 
@@ -59,25 +59,25 @@ draft: true
 
 因为后面要自己配置，所以下面的配置没必要修改，当然如果你想修改也可以根据自己的需要进行修改。
 
-![配置USB设备模式配置](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20250921154613968.png)
+![配置USB设备模式配置](img/image-20250921154613968.webp)
 
 #### 再次配置时钟
 
 在前面打开USB的时候，就应该可以注意到Clock Configuration出现了一个红叉报错，重新进入时钟配置界面，可以发现一个提示可以自动配置始终的提示，点击Yes。
 
-![再次配置时钟](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20250921154939786.png)
+![再次配置时钟](img/image-20250921154939786.webp)
 
 #### 完成项目配置
 
 接下来完成项目设置即可，生成完成后点击close，然后前往项目文件夹，通过你的开发软件打开。
 
-![配置项目](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20250921155115553.png)
+![配置项目](img/image-20250921155115553.webp)
 
-![生成.c和.h文件](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20250921155147081.png)
+![生成.c和.h文件](img/image-20250921155147081.webp)
 
-![生成完成，点击Close](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20250921155249231.png)
+![生成完成，点击Close](img/image-20250921155249231.webp)
 
-![image-20250921155410341](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20250921155410341.png)
+![image-20250921155410341](img/image-20250921155410341.webp)
 
 ## 项目文件分析
 
@@ -85,7 +85,7 @@ draft: true
 
 我使用VSCode打开了项目文件夹，现在观察项目在根路径上的结构。
 
-![根路径](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20250921160010153.png)
+![根路径](img/image-20250921160010153.webp)
 
 #### 可以忽略的部分
 
@@ -104,19 +104,19 @@ draft: true
 
 Core是核心逻辑文件夹，里面负责项目的核心逻辑，不关注接口实现，这里面的文件内容和USB基本不相关。
 
-![image-20251111165930414](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251111165930414.png)
+![image-20251111165930414](img/image-20251111165930414.webp)
 
 #### Drivers
 
 Drivers是驱动文件夹，里面装有CMSIS库和HAL库，虽然涉及了USB底层内容，但和协议并不高度相关，我们仅在用到的时候讨论。
 
-![image-20251111170123925](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251111170123925.png)
+![image-20251111170123925](img/image-20251111170123925.webp)
 
 #### Middlewares
 
 Middlewares是中间件文件夹，里面的内容是从STM32提供的官方USB库中直接拷贝过来的，通常我们不需要修改里面的内容，但是里面的文件我们需要详细研究。
 
-![image-20251111170259247](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251111170259247.png)
+![image-20251111170259247](img/image-20251111170259247.webp)
 
 - Core文件夹：包含了USB设备库状态机，它由USB2.0规范定义。
   - usbd_core(.c,.h)：此文件包含了处理所有USB通信和状态机的函数
@@ -130,7 +130,7 @@ Middlewares是中间件文件夹，里面的内容是从STM32提供的官方USB�
 
 USB_DEVICE是USB设备配置文件夹，里面包含了关于USB的具体配置，通常来说我们需要在里面进行相关的设置，同时我们刚刚通过CubeMX配置的和USB相关的东西也基本都是生成在这里。
 
-![image-20251111170443416](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251111170443416.png)
+![image-20251111170443416](img/image-20251111170443416.webp)
 
 可以注意到，里面的`usbd_cdc_if(.c,.h)`、`usbd_desc(.c,.h)`、`usbd_conf(.c,.h)`都是通过前面的Middlewares里面的USB官方库生成的。
 
@@ -149,7 +149,7 @@ USB_DEVICE是USB设备配置文件夹，里面包含了关于USB的具体配置�
 
 让我们关注main文件，看向main函数。
 
-![main函数中的USB](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20250921200402638.png)
+![main函数中的USB](img/image-20250921200402638.webp)
 
 在生成的`main`函数中出现了`MX_USB_DEVICE_Init`函数，字面意义上来看，这个对USB设备的初始化。
 
@@ -157,7 +157,7 @@ USB_DEVICE是USB设备配置文件夹，里面包含了关于USB的具体配置�
 
 另外我们可以直接在`main.c`文件中搜索`USB`，然后就可以看到：
 
-![SystemClock中的USB](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20250921200740459.png)
+![SystemClock中的USB](img/image-20250921200740459.webp)
 
 这段内容出现在`void SystemClock_Config(void)`函数中，显然这里是对USB外设的时钟配置，这部分在CubeMX中已经配好了，我们无需要再关注了。
 
@@ -169,7 +169,7 @@ USB_DEVICE是USB设备配置文件夹，里面包含了关于USB的具体配置�
 
 通过在`stm32f1xx_it.c`文件中搜索USB，可以找到一个带USB的控制句柄。
 
-![hpcd_USB_FS](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20250921202043366.png)
+![hpcd_USB_FS](img/image-20250921202043366.webp)
 
 可以发现这个类型是`PCD_HandleTypeDef`的句柄，PCD的全称是`USB Physical Layer Circuit`，它负责STM32微控制器与USB物理接口的底层通信。通过类型名称可以跳转到`stm32f1xx_hal_pcd.h`的文件中，它对应了`stm32f1xx_hal_pcd.c`文件。对于USB协议栈而言，PCD是软件层面的最底层，它负责操作硬件的寄存器，USB协议栈上层所有的操作实际上都是通过调用PCD实现的。
 
@@ -179,11 +179,11 @@ USB_DEVICE是USB设备配置文件夹，里面包含了关于USB的具体配置�
 
 继续往下查看，会发现`USB_LP_CAN1_RX0_IRQHandler`函数，从注释上来看，它负责管理USB低优先级中断或者CAN接收0中断，我们没有使用CAN总线，显然这里就是负责了USB低优先级中断：
 
-![USB_LP_CAN1_RX0_IRQHandler](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20250921203416885.png)
+![USB_LP_CAN1_RX0_IRQHandler](img/image-20250921203416885.webp)
 
 内部有一个`HAL_PCD_IRQHandler`的中断处理函数。尝试跳转会发现它有两个定义，并通过`USB`和`USB_OTG_FS`两个标志进行开关，因为我们没有使用OTG功能，所以现在只有`USB`这一个标志是定义了的。
 
-![image-20250921203824932](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20250921203824932.png)
+![image-20250921203824932](img/image-20250921203824932.webp)
 
 这个函数被定义在`stm32f1xx_hal_pcd.c`文件中：
 
@@ -320,17 +320,17 @@ void HAL_PCD_IRQHandler(PCD_HandleTypeDef *hpcd)
 
 稍微观察一下，不难发现，虽然这段代码很长，但是它们其实一直在做一件重复的事情：比对`wIstr`变量的值，如果比对成功则进入一段处理程序，处理完成后就直接return。其中`wIstr`是`USB_ReadInterrupts`函数的返回值：
 
-![USB_ReadInterrupts](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20250921210024807.png)
+![USB_ReadInterrupts](img/image-20250921210024807.webp)
 
 我们查看这个函数的注释，不难发现，它的返回值代表了当前中断的状态码。
 
 所以其实在这个函数中，每次if判断，都是在判断正在处理的这个中断是个什么中断，然后调用对应的回调函数去处理它，以下是可能出现的中断。
 
-![image-20251112112021022](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251112112021022.png)
+![image-20251112112021022](img/image-20251112112021022.webp)
 
 此外，我们可以注意到其中还有一些特殊的宏判断，它们的写法都是`#if (USE_HAL_PCD_REGISTER_CALLBACKS == 1U)`，当这个宏定义被设置为`1U`的时候，就会执行由`hpcd`设定的回调函数，而非`HAL_PCD_xxCallback`这种HAL库函数。关于这个宏定义的设置，可以在`Core`文件夹下的`stm32f1xx_hal_conf.h`文件里看到，它可以在CubeMX的Project Manager界面的右边进行设置。
 
-![image-20251112192237112](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251112192237112.png)
+![image-20251112192237112](img/image-20251112192237112.webp)
 
 通常情况我们不需要打开这个功能，但是如果在一些情况下已经有固定代码不想重复造轮子，那么就可以打开该功能，并通过`HAL_PCD_RegisterCallback`对函数进行绑定，当然也可以通过`HAL_PCD_UnRegisterCallback`进行解绑，解绑之后`hpcd`里面的回调函数指针就又是指向`HAL_PCD_xxCallback`函数了。
 
@@ -367,11 +367,11 @@ void HAL_PCD_ResetCallback(PCD_HandleTypeDef *hpcd)
 
 验证的方法很简单，我们只需要随便选择一个回调函数，然后使用VSCode的全局搜索功能搜索一下就知道了，比如我们还是选择`HAL_PCD_ResetCallback`这个函数：
 
-![image-20251016212209880](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251016212209880.png)
+![image-20251016212209880](img/image-20251016212209880.webp)
 
 可以发现它的定义出现在了两个c文件中，其中一个是我们刚才看过的弱函数，而另一个很显然是普通函数，其位于`usbd_conf.c`函数中，通过跳转可以观察其实现：
 
-![image-20251112200522789](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251112200522789.png)
+![image-20251112200522789](img/image-20251112200522789.webp)
 
 可以发现其中调用了三个函数，其中`Error_Handler`被定义在main.c文件中，`USBD_LL_SetSpeed`和`USBD_LL_Reset`两个函数则都被定义在Middlewares文件夹下USB库里的usbd_core.c文件中，我们无需修改。
 
@@ -465,7 +465,7 @@ void HAL_PCD_ResetCallback(PCD_HandleTypeDef *hpcd)
 
 同样，让我们首先观察一下这个文件夹的整体结构：
 
-![image-20251016221458373](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251016221458373.png)
+![image-20251016221458373](img/image-20251016221458373.webp)
 
 很显然，文件夹由两个部分组成，其一是App，另一部分是Target。既然我们刚刚查询到USB中断里面的回调函数在Target文件夹中的`usbd_conf.c`文件中被重新定义了，那就让我们先关注Target这个文件夹吧。
 
@@ -477,7 +477,7 @@ void HAL_PCD_ResetCallback(PCD_HandleTypeDef *hpcd)
 
 首先我们观察一下它的引用文件，来确定它的依赖关系。
 
-![image-20251017112425783](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251017112425783.png)
+![image-20251017112425783](img/image-20251017112425783.webp)
 
 这五个`.h`文件来自两个部分，首先是以`stm32f1xx_`开头的两个文件，它们来自于Drivers文件夹中的STM32F1xx_HAL_Driver文件夹，是STM32HAL库的内容，我们无需修改它们。它们内部API的使用也不是我们这篇文章关注的内容。
 
@@ -513,31 +513,31 @@ void HAL_PCDEx_SetConnectionState(PCD_HandleTypeDef *hpcd, uint8_t state);
 
 其中`Error_Handler`是用于处理错误情况的中断，这个中断在main.c中被定义的，内容可以自行修改。
 
-![image-20251017225214523](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251017225214523.png)
+![image-20251017225214523](img/image-20251017225214523.webp)
 
 而`USBD_Get_USB_Status`这个函数被定义在当前文件中，它的作用是根据HAL状态返回USB的状态，本质上就是一个状态码的映射转换。
 
 至于`PCDEx_SetConnectionState`和`HAL_PCDEx_SetConnectionState`这两个函数，会因为宏定义的不同而存在名称上的差异，但是本质上是实现的同一个功能，即根据传入的连接状态`state`来配置USB设备的连接状态（连接或断开），并且不同状态可以执行不同的操作，可以根据需要进行修改：
 
-![image-20251017225945109](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251017225945109.png)
+![image-20251017225945109](img/image-20251017225945109.webp)
 
 ##### HAL_PCD_xx系列函数
 
 在我们看完这几个函数声明后，现在可以看看里面定义的函数了，当然我们不需要每个都仔细看，现在打开大纲，然后可以发现，在这个文件中有大量以`HAL_PCD_`开头的函数：
 
-![image-20251018220238396](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251018220238396.png)
+![image-20251018220238396](img/image-20251018220238396.webp)
 
 在这一部分的开头有一个注释：
 
-![image-20251018220420358](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251018220420358.png)
+![image-20251018220420358](img/image-20251018220420358.webp)
 
 这代表这一部分的数据是PCD传递数据给USB设备的。我们可以随便搜索一个函数，比如`HAL_PCD_MspInit`，可以发现它被`stm32f1_hal_pcd.c`这个HAL库文件广泛使用：
 
-![image-20251018220632280](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251018220632280.png)
+![image-20251018220632280](img/image-20251018220632280.webp)
 
 同时观察一下这个文件的大纲：
 
-![image-20251018220923231](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251018220923231.png)
+![image-20251018220923231](img/image-20251018220923231.webp)
 
 不难发现其中出现了很多刚才出现在`usbd_conf.c`中出现的`HAL_PCD_`开头的函数，如果你点过去看，可以发现它们全都带着`__weak`标志。
 
@@ -575,7 +575,7 @@ void HAL_PCD_SOFCallback(PCD_HandleTypeDef *hpcd)
 
 那么接下来我们看到下面一堆`USBD_LL_`开头的函数，就会很好理解了。
 
-![image-20251019185743424](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251019185743424.png)
+![image-20251019185743424](img/image-20251019185743424.webp)
 
 显然，它们是原属于被声明在`STM32_USB_Device_Library`这个库里的函数，但是我们知道`LL`的全称其实就是`Low Layer`，而这些操作也显然和硬件密切相关，它们的具体实现需要涉及硬件操作，所以就在`usbd_conf.c`文件里面完成。
 
@@ -637,11 +637,11 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
 
 然后我们可以搜索一下这个库的名称，看它在哪些地方被使用了？
 
-![image-20251019190207174](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251019190207174.png)
+![image-20251019190207174](img/image-20251019190207174.webp)
 
 可以发现它在`usbd_core.c`文件中被使用了，被用于实现一个叫`USBD_Init`的函数，也就是USB的初始化。显然，USB初始化需要底层硬件的参与，不同平台的USB初始化的过程不可能一样，但是通过这样一个硬件层函数的移植，我们的`STM32_USB_Device_Library`就不需要理会其它平台的具体实现了，`USBD_Init`其它地方可以专心实现USB初始化的算法逻辑，而和硬件相关的部分交给`USBD_LL_Init`就可以了。
 
-![image-20251019190311041](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251019190311041.png)
+![image-20251019190311041](img/image-20251019190311041.webp)
 
 这和我们的猜测完全一致。
 
@@ -655,7 +655,7 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
 
 首先观察它的引用部分：
 
-![image-20251019210107148](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251019210107148.png)
+![image-20251019210107148](img/image-20251019210107148.webp)
 
 前三个是C语言的标准库，main.h中初始状态只有一个`Error_Handler`函数的声明，文件中其实没有用到，可能是为了某种安全冗余，如果介意编译过程中一点非常小的损耗，可以删除这一行。剩余两个引用都是HAL库的内容。
 
@@ -755,7 +755,7 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
 
 我们从`usbd_desc.c`的引用部分可以发现它引用了`usbd_core.h`，还有刚刚我们分析的`usbd_conf.h`，以及它自己对应的`usbd_desc.h`。
 
-![image-20251019214505007](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251019214505007.png)
+![image-20251019214505007](img/image-20251019214505007.webp)
 
 为此我们最好还是先从`usbd_desc.h`开始看起。
 
@@ -763,13 +763,13 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
 
 在`usbd_desc.h`的引用中，它只引用了一个`usbd_def.h`，跳过去看一下会发现这个文件其实就是一大堆USB操作码的宏定义常量，看来是为了方便后面的书写和理解。
 
-![image-20251019214707558](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251019214707558.png)
+![image-20251019214707558](img/image-20251019214707558.webp)
 
 ##### UID
 
 然后往下，我们就可以看到一串宏定义，它们标定了设备唯一标识符（UID）的三个地址常量以及这个标识符的存储字符长度，前三个宏定义和硬件相关，不应该修改，最后一个宏定义可以修改但不建议。
 
-![image-20251019214915572](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251019214915572.png)
+![image-20251019214915572](img/image-20251019214915572.webp)
 
 STM32微控制器内置了一个96位的唯一标识符（UID），这个UID对于每一个STM32芯片都是独一无二的。这个UID通常由芯片的制造参数组合而成，包括晶圆上的X和Y坐标、批次号和晶圆号。UID可以用于区分不同芯片或用于安全应用中的密钥。在USB中通常可以作为主机识别不同设备的ID。
 
@@ -777,7 +777,7 @@ STM32微控制器内置了一个96位的唯一标识符（UID），这个UID对�
 
 再然后，下面就是一个向外引出的结构体：
 
-![image-20251019215612488](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251019215612488.png)
+![image-20251019215612488](img/image-20251019215612488.webp)
 
 这个结构体定义在`usbd_desc.c`中，而结构体类型定义在`usbd_de.h`，我们可以跳转到这个结构体的类型定义中观察：
 
@@ -835,7 +835,7 @@ typedef struct
 
 接着我们往下看，可以发现两个函数声明：
 
-![image-20251020230056715](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251020230056715.png)
+![image-20251020230056715](img/image-20251020230056715.webp)
 
 它们的`static`关键字说明了它们是工作在这个文件中的，我们可以跳转到它们的定义中：
 
@@ -892,11 +892,11 @@ static void IntToUnicode(uint32_t value, uint8_t *pbuf, uint8_t len) {
 
 接着往下，可以发现一堆返回值是`uint8_t*`的函数，他们的结构统一为`uin8_t *USBD_FS_xxDescriptor`，显然它们可以用于获取描述符的数据指针。
 
-![image-20251021092621585](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251021092621585.png)
+![image-20251021092621585](img/image-20251021092621585.webp)
 
 而后，这些函数被统一收纳在一个结构体`FS_Desc`中：
 
-![image-20251021092721702](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251021092721702.png)
+![image-20251021092721702](img/image-20251021092721702.webp)
 
 我们在前面已经讲过这个结构体类型的组成，可知后续如果需要获得某个描述符的数据，只需要通过这个结构体进行访问就可以了。
 
@@ -949,7 +949,7 @@ __ALIGN_BEGIN uint8_t USBD_FS_DeviceDesc[USB_LEN_DEV_DESC] __ALIGN_END
 
 可以发现，这里使用了`__ALIGN_BEGIN`和`__ALIGN_END`两个宏定义，让我们跳转过去看看：
 
-![image-20251021102339894](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251021102339894.png)
+![image-20251021102339894](img/image-20251021102339894.webp)
 
 这个宏定义可以保证数组在内存中按照4字节对齐，这是一种为了保证内存安全和数据完整性的标准写法，我们不需要修改它。
 
@@ -1052,7 +1052,7 @@ uint8_t *USBD_FS_DeviceDescriptor(USBD_SpeedTypeDef speed, uint16_t *length) {
 
 `usbd_cdc.h`的引用内容很少，只有一个：
 
-![image-20251021131855494](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251021131855494.png)
+![image-20251021131855494](img/image-20251021131855494.webp)
 
 这个文件同样是位于`Middlewares`中的，不过它位于最底层的`Class\CDC`路径，定义了一些和CDC相关的数据结构。
 
@@ -1060,13 +1060,13 @@ uint8_t *USBD_FS_DeviceDescriptor(USBD_SpeedTypeDef speed, uint16_t *length) {
 
 接着，文件定义了收发数据的缓存区大小的值。
 
-![image-20251021133757077](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251021133757077.png)
+![image-20251021133757077](img/image-20251021133757077.webp)
 
 ##### CDC接口函数结构体
 
 和`usbd_desc`中的`USBD_DescriptorsTypeDef`类似，`usbd_cdc_if.h`也有一个存储函数接口的结构体：
 
-![image-20251021133349840](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251021133349840.png)
+![image-20251021133349840](img/image-20251021133349840.webp)
 
 我们跳转到结构体类型定义中：
 
@@ -1087,7 +1087,7 @@ typedef struct _USBD_CDC_Itf
 
 最后，在这个文件中还声明了一个CDC的发送函数：
 
-![image-20251021133612341](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251021133612341.png)
+![image-20251021133612341](img/image-20251021133612341.webp)
 
 显然是可以通过这个函数，给主机发送数据。
 
@@ -1099,19 +1099,19 @@ typedef struct _USBD_CDC_Itf
 
 对于`usbd_cdc_if.c`文件，它的引用内容很少，就是对它对应头文件的引用：
 
-![image-20251021133935049](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251021133935049.png)
+![image-20251021133935049](img/image-20251021133935049.webp)
 
 ##### 缓存区
 
 紧接着定义了两个数组作为收发缓存区，它们的值都是1024字节。
 
-![image-20251021134034976](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251021134034976.png)
+![image-20251021134034976](img/image-20251021134034976.webp)
 
 ##### USB设备句柄
 
 在`usbd_cdc_if.c` 中，还额外引入了一个USB设备句柄：
 
-![image-20251021182537772](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251021182537772.png)
+![image-20251021182537772](img/image-20251021182537772.webp)
 
 这个句柄是在`usb_device.c`中定义的，等会我们会分析它。
 
@@ -1153,7 +1153,7 @@ typedef struct _USBD_HandleTypeDef
 
 紧接着就是刚才我们提到到CDC接口函数的声明还有将它们引出去的结构体：
 
-![image-20251021183312312](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251021183312312.png)
+![image-20251021183312312](img/image-20251021183312312.webp)
 
 ##### CDC初始化函数
 

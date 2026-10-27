@@ -30,22 +30,22 @@ Arduino IDE本身其实只是一个非常简陋的IDE，没有代码补全、丰
 
 接着下载插件，在最左边选择扩展按钮，然后搜索并安装我标出的这几个插件，你就能有一个可以装Arduino的中文VSCode了（我的VSCode与你们的应该样式不同，因为我安装了样式的插件）：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/c7fc4b5633e0fc1458fc5acd5d2860b2.png#pic_center)
+![在这里插入图片描述](img/c7fc4b5633e0fc1458fc5acd5d2860b2.webp)
 
 
 然后打开安装好的VSCode，左上角选择：文件-打开文件夹，然后选择一个你以后专门保存Arduino代码的文件夹打开。
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/52016e4852c6b62c2703dc61160c1321.png#pic_center)
+![在这里插入图片描述](img/52016e4852c6b62c2703dc61160c1321.webp)
 
 
 在左上角文件选项中选择首选项-设置。
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/106e1e65d5a45b502d2f482a5a21e34c.png#pic_center)
+![在这里插入图片描述](img/106e1e65d5a45b502d2f482a5a21e34c.webp)
 
 
 然后设置界面的右上角，选择打开设置（json）
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/f37302a0a933a2447a87ac01aba3df89.png#pic_center)
+![在这里插入图片描述](img/f37302a0a933a2447a87ac01aba3df89.webp)
 
 
 然后我们就进入到了一个JSON文件界面，在原本的文件开头如下内容，不过需要**注意：下面第一行的path为你安装Arduino的位置，我安装在D:/Software/Arduino文件夹里的，如果设置自己的地址也请按照我这种双斜杠的格式来写。**
@@ -68,7 +68,7 @@ Arduino IDE本身其实只是一个非常简陋的IDE，没有代码补全、丰
 
 现在我们先来打开一个官方例程，首先打开Arduino IDE，选择文件-示例-Basic-Blink，这是Arduino官方提供的一个灯光闪烁程序。
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/09daac37204e1034f935706c1892f310.png#pic_center)
+![在这里插入图片描述](img/09daac37204e1034f935706c1892f310.webp)
 
 
 点开后按Ctrl+S，IDE会告诉你该文件处于只读状态，需要将项目保存在其它位置，点击确定，然后将文件保存在我们前面设置的VSCode工作文件夹里，然后我们就可以退出并通过VSCode打开它了。
@@ -79,14 +79,14 @@ Arduino IDE本身其实只是一个非常简陋的IDE，没有代码补全、丰
 
 我们现在可以发现其实这个Blink中有两个函数setup和loop，它们的功能我在下图中标示了：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/f5df60433d2ca2d95e1e3134913dece1.png#pic_center)
+![在这里插入图片描述](img/f5df60433d2ca2d95e1e3134913dece1.webp)
 
 
 setup和loop是Arduino的逻辑核心，普通的Arduino程序都是基于这两个函数进行运行的，一般我们在setup中初始化环境，然后在loop区域写我们需要实现的功能。
 
 如果想知道这两个函数是怎么实现的，可以查看`{你的Arduino安装地址}\hardware\arduino\avr\cores\arduino`中main.cpp和Arduino.h文件，大概意思就是我们在程序中实现的setup和loop函数将会通过Arduino.h被引用，然后在main.cpp中被执行，Arduino.h只是一个引用传递文件，这里我们重点关注main.cpp：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/931b69a6a1a66f5302b28401b63b14df.png#pic_center)
+![在这里插入图片描述](img/931b69a6a1a66f5302b28401b63b14df.webp)
 
 
 ### 功能函数
@@ -115,7 +115,7 @@ void loop() {
 
 然后我们再看参数部分，OUTPUT、HIGH、LOW这些似乎比较好理解，但是LED_BUILTIN是什么东西？不用担心，我们同样Ctrl点击它，即可查看它的定义：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/52bb0868742053b303b2b91272870d20.png#pic_center)
+![在这里插入图片描述](img/52bb0868742053b303b2b91272870d20.webp)
 
 
 它被宏定义为了1，现在我先告诉你这个1其实就是Arduino板子上标注了1的那个引脚，但是这个函数具体是怎么个原理呢？我们怎么知道一个函数需要怎么使用呢？
@@ -124,7 +124,7 @@ void loop() {
 
 对于上述两个问题，最好的方案当然是查看手册了。打开Arduino IDE，选择帮助-参考，然后我们就打开了我们的功能函数手册，一个保存在你电脑里的网页，参考手册看上去很多而且是全英语的，但是不用担心，我来告诉你怎么查看它。
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/be4e29fe7e4bb3239f2d39f0ff567fd6.png#pic_center)
+![在这里插入图片描述](img/be4e29fe7e4bb3239f2d39f0ff567fd6.webp)
 
 
 首先可以看到手册分成了三列，第一列的大标题是Structure（结构体），第二列是Variables（变量），第三列是Functions（函数）。
@@ -139,7 +139,7 @@ void loop() {
 
 而第二列变量里，第一个大类Constants（常量）（是的，他把常量划分到变量列里了，不过不影响，只是个分类方法而已），这些是一些宏定义的量，如果你需要知道他有什么用，点开查看即可，不过一般基础使用常用的内容有以下几个：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/a24cafad9d0e22d2c2096e0705348a38.png#pic_center)
+![在这里插入图片描述](img/a24cafad9d0e22d2c2096e0705348a38.webp)
 
 
 不知道电平是什么的我们在后面讲。
@@ -148,7 +148,7 @@ void loop() {
 
 这个就是数据类型，C++与C之间的差别在于C++多了几个数据类型，其它没什么变化（不过不同芯片中同一类型占用的存储空间大小可能各自不同（也就是他的最大最小值可能会有差别），不过一般基础使用只要不遇到特别大或者特别小的一般不会遇到这些问题）我在这里标注了它们不同的地方：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/d3a6d198be7984e521491fa0e5e2a660.png#pic_center)
+![在这里插入图片描述](img/d3a6d198be7984e521491fa0e5e2a660.webp)
 
 
 ##### Conversion
@@ -173,7 +173,7 @@ void loop() {
 
 平常我们见到的像是音频波纹这些，都属于模拟信号，它们在时间上是连续的，一般来说我们正常制作和能感知到的电路都是模拟电路，我们可以把模拟电路某点的电压在时间上的改变用图像来标示，下面是一个模拟电路的波形示例：
 
-![](https://i-blog.csdnimg.cn/blog_migrate/87df440dc801c80aae1089ce5f43937a.jpeg)
+![](img/87df440dc801c80aae1089ce5f43937a.webp)
 
 ### 数字电路
 
@@ -181,7 +181,7 @@ void loop() {
 
 所以我们平常使用的芯片之类的都是半导体元件，而在外界和内部的处理信息方式都是对数字电路的处理。
 
-![](https://i-blog.csdnimg.cn/blog_migrate/ab0c76b24e577ddfc5a5b7404047c036.jpeg)
+![](img/ab0c76b24e577ddfc5a5b7404047c036.webp)
 
 但是具体多高的电平是高电平多低是低电平呢。一般来说对于一个普通的芯片，它会有两种电源引脚，一个叫GND，一个叫VCC，GND作为参考基准电平，我们统一将其标定为0V，那么VCC和GND的电压差就是工作电压，我们可以直接用VCC的压值来直接表示。一般常见的工作电压有3.3V和5V，而UNO即为5V，在与UNO这类5V单片机定义电压分界的时候，往往定义的3V往上为1，往下为0，但是为了稳妥起见，芯片自身输出的1就是其工作电压，而0就是其GND的电压。
 
@@ -189,7 +189,7 @@ void loop() {
 
 模拟电路和数字电路其实是可以相互转换的，一般我们如果需要从外界读取一个模拟量（就是我们不只是需要简单知道其电平为1还是0，而是需要知道具体电压），就可以使用模数转换然后得到结果。如果我们需要输出一个模拟量，就可以通过数模转换将数字信号生成模拟信号。
 
-![](https://i-blog.csdnimg.cn/blog_migrate/59f0c1f4debbcd9e73d86f27167f084b.jpeg)
+![](img/59f0c1f4debbcd9e73d86f27167f084b.webp)
 
 ### PWM
 
@@ -203,45 +203,45 @@ void loop() {
 
 #### 普通引脚功能函数
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/928ec71e7a81a39151acd7da14dfd518.png#pic_center)
+![在这里插入图片描述](img/928ec71e7a81a39151acd7da14dfd518.webp)
 
 
 #### 时间函数
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/53e6bcfaf4757c926f8f14bfb84b8044.png#pic_center)
+![在这里插入图片描述](img/53e6bcfaf4757c926f8f14bfb84b8044.webp)
 
 
 #### 数学函数
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/83055458ec6053dd60e03e7f7c7ddeb1.png#pic_center)
+![在这里插入图片描述](img/83055458ec6053dd60e03e7f7c7ddeb1.webp)
 
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/ba0f3a3ec5aaabbe1e4da94668689fb9.png#pic_center)
+![在这里插入图片描述](img/ba0f3a3ec5aaabbe1e4da94668689fb9.webp)
 
 
 #### 字符判断函数
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/e12a692e5e3f7df829b9d166792e27f7.png#pic_center)
+![在这里插入图片描述](img/e12a692e5e3f7df829b9d166792e27f7.webp)
 
 
 #### 随机数
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/ed08e93c464bed7891b88924c01f87a4.png#pic_center)
+![在这里插入图片描述](img/ed08e93c464bed7891b88924c01f87a4.webp)
 
 
 #### 位操作
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/4794f6083da926f6bcc3e59b6dec5de7.png#pic_center)
+![在这里插入图片描述](img/4794f6083da926f6bcc3e59b6dec5de7.webp)
 
 
 #### 中断
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/4d7a674a1b2e9062d414907d168b81f6.png#pic_center)
+![在这里插入图片描述](img/4d7a674a1b2e9062d414907d168b81f6.webp)
 
 
 #### 通信
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/36c3e79584e1750c2ca672cb6436c09e.png#pic_center)
+![在这里插入图片描述](img/36c3e79584e1750c2ca672cb6436c09e.webp)
 
 
 不过上面其实只是一小部分，我们回到这个网页顶部，然后这里有个Libraries，点开它，里面罗列了一堆库的用法介绍。
@@ -250,7 +250,7 @@ void loop() {
 
 相信你看到这么多功能感觉特别复杂了，不过不用担心，很多功能其实不太常用，我现在说一下一些比较常用的功能和函数，这些你去学习就好了。
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/2d3673d1c2cd3162e1be37bd605ddd2b.png#pic_center)
+![在这里插入图片描述](img/2d3673d1c2cd3162e1be37bd605ddd2b.webp)
 
 
 1. 上面勾出来的三个库，你需要大概去掌握它们，其中SPI和I2C与前面Serial那个串口（UART）是非常常见而且重要的三种通信协议，你需要知道它们大概的通信流程。这些功能可以在Arduino IDE种官方提供的例程和这个参考手册综合学习。

@@ -115,7 +115,7 @@ buildFuture  = false
         card = 'summary_large_image'
 
     [params.imageProcessing]
-        autoOrient = true
+        autoOrient = false
         [params.imageProcessing.external]
             timeout = '5s'
         [params.imageProcessing.content]

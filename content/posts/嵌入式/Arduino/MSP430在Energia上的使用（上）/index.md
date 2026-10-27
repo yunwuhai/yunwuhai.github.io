@@ -41,7 +41,7 @@ draft: false
 
 通过 TI 公司的官方文件《MSP430F5529 LaunchPad Development Kit……》，我们其实可以得到 LaunchPad 的原理图，因为整个原理图用了四页，这里就不详细展示了，有需要可以在 TI 官网找。我只截取板载仿真器和 MSP430F5529 芯片的接口部分的图
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/ce2078a0f1addb14d8380c3564acccfa.png#pic_center)
+![在这里插入图片描述](img/ce2078a0f1addb14d8380c3564acccfa.webp)
 
 其中板载仿真器被 TI 公司命名为 ezFET，应该是简版仿真器的意思，除去电源线部分，我们可以看到信息传输分为两部分——SBW 和 UART。其中 SBW 相当于两线 JTAG，可以当做仿真器接口，而 UART 则是使用的 MSP430 的 BSL 接口，其只能作为烧录口。
 
@@ -55,7 +55,7 @@ draft: false
 
 这个工作其实很简单，因为板子在设计的时候就是通过跳线进行连接的，所以我们只需要调整跳线位置即可进行测试。
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/441189fa41578c8341549dbe5ee0fbf8.jpeg#pic_center =500x)
+![在这里插入图片描述](img/441189fa41578c8341549dbe5ee0fbf8.webp)
 
 ### 实验现象：
 

@@ -45,9 +45,9 @@ _也就是说你不能在没有 BootLoader 的情况下烧录 avr-Arduino 的 Bo
 最开始初学的时候，买了一块 nano 板，结果在我准备做点骚操作的时候（具体忘了做了啥了，好像是写错了个指针？），它被我搞废了，烧录不了程序。然后各种查资料，怀疑是 BootLoader 的问题，需要重新烧 BootLoader。（事实上现在我也不知道具体是不是真的，因为拖延症导致我很久没去碰这块板子，现在不知道扔哪去了。而且当时没有记录的习惯，这个世界又多了个未解之谜）
 
 当时我并不清除 BootLoader 是个什么东西，毕竟年轻的我看见 hardware 文件夹里那一堆文件就头（tuo）疼（yan），但是总体印象大概就是 Arduino 的便捷和这玩意有很大关系。然后在我脑海中 Arduino 不能没有 BootLoader 这个想法就形成了，于是这次准备把 MSP430 做成 Arduino 的时候我就想到了是不是要烧 BootLoader？但是打开官方给出的 energia 软件，在其目录下并未发现 BootLoader 的文件，而且软件也没有给出烧录引导程序这一选项，所以我对我的认知产生了一丝丝怀疑。
-![avr](https://i-blog.csdnimg.cn/blog_migrate/89700e50a16f79ed64fc41553b94362c.png)
+![avr](img/89700e50a16f79ed64fc41553b94362c.webp)
 
-![energia](https://i-blog.csdnimg.cn/blog_migrate/1faee740b48f0ec670aebde6bbf8f117.png)
+![energia](img/1faee740b48f0ec670aebde6bbf8f117.webp)
 
 于是，我选择再搜索一下 BootLoader 到底是什么，[百度的解释](https://baike.baidu.com/item/BootLoader/8733520?fr=aladdin)是可以把它当做一个启动引导程序，但是感觉这种解释有点抽象，然后我找到[另外一篇文章](https://www.cnblogs.com/anandexuechengzhangzhilu/p/10719808.html)是说把它当做一个系统，我们的程序就是运行在这个系统的软件，这种说法感觉有一定道理，但是感觉又不是那么对，因为平常如果我们没有 BootLoader，我们也可以对普通单片机烧录程序，但是如果软件没了系统，是无法直接在电脑裸机上运行的。但是这个文章还是给了我一定的思路，所以我搜索了一下“如何使用串口给 avr 烧录程序”，然后我找到了[这个](https://wenku.baidu.com/view/de9810795acfa1c7aa00ccd8.html)。然后结合我目前掌握的知识和已知条件：
 
@@ -70,7 +70,7 @@ _也就是说你不能在没有 BootLoader 的情况下烧录 avr-Arduino 的 Bo
 
 1. ArduinoIDE 安装开发板：http://dan.drown.org/stm32duino/package_STM32duino_index.json
 
-![开发板管理](https://i-blog.csdnimg.cn/blog_migrate/70f01c9835cfe2792692c5f00555ede4.png)
+![开发板管理](img/70f01c9835cfe2792692c5f00555ede4.webp)
 
 2. stm32f103c8t6 调整好 boot 引脚，连接 usb 转 ttl，然后连接电脑
 
@@ -91,7 +91,7 @@ _也就是说你不能在没有 BootLoader 的情况下烧录 avr-Arduino 的 Bo
 
 4. 选择好板子、端口，然后选择烧录模式为 serial
 
-![Serial](https://i-blog.csdnimg.cn/blog_migrate/0c32af7676ee0b7015f5451cf51485f7.png)
+![Serial](img/0c32af7676ee0b7015f5451cf51485f7.webp)
 
 5. 点击上传即可
 
@@ -103,7 +103,7 @@ _也就是说你不能在没有 BootLoader 的情况下烧录 avr-Arduino 的 Bo
 
 而 Arduino 的二进制文件可以通过 ArduinoIDE 的项目-导出二进制文件获取，会导出到工作文件夹下。
 
-![二进制](https://i-blog.csdnimg.cn/blog_migrate/209ec1bafe6ef1e59222db663663839c.png)
+![二进制](img/209ec1bafe6ef1e59222db663663839c.webp)
 
 ## 总结
 

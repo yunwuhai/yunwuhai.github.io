@@ -40,4 +40,4 @@ for cock in range(0, 21):        # 公鸡从0到20只
 
 ## 执行效果
 
-![image-20251102163702432](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251102163702432.png)
+![image-20251102163702432](img/image-20251102163702432.webp)

@@ -101,7 +101,7 @@ int main(int argc, char * argv[])
 
 输出结果如下：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/c652d7de2b3a300b16e91dc881ec14ee.png#pic_center)
+![在这里插入图片描述](img/c652d7de2b3a300b16e91dc881ec14ee.webp)
 
 
 而我们刚才说过argc记录的argv[]的个数，所以同理，我们知道argc的默认值为1。
@@ -112,4 +112,4 @@ int main(int argc, char * argv[])
 
 在输出了地址和本次传入参数个数后，程序将会从我传入的第一个参数（也就是argv[1]）开始，一直到最后一个参数，分别将其作为指令进行判断，如果为Linux或World则输出Hello World，其他指令则以This is xx进行输出，而如果判断出首字母为L/l或W/w的指令则会多输出一句Is W/w but not World~\t，最终运行结果如下：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/bb2e858a090083f04784b70b68370c65.png#pic_center)
+![在这里插入图片描述](img/bb2e858a090083f04784b70b68370c65.webp)

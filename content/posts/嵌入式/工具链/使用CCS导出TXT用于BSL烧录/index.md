@@ -21,7 +21,7 @@ license: CC-BY-SA 4.0
 
 # 使用 CCS 导出 TXT 用于 BSL 烧录
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/c4583c9a3d9f17715f7bfe9319a8bc29.png#pic_center)
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/9699fe20aa6ffef261a000b3fd8bc2ba.png#pic_center)
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/dbe6eb5628f458c8fb049e0216c87aff.png#pic_center)
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/73853efe3996224d43427459dd322c6f.png#pic_center)
+![在这里插入图片描述](img/c4583c9a3d9f17715f7bfe9319a8bc29.webp)
+![在这里插入图片描述](img/9699fe20aa6ffef261a000b3fd8bc2ba.webp)
+![在这里插入图片描述](img/dbe6eb5628f458c8fb049e0216c87aff.webp)
+![在这里插入图片描述](img/73853efe3996224d43427459dd322c6f.webp)

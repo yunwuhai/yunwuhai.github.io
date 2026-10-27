@@ -132,7 +132,7 @@ if __name__ == "__main__":
 
 ### 执行结果
 
-![image-20251102165232650](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251102165232650.png)
+![image-20251102165232650](img/image-20251102165232650.webp)
 
 ## 完全去重
 
@@ -474,4 +474,4 @@ if __name__ == "__main__":
 
 ### 执行结果
 
-![image-20251102165907153](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251102165907153.png)
+![image-20251102165907153](img/image-20251102165907153.webp)

@@ -22,7 +22,7 @@ date: 2021-03-21T22:45:35+08:00
 
 新建一个项目，选择Windows窗体控件库(.NET Framwork)，然后选择地址、命名。
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/739585ea15f492b0d84f5b50c03bf306.png#pic_center)
+![在这里插入图片描述](img/739585ea15f492b0d84f5b50c03bf306.webp)
 
 
 正常情况下工程里应该有一个UserControl1.cs文件，不要它，直接删除，然后新建一个没有模板的类。
@@ -42,21 +42,21 @@ private bool isOpen = false;	// 默认关闭
 
 然后为他们添加上各自的访问器：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/fd57a6439e9358d15ad2c206b752bba2.png#pic_center)
+![在这里插入图片描述](img/fd57a6439e9358d15ad2c206b752bba2.webp)
 
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/543f0ac40433a38bd90034f48897f3fe.png#pic_center)
+![在这里插入图片描述](img/543f0ac40433a38bd90034f48897f3fe.webp)
 
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/d0751f17324da7995052ef8543f8f0b0.png#pic_center)
+![在这里插入图片描述](img/d0751f17324da7995052ef8543f8f0b0.webp)
 
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/6e40163512af66c91631e13ad14c48a1.png#pic_center)
+![在这里插入图片描述](img/6e40163512af66c91631e13ad14c48a1.webp)
 
 
 我们可以注意到，他们各自的get访问器其实没啥特别的，但是set访问器中除了基本的赋值以外，每个访问器中都有`Invalidate();`这么一句，它的工作目的是重新绘制一遍控件。
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/4a719da808aecb7b0ce4feedbf6ef341.png#pic_center)
+![在这里插入图片描述](img/4a719da808aecb7b0ce4feedbf6ef341.webp)
 
 
 一般来说，如果你调整的这个属性将会影响到当前控件的外观，那么就有必要加上这么一句，它的功能类似于将原本的控件从你的屏幕上删除，然后根据新的定义创建一个新的控件。
@@ -67,10 +67,10 @@ private bool isOpen = false;	// 默认关闭
 
 不过我们如果需要使用这个功能的话，就还需要添加上委托和事件的定义，一般情况下我们在命名空间内写委托，然后在类里定义事件。
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/54bdcf19c95fe0409915e213ac2d364a.png#pic_center)
+![在这里插入图片描述](img/54bdcf19c95fe0409915e213ac2d364a.webp)
 
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/e38aaa0fc11b41260f72bc0d54176302.png#pic_center)
+![在这里插入图片描述](img/e38aaa0fc11b41260f72bc0d54176302.webp)
 
 
 但是，我们知道如果想使用VS的设计器的话可以利用属性栏修改控件的属性，所以我们自定义的控件自然也想要相同的功能。此时需要输入`[Category("属性分类"), Description("功能描述")]`即可添加这些功能。其中属性分类的目的是为了方便我们找到我们自定义的这些功能，而功能描述则是方便使用的时知道该如何填入所需的属性。如果这里出现了报错，同样是因为没有引用所需的命名空间，只需要像前面一样按住`Alt + Enter`然后进行修正即可。
@@ -228,7 +228,7 @@ namespace DemoControls
 
 同时我们还可以把这个事件设为默认事件，在开头部分我们定义这个控件类的默认事件为我们前面注册的TestSwitch。
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/20b434b3f3024c7e349b2480e5496d4f.png#pic_center)
+![在这里插入图片描述](img/20b434b3f3024c7e349b2480e5496d4f.webp)
 
 
 ## 使用这个控件
@@ -241,22 +241,22 @@ namespace DemoControls
 
 生成文件、新建工程、然后开始使用设计页面，可以发现设计页面最开头添加了我们的控件库：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/533f3dc5f5f6af437880e1b5a233b25e.png#pic_center)
+![在这里插入图片描述](img/533f3dc5f5f6af437880e1b5a233b25e.webp)
 
 
 然后我们拖出来两个，设置一下他们的大小和颜色：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/ee732094f8a4b7749553b2667701621e.png#pic_center)
+![在这里插入图片描述](img/ee732094f8a4b7749553b2667701621e.webp)
 
 
 同时双击第一个控件增添事件功能：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/6cced7a1cc2475ecca74f99e70f751fa.png#pic_center)
+![在这里插入图片描述](img/6cced7a1cc2475ecca74f99e70f751fa.webp)
 
 
 最后启动：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/f03246cf7249a979453708845785e066.gif#pic_center)
+![在这里插入图片描述](img/f03246cf7249a979453708845785e066.webp)
 
 
 成功。

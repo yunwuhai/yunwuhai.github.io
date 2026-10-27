@@ -525,6 +525,6 @@ if __name__ == "__main__":
 
 ## 执行结果
 
-![数独求解](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/数独求解.gif)
+![数独求解](img/数独求解.gif)
 
-![image-20251102170427575](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251102170427575.png)
+![image-20251102170427575](img/image-20251102170427575.webp)

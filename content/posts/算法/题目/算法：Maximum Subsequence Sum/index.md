@@ -30,7 +30,7 @@ date: 2022-04-02T19:09:57+08:00
 
 ## 题目内容
 
-![](https://i-blog.csdnimg.cn/blog_migrate/818138394d250650e19decb33b707299.png)
+![](img/818138394d250650e19decb33b707299.webp)
 
 ## 分析
 
@@ -90,4 +90,4 @@ int main()
 ## 运行结果
 
 
-![](https://i-blog.csdnimg.cn/blog_migrate/a149a3fd19ed118b5993fd92179a8e01.png)
+![](img/a149a3fd19ed118b5993fd92179a8e01.webp)

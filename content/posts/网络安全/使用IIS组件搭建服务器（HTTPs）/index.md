@@ -30,32 +30,32 @@ license: CC-BY-SA 4.0
 
 1. 在IIS管理器中，选择计算机名称（不是某个网站），然后在中间的功能视图中，双击服务器证书。
 
-   ![image-20251007161123837](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251007161123837.png)
+   ![image-20251007161123837](img/image-20251007161123837.webp)
 
 2. 在右侧选择“创建自签名证书”。
 
-   ![image-20251007161206222](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251007161206222.png)
+   ![image-20251007161206222](img/image-20251007161206222.webp)
 
 3. 输入证书名称，然后确定。
 
-   ![image-20251007161303242](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251007161303242.png)
+   ![image-20251007161303242](img/image-20251007161303242.webp)
 
 ### 绑定HTTPS
 
 1. 右键点击你原本的HTTP网站，然后选择编辑绑定。
 
-   ![image-20251007161721535](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251007161721535.png)
+   ![image-20251007161721535](img/image-20251007161721535.webp)
 
 2. 点击添加。
 
-   ![image-20251007161818440](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251007161818440.png)
+   ![image-20251007161818440](img/image-20251007161818440.webp)
 
 3. 类型选择`https`，SSL证书选择刚刚创建的证书，其它全部保持默认即可。然后点击确定。你网站的https就配置好了。
 
-   ![image-20251007162143260](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251007162143260.png)
+   ![image-20251007162143260](img/image-20251007162143260.webp)
 
 ### 测试
 
 直接访问`https://localhost`，你可能收到浏览器的警告，这是因为我们的SSL是自己创建的，并不被公共认可，浏览器认为其可能不安全。此时强制访问即可。
 
-![image-20251007162618807](https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/image-20251007162618807.png)
+![image-20251007162618807](img/image-20251007162618807.webp)

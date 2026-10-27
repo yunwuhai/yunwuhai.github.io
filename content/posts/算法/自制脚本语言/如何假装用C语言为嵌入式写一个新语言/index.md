@@ -154,7 +154,7 @@ int main()
 
 运行结果为：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/ec774e3292f10cc98765c5dd0cc03f84.png#pic_center)
+![在这里插入图片描述](img/ec774e3292f10cc98765c5dd0cc03f84.webp)
 
 ---
 ## 功能映射并单指令运行
@@ -198,7 +198,7 @@ int main()
 
 通过这个程序，我们可以完成单个预设指令实现操作了，这里选择指令0x03进行操作：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/9353cd332040602bf4e168f1356f0486.png#pic_center)
+![在这里插入图片描述](img/9353cd332040602bf4e168f1356f0486.webp)
 
 ---
 ## 多指令运行
@@ -249,7 +249,7 @@ int main()
 
 这样子就可以运行多条语句了：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/a6ef97c69644aad9329ab0dd2b18c5ee.png#pic_center)
+![在这里插入图片描述](img/a6ef97c69644aad9329ab0dd2b18c5ee.webp)
 
 ---
 ## 上位机编程
@@ -364,7 +364,7 @@ int main()
 
 这时当前的程序，我们可以根据宏定义中MAX_LEN的长度制作最大等长的程序设计，我随便编了一下，效果感觉还不错：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/8fa21dcff86f709b5e992bf55a193b59.png#pic_center)
+![在这里插入图片描述](img/8fa21dcff86f709b5e992bf55a193b59.webp)
 
 ---
 ## 传递参数
@@ -524,7 +524,7 @@ int main()
 
 我们再次测试一下：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/1ef729d2d1382b470904c7d4a8e8e6c9.png#pic_center)
+![在这里插入图片描述](img/1ef729d2d1382b470904c7d4a8e8e6c9.webp)
 
 
 ---
@@ -1086,7 +1086,7 @@ void MCUCtrl(unsigned char instruction[], int OutStr[], CtrlOut *O, CtrlIn *I);
 
 写这段程序着实花了我挺大精力，重点是没有参照所以编程思路需要理清。程序还有很多可以改进的地方，具体我放在最后写，我用这段程序形成的代码写了一段程序：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/e71becdec9ab93a0d2f054fa18bd538d.png#pic_center)
+![在这里插入图片描述](img/e71becdec9ab93a0d2f054fa18bd538d.webp)
 
 
 程序的注释挺多的，要知道具体工作原理请直接看代码。

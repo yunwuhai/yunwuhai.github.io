@@ -44,7 +44,7 @@ _其实我自己都没想到我居然会来填坑，不过说实话这好像也�
 
 示例程序有很多，这里介绍其中最简单的 MultiBlink 的程序。
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/e7c8578e4b34b19fce183c3a6cf317c1.png#pic_center)
+![在这里插入图片描述](img/e7c8578e4b34b19fce183c3a6cf317c1.webp)
 
 #### TASK1
 
