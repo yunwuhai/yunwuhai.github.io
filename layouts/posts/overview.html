@@ -3,7 +3,7 @@
     {{- $sections := .Sections.ByWeight -}}
 
     <header>
-        {{ with .Params.description }}<h3 class="section-title">{{ . }}</h3>{{ end }}
+        <h3 class="section-title">全部文章的入口</h3>
         <div class="section-card">
             <div class="section-details">
                 <h3 class="section-count">{{ T "list.page" (len $articles) }}</h3>

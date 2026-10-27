@@ -1,6 +1,16 @@
-{{- /* 覆盖主题 tile：在标题上方补一行「N 篇 / 描述」，让分区卡信息量真正够用 */ -}}
+{{- /* 覆盖主题 tile：
+   分区卡 = 图标 + 篇数 + 标题 + 描述 + 最近文章；
+   最近文章默认只显示 1 条，目录页第一张卡由 CSS 放大成 2x2 时显示 3 条。 */ -}}
 {{ $image := partial "helper/image" (dict "Image" .Params.image "Resources" .Resources "Context" .) }}
-<article class="{{ if $image }}has-image{{ end }}">
+{{- $isSection := .IsSection -}}
+{{- $count := 0 -}}
+{{- $recent := slice -}}
+{{- if $isSection -}}
+    {{- $pages := .RegularPagesRecursive -}}
+    {{- $count = len $pages -}}
+    {{- $recent = first 2 $pages.ByDate.Reverse -}}
+{{- end -}}
+<article class="{{ if $image }}has-image{{ end }}{{ if $isSection }} tile-section{{ end }}">
     <a href="{{ .RelPermalink }}">
         {{ if $image }}
         <div class="article-image">
@@ -30,15 +40,30 @@
                 {{- end -}}
             {{- end -}}
         >
-            {{- $count := len .RegularPagesRecursive -}}
-            {{- if $count -}}
-                <span class="article-tile-count">{{ $count }} 篇</span>
-            {{- end -}}
-            <h2 class="article-title">
-                {{- .Title -}}
-            </h2>
-            {{- with .Params.description -}}
-                <span class="article-tile-desc">{{ . }}</span>
+            {{- if $isSection -}}
+                <div class="article-tile-top">
+                    <span class="article-tile-badge">{{ partial "section-icon.html" .Title }}</span>
+                    {{- if $count -}}
+                        <span class="article-tile-count">{{ $count }} 篇</span>
+                    {{- end -}}
+                </div>
+
+                <div class="article-tile-body">
+                    <h2 class="article-title">{{- .Title -}}</h2>
+                    {{- with .Params.description -}}
+                        <span class="article-tile-desc">{{ . }}</span>
+                    {{- end -}}
+                </div>
+
+                {{- with $recent -}}
+                    <ul class="article-tile-recents">
+                        {{- range . -}}
+                            <li><span class="dot" aria-hidden="true"></span><span class="t">{{ .Title }}</span></li>
+                        {{- end -}}
+                    </ul>
+                {{- end -}}
+            {{- else -}}
+                <h2 class="article-title">{{- .Title -}}</h2>
             {{- end -}}
         </div>
     </a>

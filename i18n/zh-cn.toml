@@ -4,7 +4,7 @@ darkMode   = "暗色模式"
 [list]
     page       = "{{ .Count }} 个页面"
     section    = "章节"
-    subsection = "子章节"
+    subsection = "分区"
 
 [article]
     back            = "返回"

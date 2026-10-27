@@ -1,0 +1,78 @@
+{{- /* 覆盖 posts 下的分区列表页：
+   有子分区时，用「分区卡网格」代替主题默认的紧凑列表（那里给分区显示日期毫无意义）；
+   直接挂在分区下的文章走紧凑列表 + 分页，保持原有 /posts/xxx/page/N/ 链接不失效。 */ -}}
+{{ define "main" }}
+    {{- $subsections := .Sections -}}
+    {{- $pages := partial "helper/pages.html" . -}}
+
+    <header>
+        <h3 class="section-title">
+            {{- if eq .Parent (.GetPage "/") -}}
+                {{ T "list.section" }}
+            {{- else -}}
+                分区 · <a href="{{ .Parent.RelPermalink }}">{{ .Parent.Title }}</a>
+            {{- end -}}
+        </h3>
+        <div class="section-card">
+            <div class="section-details">
+                <h3 class="section-count">{{ T "list.page" (len .RegularPagesRecursive) }}</h3>
+                <h1 class="section-term">{{ .Title }}</h1>
+                {{ with .Params.description }}
+                    <h2 class="section-description">{{ . }}</h2>
+                {{ end }}
+            </div>
+
+            {{- $image := partial "helper/image" (dict "Image" .Params.image "Resources" .Resources "Context" .) -}}
+            {{ if $image }}
+                <div class="section-image">
+                    {{ partial "helper/thumbnail-image" (dict
+                        "Resource" $image.Resource
+                        "Width" 60
+                        "Height" 60
+                        "Resize" .Site.Params.ImageProcessing.Thumbnail.Enabled
+                        "Attributes" (dict
+                            "src" $image.Permalink
+                            "alt" .Title
+                            "loading" "lazy"
+                            "width" $image.Width
+                            "height" $image.Height
+                        )
+                    ) }}
+                </div>
+            {{ end }}
+        </div>
+    </header>
+
+    {{- with $subsections }}
+    <aside>
+        <h2 class="section-title">{{ T "list.subsection" (len .) }}</h2>
+        <div class="subsection-grid">
+            <div class="article-list--tile">
+                {{ range . }}
+                    {{ partial "article-list/tile" . }}
+                {{ end }}
+            </div>
+        </div>
+    </aside>
+    {{- end }}
+
+    {{/* 只有在分区下直接挂着文章时才列文章；否则上面的分区卡已经把所有内容列完了 */}}
+    {{- if gt (len .RegularPages) 0 }}
+        {{ $paginator := partial "helper/paginator.html" . }}
+        {{ with $paginator }}
+            <section class="article-list--compact">
+                {{ range .Pages }}
+                    {{ partial "article-list/compact" . }}
+                {{ end }}
+            </section>
+        {{ end }}
+
+        {{- partial "pagination.html" . -}}
+    {{- end }}
+
+    {{ partialCached "footer/footer" . }}
+{{ end }}
+
+{{ define "right-sidebar" }}
+    {{ partial "sidebar/right.html" (dict "Context" . "Scope" "homepage") }}
+{{ end }}
