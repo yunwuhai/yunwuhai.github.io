@@ -5,14 +5,9 @@
     {{- $subsections := .Sections -}}
     {{- $pages := partial "helper/pages.html" . -}}
 
+    {{ partial "nav/breadcrumb" . }}
+
     <header>
-        <h3 class="section-title">
-            {{- if eq .Parent (.GetPage "/") -}}
-                {{ T "list.section" }}
-            {{- else -}}
-                分区 · <a href="{{ .Parent.RelPermalink }}">{{ .Parent.Title }}</a>
-            {{- end -}}
-        </h3>
         <div class="section-card">
             <div class="section-details">
                 <h3 class="section-count">{{ T "list.page" (len .RegularPagesRecursive) }}</h3>

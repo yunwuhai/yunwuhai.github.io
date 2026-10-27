@@ -1,0 +1,21 @@
+{{- /*
+    面包屑导航：首页 › 上级分区… › 当前页
+    用法：{{ partial "nav/breadcrumb" . }}
+    说明：不渲染在首页；当前页不带链接；「← 返回」按钮仅在站内跳转来源时显示。
+*/ -}}
+{{- $page := . -}}
+{{- if and $page (not $page.IsHome) -}}
+<nav class="breadcrumb" aria-label="面包屑导航">
+    <a class="breadcrumb-back" href="{{ $page.RelPermalink }}" hidden onclick="if (history.length > 1) { history.back(); return false; }">← 返回</a>
+    <ol class="breadcrumb-list">
+        <li><a href="{{ $page.Site.Home.RelPermalink }}">首页</a></li>
+        {{- range $page.Ancestors.Reverse -}}
+            {{- if not .IsHome -}}
+            <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+            {{- end -}}
+        {{- end -}}
+        <li class="is-current"><span>{{ $page.LinkTitle }}</span></li>
+    </ol>
+</nav>
+<script>!function(){var s=document.currentScript;if(!s)return;var b=s.previousElementSibling;if(!b)return;b=b.querySelector(".breadcrumb-back");if(!b)return;try{var u=new URL(document.referrer);if(u.origin===location.origin&&u.pathname!==location.pathname)b.hidden=!1}catch(e){}}();</script>
+{{- end -}}

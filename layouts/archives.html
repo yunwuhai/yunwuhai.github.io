@@ -2,6 +2,8 @@
 {{ define "main" }}
     {{- $pages := partial "helper/pages.html" .Site.Home -}}
 
+    {{ partial "nav/breadcrumb" . }}
+
     <header>
         <h2 class="section-title">{{ T "widget.archives.title" }}</h2>
         <p class="section-description">按年份浏览全部 {{ len $pages }} 篇文章</p>

@@ -1,0 +1,28 @@
+{{/*
+    站点级覆盖：Stack 主题的评论 entry。
+    相比主题：把评论包进一张与正文同款的卡片，并加上「评论」小标题。
+    其余逻辑（Cookie 同意门控 / 直接渲染 provider）保持与主题一致。
+*/}}
+{{ if .Site.Params.comments.enabled }}
+    {{- $needsConsent := and .Site.Params.cookies.enabled .Site.Params.cookies.categories.functional -}}
+    <section class="comments-section" id="comments">
+        <h2 class="comments-title section-title">{{ T "commentsTitle" }}</h2>
+        {{- if $needsConsent -}}
+            <div id="comments-consent-placeholder" class="consent-placeholder">
+                <p>{{ T "cookies.commentsDisabled" }}</p>
+                <button class="cookie-btn cookie-btn--primary" data-cookie-action="reopen">
+                    {{ T "cookies.managePreferences" }}
+                </button>
+            </div>
+            <div id="comments-container" style="display: none;"></div>
+            <template id="comments-template">
+                {{ partial (printf "comments/provider/%s" .Site.Params.comments.provider) . }}
+            </template>
+            {{- $opts := dict "minify" hugo.IsProduction -}}
+            {{- $commentsScript := resources.Get "ts/commentsConsent.ts" | js.Build $opts | fingerprint -}}
+            <script type="text/javascript" src="{{ $commentsScript.RelPermalink }}" integrity="{{ $commentsScript.Data.Integrity }}" defer></script>
+        {{- else -}}
+            {{ partial (printf "comments/provider/%s" .Site.Params.comments.provider) . }}
+        {{- end -}}
+    </section>
+{{ end }}

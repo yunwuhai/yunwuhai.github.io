@@ -1,5 +1,6 @@
-toggleMenu = "切换菜单"
-darkMode   = "暗色模式"
+toggleMenu    = "切换菜单"
+darkMode      = "暗色模式"
+commentsTitle = "评论"
 
 [list]
     page       = "{{ .Count }} 个页面"

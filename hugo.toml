@@ -156,7 +156,26 @@ buildFuture  = false
         ]
 
     [params.comments]
+        # giscus App 尚未安装到博客仓库，先关掉；安装后把 enabled 改为 true 即可上线
         enabled = false
+        provider = 'giscus'
+
+        # giscus：基于 GitHub Discussions 的评论（无后端、免费）
+        # repoID / categoryID 可用 https://giscus.app 或 GitHub GraphQL 查询
+        [params.comments.giscus]
+            repo            = 'yunwuhai/yunwuhai.github.io'
+            repoID          = 'R_kgDOP36lHQ'
+            category        = 'Announcements'
+            categoryID      = 'DIC_kwDOP36lHc4DJxCY'
+            mapping         = 'pathname'
+            strict          = '0'
+            reactionsEnabled = '1'
+            emitMetadata    = '0'
+            inputPosition   = 'top'
+            lightTheme      = 'light'
+            darkTheme       = 'transparent_dark'
+            lang            = 'zh-CN'
+            loading         = 'lazy'
 
     [params.cookies]
         enabled = false

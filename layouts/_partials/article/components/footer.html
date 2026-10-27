@@ -1,0 +1,45 @@
+<footer class="article-meta article-footer">
+    {{ partial "article/components/tags" . }}
+
+    {{ if and (.Site.Params.article.license.enabled) (not (eq .Params.license false)) }}
+    <section class="article-copyright inline-meta">
+        {{ partial "helper/icon" "copyright" }}
+        <span>{{ default .Site.Params.article.license.default .Params.license | markdownify }}</span>
+    </section>
+    {{ end }}
+
+    {{- if ne .Lastmod .Date -}}
+    <section class="article-lastmod inline-meta">
+        {{ partial "helper/icon" "clock" }}
+        <span>
+            {{ T "article.lastUpdatedOn" }} {{ .Lastmod | time.Format .Site.Params.dateFormat.lastUpdated }}
+        </span>
+    </section>
+    {{- end -}}
+</footer>
+
+{{- /* 同分区上一篇/下一篇 + 返回分区，补足文章末尾的向上导航 */ -}}
+{{- $prev := .PrevInSection -}}
+{{- $next := .NextInSection -}}
+{{- $section := .CurrentSection -}}
+{{- if or $prev $next -}}
+<nav class="article-neighbors" aria-label="同分区文章导航">
+    {{- with $prev }}
+    <a class="article-neighbor article-neighbor--prev" href="{{ .RelPermalink }}">
+        <span class="article-neighbor-label">← 上一篇</span>
+        <span class="article-neighbor-title">{{ .LinkTitle }}</span>
+    </a>
+    {{- else }}
+    <span class="article-neighbor is-empty" aria-hidden="true"></span>
+    {{- end }}
+    {{- with $next }}
+    <a class="article-neighbor article-neighbor--next" href="{{ .RelPermalink }}">
+        <span class="article-neighbor-label">下一篇 →</span>
+        <span class="article-neighbor-title">{{ .LinkTitle }}</span>
+    </a>
+    {{- end }}
+</nav>
+{{- end -}}
+{{- with $section }}
+<a class="article-back-section" href="{{ .RelPermalink }}">↑ 返回「{{ .LinkTitle }}」分区</a>
+{{- end }}
