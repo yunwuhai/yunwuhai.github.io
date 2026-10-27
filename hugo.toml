@@ -2,7 +2,7 @@
 #  云雾海的博客 · Hugo 站点配置（Stack 主题）
 #  URL 结构与 PaperMod 时代完全一致，旧链接不会失效
 # ===========================================================================
-baseURL                = 'https://yunwuhai.com/'
+baseURL                = 'https://blog.yunwuhai.com/'
 locale                 = 'zh-cn'
 defaultContentLanguage = 'zh-cn'
 hasCJKLanguage         = true
