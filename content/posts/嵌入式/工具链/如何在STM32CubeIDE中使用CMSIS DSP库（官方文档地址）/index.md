@@ -1,0 +1,20 @@
+---
+aliases:
+  - "/posts/解决方案/如何在stm32cubeide中使用cmsis-dsp库官方文档地址/"
+image: "cover.jpg"
+date: 2021-11-05T14:06:52+08:00
+draft: false
+title: '如何在STM32CubeIDE中使用CMSIS DSP库'
+categories:
+- 工具链
+tags:
+- STM32
+- CMSIS
+- DSP
+author: ["云雾海"]
+description: "本文首发于CSDN，原文：https://blog.csdn.net/qq_44884716/article/details/121161817"
+license: CC-BY-SA 4.0
+---
+
+
+[Configuring DSP libraries on STM32CubeIDE](https://community.st.com/s/article/configuring-dsp-libraries-on-stm32cubeide)

@@ -1,0 +1,48 @@
+{{- /*
+  覆盖主题 _markup/render-image.html。
+
+  背景：本博客正文里的图片全部是外链（raw.githubusercontent.com / csdnimg.cn），
+  主题默认会为每张图调用 resources.GetRemote 去读尺寸以启用画廊布局。
+  这会让每次干净构建都依赖外网、耗时可观，CI 网络抖动时还会刷一堆 WARN。
+
+  因此：远程图片直接输出朴素的 <img>，不联网、不处理；
+  本地资源（如文章目录里的图）仍走主题的完整流程。
+*/ -}}
+{{- $dest := .Destination -}}
+{{- $remote := or (hasPrefix $dest "http://") (hasPrefix $dest "https://") -}}
+
+{{- if $remote -}}
+    <img src="{{ $dest | safeURL }}"
+        alt="{{ .PlainText }}"
+        {{ with .Title }}title="{{ . | markdownify }}"{{ end }}
+        loading="lazy">
+{{- else -}}
+    {{- $image := partial "helper/image" (dict "Resources" .Page.Resources "Image" $dest "Context" .Page) -}}
+    {{- $alt := .PlainText | safeHTML -}}
+    {{- $title := .Title | markdownify -}}
+    {{- $galleryImage := and $image.Height $image.Width -}}
+
+    {{- $attributes := dict -}}
+    {{- if $galleryImage -}}
+        {{- $attributes = (dict
+            "data-flex-grow" (div (mul $image.Width 100) $image.Height)
+            "data-flex-basis" (printf "%dpx" (div (mul $image.Width 240) $image.Height))
+        ) -}}
+    {{- end -}}
+
+    {{ partial "helper/responsive-image" (dict
+        "Resource" $image.Resource
+        "Widths" (cond .Page.Site.Params.ImageProcessing.Content.Enabled .Page.Site.Params.ImageProcessing.Content.Widths nil)
+        "Attributes" (merge $attributes (dict
+            "src" $image.Permalink
+            "width" $image.Width
+            "height" $image.Height
+            "alt" $alt
+            "title" $title
+            "data-title-escaped" ($title | htmlEscape)
+            "class" (cond $galleryImage "gallery-image" "")
+            "loading" "lazy"
+            "sizes" "(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px"
+        ))
+    ) }}
+{{- end -}}

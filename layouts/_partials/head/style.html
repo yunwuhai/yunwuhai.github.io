@@ -1,0 +1,14 @@
+{{- /*
+  覆盖主题 head/style.html：改用 Dart Sass（css.Sass），
+  与 CI 里安装的 dart-sass 1.92.1 配套，规避 toCSS 的 libsass 弃用警告。
+  主题 v4.0.3 仍在用 @import 与全局内置函数，Dart Sass 3.0 之前只会警告，
+  这里显式静默这两类弃用提示，避免构建日志被刷屏。
+*/ -}}
+{{- $sass := resources.Get "scss/style.scss" -}}
+{{- $opts := dict
+    "transpiler" "dartsass"
+    "outputStyle" "compressed"
+    "silenceDeprecations" (slice "import" "global-builtin")
+-}}
+{{- $style := $sass | css.Sass $opts | resources.Fingerprint "sha256" -}}
+<link rel="stylesheet" href="{{ $style.RelPermalink }}">

@@ -1,6 +1,12 @@
 ---
-title: "档案"
+title: "归档"
+slug: "archives"
+type: "page"
 layout: "archives"
-url: "/archives/"
-summary: archives
+description: "按年份浏览全部文章"
+menu:
+  main:
+    weight: 50
+    params:
+      icon: archives
 ---

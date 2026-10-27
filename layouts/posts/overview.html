@@ -1,0 +1,50 @@
+{{ define "main" }}
+    {{- $articles := where .Site.RegularPages "Type" "posts" -}}
+    {{- $sections := .Sections.ByWeight -}}
+
+    <header>
+        {{ with .Params.description }}<h3 class="section-title">{{ . }}</h3>{{ end }}
+        <div class="section-card">
+            <div class="section-details">
+                <h3 class="section-count">{{ T "list.page" (len $articles) }}</h3>
+                <h1 class="section-term">{{ .Title }}</h1>
+                <h2 class="section-description">按分区浏览，或直接往下翻看全部文章</h2>
+            </div>
+        </div>
+    </header>
+
+    {{- with $sections }}
+    <aside>
+        <h2 class="section-title">分区</h2>
+        <div class="subsection-grid">
+            <div class="article-list--tile">
+                {{ range . }}
+                    {{ partial "article-list/tile" . }}
+                {{ end }}
+            </div>
+        </div>
+    </aside>
+    {{- end }}
+
+    <section>
+        <h2 class="section-title">全部文章</h2>
+        {{ range $articles.GroupByDate "2006" }}
+            {{ $id := lower (replace .Key " " "-") }}
+            <div class="archives-group" id="y{{ $id }}">
+                <h2 class="archives-date section-title"><a href="{{ $.RelPermalink }}#y{{ $id }}">{{ .Key }}</a></h2>
+                <div class="article-list--compact">
+                    {{ range .Pages }}
+                        {{ partial "article-list/compact" . }}
+                    {{ end }}
+                </div>
+            </div>
+        {{ end }}
+    </section>
+
+    {{ partialCached "footer/footer" . }}
+{{ end }}
+
+{{ define "right-sidebar" }}
+    {{ partial "sidebar/right.html" (dict "Context" . "Scope" "homepage") }}
+{{ end }}
+

@@ -1,0 +1,29 @@
+{{ define "main" }}
+    {{- $terms := .Data.Terms.ByCount -}}
+    {{- $total := len (where .Site.RegularPages "Type" "in" .Site.Params.mainSections) -}}
+    <header>
+        <h3 class="section-title">{{ .Title }}</h3>
+        <div class="section-card">
+            <div class="section-details">
+                <h3 class="section-count">共 {{ $total }} 篇文章</h3>
+                <h1 class="section-term">{{ .Title }}</h1>
+                {{ with .Params.description }}<h2 class="section-description">{{ . }}</h2>{{ end }}
+            </div>
+        </div>
+    </header>
+
+    <section class="term-cloud">
+        {{ range $terms }}
+            <a class="term-chip" href="{{ .Page.RelPermalink }}">
+                <span class="term-chip-name">{{ .Page.Title }}</span>
+                <span class="term-chip-count">{{ .Count }}</span>
+            </a>
+        {{ end }}
+    </section>
+
+    {{ partialCached "footer/footer" . }}
+{{ end }}
+
+{{ define "right-sidebar" }}
+    {{ partial "sidebar/right.html" (dict "Context" . "Scope" "homepage") }}
+{{ end }}

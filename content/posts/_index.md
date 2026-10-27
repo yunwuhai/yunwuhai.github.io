@@ -1,7 +1,10 @@
 ---
+layout: "overview"
 title: "目录"
-date: 2025-10-02T00:14:48+08:00
-draft: false
-searchHidden: true
-hideMeta: true
+description: "全部文章的入口"
+menu:
+  main:
+    weight: 10
+    params:
+      icon: home
 ---

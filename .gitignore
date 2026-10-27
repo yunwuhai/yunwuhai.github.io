@@ -1,3 +1,4 @@
+# ---- 编辑器 ----
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -5,20 +6,28 @@
 !.vscode/extensions.json
 !.vscode/*.code-snippets
 !*.code-workspace
-
-# Built Visual Studio Code Extensions
 *.vsix
 
-# Generated files by hugo
+# ---- Hugo 生成物 ----
 public/
 resources/_gen/
 assets/jsconfig.json
 hugo_stats.json
+.hugo_build.lock
 
-# Executable may be added to repository
+# ---- 二进制（不随仓库发布）----
 hugo.exe
 hugo.darwin
 hugo.linux
 
-# Temporary lock file while building
-.hugo_build.lock
+# ---- 本地工作产物 ----
+_shots/
+_covers/
+theme-gallery/
+__pycache__/
+scripts/covers/__pycache__/
+build.out
+build.err
+b.out
+b.err
+.playwright-cli/

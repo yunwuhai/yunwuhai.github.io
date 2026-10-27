@@ -1,145 +1,162 @@
-baseURL = 'https://yunwuhai.github.io/'
-languageCode = 'zh-cn'
-title = '云雾海的博客'
-theme = ["PaperMod"]
+# ===========================================================================
+#  云雾海的博客 · Hugo 站点配置（Stack 主题）
+#  URL 结构与 PaperMod 时代完全一致，旧链接不会失效
+# ===========================================================================
+baseURL                = 'https://yunwuhai.github.io/'
+locale                 = 'zh-cn'
+defaultContentLanguage = 'zh-cn'
+hasCJKLanguage         = true
 
-buildDrafts = false
-buildExpired = false
-buildFuture = false
+title      = '云雾海的博客'
+theme      = ['hugo-theme-stack']
 enableRobotsTXT = true
 
+buildDrafts  = false
+buildExpired = false
+buildFuture  = false
+
 [pagination]
-  pagerSize = 5
-pygmentsUseClasses = true
-
-[markup.highlight]
-noClasses = false
-
-[[menu.main]]
-identifier = "posts"
-name = "目录"
-url = "/posts/"
-weight = 10
-
-[[menu.main]]
-identifier = "categories"
-name = "分类"
-url = "/categories/"
-weight = 20
-
-[[menu.main]]
-identifier = "tags"
-name = "标签"
-url = "/tags/"
-weight = 30
-
-[[menu.main]]
-identifier = "search"
-name = "搜索"
-url = "/search/"
-weight = 40
-
-[[menu.main]]
-identifier = "archives"
-name = "归档"
-url = "/archives/"
-weight = 50
-
-[minify]
-disableXML = true
-minifyOutput = true
-
-[params]
-DateFormat = "January 2, 2006"
-ShowBreadCrumbs = true
-ShowCodeCopyButtons = true
-ShowPostNavLinks = true
-ShowReadingTime = false
-ShowRssButtonInSectionTermList = false
-ShowShareButtons = false
-ShowWordCount = false
-UseHugoToc = true
-author = "云雾海"
-comments = false
-defaultTheme = "auto"
-description = "云雾海的博客"
-disableScrollToTop = false
-disableSpecial1stPost = false
-disableThemeToggle = false
-env = "production"
-hideSummary = false
-hidemeta = false
-images = ["<link or path of image for opengraph, twitter-cards>"]
-keywords = ["Blog", "C/C++", "嵌入式", "Arduino", "USB", "桌面端", "C#", ".NET", "WPF", "Avalonia", "个人博客", "GitHub", "开源"]
-showtoc = true
-title = "Yunwuhai's Blog"
-tocopen = false
-
-[params.cover]
-hidden = true
-hiddenInList = true
-hiddenInSingle = true
-
-[params.editPost]
-Text = "Suggest Changes"
-URL = "https://github.com/yunwuhai/yunwuhai.github.io/tree/master/content/posts"
-appendFilePath = true
-
-[params.fuseOpts]
-distance = 1000
-isCaseSensitive = false
-keys = ["title", "permalink", "summary", "content"]
-limit = 10
-location = 0
-minMatchCharLength = 0
-shouldSort = true
-threshold = 0.4
-
-[params.homeInfoParams]
-Content = "此处记录着我来时的路"
-Title = "云筑"
-
-[params.label]
-icon = "/apple-touch-icon.png"
-iconHeight = 35
-text = "主页"
-
-[params.profileMode]
-enabled = true
-imageHeight = 120
-imageTitle = "我的头像"
-imageUrl = "https://raw.githubusercontent.com/yunwuhai/blog-img/master/img/q4SymNypcxz7Dga.thumb.1000_0.png"
-imageWidth = 120
-title = "云筑"
-subtitle = "此处记录着我来时的路"
-
-[[params.profileMode.buttons]]
-name = "目录"
-url = "posts"
-
-[[params.profileMode.buttons]]
-name = "分类"
-url = "categories"
-
-[[params.profileMode.buttons]]
-name = "标签"
-url = "tags"
-
-[[params.profileMode.buttons]]
-name = "搜索"
-url = "search"
-
-[[params.profileMode.buttons]]
-name = "归档"
-url = "archives"
-
-[[params.socialIcons]]
-name = "bilibili"
-url = "https://space.bilibili.com/16545463"
-
-[[params.socialIcons]]
-name = "github"
-url = "https://github.com/yunwuhai"
+    pagerSize = 5
 
 [outputs]
-home = ["HTML", "RSS", "JSON"]
+    home    = ['HTML', 'RSS']
+    section = ['HTML', 'RSS']
+
+# ---------------------------------------------------------------------------
+#  Markdown
+# ---------------------------------------------------------------------------
+[markup]
+    [markup.highlight]
+        noClasses = false          # 用 class 方式，配合主题自带的高亮配色
+        lineNos   = false
+        tabWidth  = 4
+
+    [markup.tableOfContents]
+        startLevel = 2
+        endLevel   = 4
+        ordered    = true
+
+    [markup.goldmark.parser]
+        wrapStandAloneImageWithinParagraph = false
+        [markup.goldmark.parser.attribute]
+            block = true
+            title = true
+
+    [markup.goldmark.renderer]
+        unsafe = true              # 允许正文里写原始 HTML
+
+# ---------------------------------------------------------------------------
+#  相关文章推荐（文章底部）
+# ---------------------------------------------------------------------------
+[related]
+    threshold = 30
+    includeNewer = true
+    toLower = true
+    [[related.indices]]
+        name   = 'tags'
+        weight = 100
+    [[related.indices]]
+        name   = 'categories'
+        weight = 60
+
+# ---------------------------------------------------------------------------
+#  侧栏菜单在 content/*.md 的 front matter 里声明（与 Stack 官方做法一致）
+# ---------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------------
+#  社交图标（侧栏头像下方）
+# ---------------------------------------------------------------------------
+[[menu.social]]
+    identifier = 'bilibili'
+    name       = 'Bilibili'
+    url        = 'https://space.bilibili.com/16545463'
+    weight     = 10
+    [menu.social.params]
+        icon   = 'brand-bilibili'
+        newTab = true
+
+[[menu.social]]
+    identifier = 'github'
+    name       = 'GitHub'
+    url        = 'https://github.com/yunwuhai'
+    weight     = 20
+    [menu.social.params]
+        icon   = 'brand-github'
+        newTab = true
+
+# ---------------------------------------------------------------------------
+#  Stack 主题参数
+# ---------------------------------------------------------------------------
+[params]
+    mainSections = ['posts']
+    description  = '云雾海的博客 —— 嵌入式、C/C++、算法与网络笔记'
+    favicon      = 'favicon.png'
+    rssFullContent = true
+
+    [params.footer]
+        since      = 2020
+        customText = '除特别注明外，本站文章均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC-BY-SA 4.0</a> 协议授权'
+
+    [params.sidebar]
+        compact  = false
+        avatar   = 'avatar.png'
+        subtitle = '此处记录着我来时的路'
+
+    [params.dateFormat]
+        published   = '2006 年 1 月 2 日'
+        lastUpdated = '2006 年 1 月 2 日'
+
+    [params.colorScheme]
+        toggle  = true
+        default = 'auto'
+
+    [params.opengraph.twitter]
+        site = ''
+        card = 'summary_large_image'
+
+    [params.imageProcessing]
+        autoOrient = true
+        [params.imageProcessing.external]
+            timeout = '5s'
+        [params.imageProcessing.content]
+            enabled = false
+        [params.imageProcessing.thumbnail]
+            enabled = true
+
+    [params.article]
+        headingAnchor = true
+        math          = false
+        toc           = true
+        readingTime   = true
+
+        [params.article.list]
+            showTags = true
+
+        [params.article.license]
+            enabled = true
+            default = '本文采用 CC-BY-SA 4.0 协议，转载请注明出处'
+
+        [params.article.mermaid]
+            look                  = 'classic'
+            lightTheme            = 'default'
+            darkTheme             = 'dark'
+            securityLevel         = 'strict'
+            htmlLabels            = true
+            transparentBackground = false
+
+    [params.widgets]
+        homepage = [
+            { type = 'search' },
+            { type = 'categories', params = { limit = 10 } },
+            { type = 'tag-cloud',  params = { limit = 24 } },
+            { type = 'archives',   params = { limit = 6 } },
+        ]
+        page = [
+            { type = 'toc' },
+        ]
+
+    [params.comments]
+        enabled = false
+
+    [params.cookies]
+        enabled = false

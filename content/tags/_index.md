@@ -1,6 +1,10 @@
 ---
+type: "taxonomy"
 title: "标签"
-description: Tags
-layout: terms
-# summary: "这些标签帮助你快速找到感兴趣的内容。"
+description: "按标签浏览文章"
+menu:
+  main:
+    weight: 30
+    params:
+      icon: tag
 ---
