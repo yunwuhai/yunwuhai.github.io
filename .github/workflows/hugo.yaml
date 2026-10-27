@@ -77,11 +77,13 @@ jobs:
           key: hugo-${{ github.run_id }}
           restore-keys: hugo-
       - name: Build the site
+        # baseURL 统一由 hugo.toml 提供：configure-pages 输出的是 Pages API 里的
+        # 「当前域名 + 当前 HTTPS 状态」，刚绑定自定义域时可能还是 http://，
+        # 会把 canonical / sitemap / RSS 里的链接写成 http。这里不再覆盖。
         run: |
           hugo \
             --gc \
             --minify \
-            --baseURL "${{ steps.pages.outputs.base_url }}/" \
             --cacheDir "${{ runner.temp }}/hugo_cache"
       - name: Cache save
         id: cache-save
