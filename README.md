@@ -4,7 +4,7 @@
 
 这个仓库用于存放本人平常的文章笔记，使用 [Hugo](https://gohugo.io/) 生成静态站点，主题为 [Stack](https://github.com/CaiJimmy/hugo-theme-stack)，通过 GitHub Pages 发布。
 
-访问地址：<https://yunwuhai.github.io/>
+访问地址：<https://yunwuhai.com/>
 
 文章笔记主要是个人在学习开发过程中进行的一些记录，不保证内容实现的准确性和一致性，请酌情参考。
 

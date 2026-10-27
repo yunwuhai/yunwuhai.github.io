@@ -20,7 +20,7 @@ license: CC-BY-SA 4.0
 
 ## 目标
 
-根据《[使用IIS组件搭建服务器（Web）](https://yunwuhai.github.io/posts/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/%E4%BD%BF%E7%94%A8iis%E7%BB%84%E4%BB%B6%E6%90%AD%E5%BB%BA%E6%9C%8D%E5%8A%A1%E5%99%A8web/)》，将原本HTTP网站改为HTTPS网站，注意你应该已经完成了该文章所述的所有步骤。
+根据《[使用IIS组件搭建服务器（Web）](/posts/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/%E4%BD%BF%E7%94%A8iis%E7%BB%84%E4%BB%B6%E6%90%AD%E5%BB%BA%E6%9C%8D%E5%8A%A1%E5%99%A8web/)》，将原本HTTP网站改为HTTPS网站，注意你应该已经完成了该文章所述的所有步骤。
 
 ## 步骤
 
