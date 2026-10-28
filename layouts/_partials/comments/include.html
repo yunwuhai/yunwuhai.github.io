@@ -24,5 +24,44 @@
         {{- else -}}
             {{ partial (printf "comments/provider/%s" .Site.Params.comments.provider) . }}
         {{- end -}}
+        {{- /* giscus 主题跟随站点明暗：主题自带的切换脚本只在「切换时」触发，首次加载已是暗色时不会同步 */ -}}
+        {{- if eq .Site.Params.comments.provider "giscus" -}}
+            <script>
+                (function () {
+                    var themes = {
+                        light: "{{ .Site.Params.comments.giscus.lightTheme }}",
+                        dark: "{{ .Site.Params.comments.giscus.darkTheme }}"
+                    };
+                    var applied = null;
+
+                    function current() {
+                        return document.documentElement.dataset.scheme === "dark" ? themes.dark : themes.light;
+                    }
+
+                    function apply(force) {
+                        var frame = document.querySelector("iframe.giscus-frame");
+                        if (!frame || !frame.contentWindow) return false;
+                        var theme = current();
+                        if (!force && applied === theme) return true;
+                        frame.contentWindow.postMessage({ giscus: { setConfig: { theme: theme } } }, "https://giscus.app");
+                        applied = theme;
+                        return true;
+                    }
+
+                    window.addEventListener("onColorSchemeChange", function () { apply(true); });
+                    window.addEventListener("message", function (e) {
+                        if (e.origin !== "https://giscus.app") return;
+                        apply(false);
+                    });
+
+                    var tries = 0;
+                    (function waitForFrame() {
+                        if (apply(false)) return;
+                        if (++tries > 100) return;
+                        setTimeout(waitForFrame, 200);
+                    })();
+                })();
+            </script>
+        {{- end -}}
     </section>
 {{ end }}
